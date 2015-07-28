@@ -4,9 +4,11 @@
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
       -->
 
-      <div class="list" collection-repeat="route in routes">
+      <div class="list card" 
+           collection-repeat="route in routes"
+           item-height="260px">
 
-        <a class="item item-thumbnail-left" href="#/tab/explore/{{route.name}}">
+        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/explore/{{route.name}}">
           <img src="{{route.image}}">
           <h2>{{route.name}}</h2>
           <p>{{route.description}}</p>

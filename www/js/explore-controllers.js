@@ -11,12 +11,27 @@ ctrls.controller('ExploreCtrl', function($scope, Gal) {
 
 	$scope.routes = Gal.itinerari;
 
-	
   
 });
 
-ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal) {
+  
+  var route = $stateParams.name;
+  
+  console.log('Param: ' + route);
+
+  $scope.route_name = route;
+
+  Gal.route(route, function (err, data) {
+    // creo un file geojson con i dati 
+    // la lista dei luoghi di interesse ordinati per coordinate
+    // mappa da poter visualizzare
+    // filtro dei punti di interesse
+    if (!err) {
+      $scope.routes = data;
+    }
+  });
+
 });
 
 

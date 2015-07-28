@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture'])
+angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -27,6 +27,11 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
   $momentProvider
     .asyncLoading(false)
     .scriptUrl('lib/moment/moment.js');
+})
+
+.constant('TEST', {
+  url: 'test/data.json',  // nome del database
+  value: true
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -76,7 +81,7 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
       }
     })
     .state('tab.explore-detail', {
-      url: '/explore/:id',
+      url: '/explore/:name',
       views: {
         'tab-explore': {
           templateUrl: 'templates/explore-detail.html',
