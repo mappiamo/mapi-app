@@ -5,10 +5,17 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture'])
+angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, Geolocation) {
   $ionicPlatform.ready(function() {
+
+    Geolocation.watch(function (position) {
+      Geolocation.save(position);
+    }, function (err) {
+      console.log('error to get location...')
+    });
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -31,7 +38,11 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
 
 .constant('TEST', {
   url: 'test/data.json',  // nome del database
-  value: true
+  value: false
+})
+
+.constant('MAPPIAMO', {
+  url: 'http://test.mappiamo.org/travotest/index.php?module=api&task=category&object=5&callback=JSON_CALLBACK'    
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -71,7 +82,7 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
     }
   })
 
-  .state('tab.chats', {
+  .state('tab.explore', {
       url: '/explore',
       views: {
         'tab-explore': {
@@ -80,8 +91,29 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
         }
       }
     })
-    .state('tab.explore-detail', {
+
+    .state('tab.list', {
       url: '/explore/:name',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/explore-list.html',
+          controller: 'ExploreListCtrl'
+        }
+      }
+    })
+
+    .state('tab.map', {
+      url: '/map/:name',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/explore-map.html',
+          controller: 'ExploreMapCtrl'
+        }
+      }
+    })
+
+    .state('tab.detail', {
+      url: '/details/:id',
       views: {
         'tab-explore': {
           templateUrl: 'templates/explore-detail.html',
@@ -90,17 +122,17 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
       }
     })
 
-  .state('tab.search', {
-    url: '/search',
-    views: {
-      'tab-search': {
-        templateUrl: 'templates/tab-search.html',
-        controller: 'SearchCtrl'
+    .state('tab.search', {
+      url: '/search',
+      views: {
+        'tab-search': {
+          templateUrl: 'templates/tab-search.html',
+          controller: 'SearchCtrl'
+        }
       }
-    }
-  });
+    });
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/home');
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/tab/home');
 
 });

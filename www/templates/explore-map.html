@@ -1,0 +1,18 @@
+<ion-view view-title="{{ title }}" hide-nav-bar="true" cache-view="false"> 
+  
+  <ion-header-bar align-title="left" class="bar-positive">
+    <div class="buttons">
+      <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore"></a>
+    </div>
+    <h1 class="title">{{ route_name }}</h1>
+    <div class="buttons">
+      <a class="button button-icon icon ion-ios-list-outline" href="#/tab/explore/{{route_name}}"></a>
+    </div>
+  </ion-header-bar>
+
+  <ion-content data-tap-disabled="true" class="has-header">
+      <leaflet id="map"
+               defaults="defaults">
+      </leaflet> 
+  </ion-content>
+</ion-view>

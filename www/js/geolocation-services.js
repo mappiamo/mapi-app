@@ -19,7 +19,7 @@
 var service = angular.module('gal.geolocation', []);
 
 // Geolocation
-service.factory('Geolocation', function ($http, _) {
+service.factory('Geolocation', function ($http, _, $localstorage) {
 
   var location = {
       latitude: 0,
@@ -50,17 +50,21 @@ service.factory('Geolocation', function ($http, _) {
       navigator.geolocation.getCurrentPosition(callback_success, callback_error);
     },
 
-    watch: function (callback_success, callback_error) {
-      
-      console.log('watching position ...');
-      
-      var options = { 
-        maximumAge: 3000, 
-        timeout: UTILITY.timeout, 
-        enableHighAccuracy: true 
-      };
-      
-      watchID = navigator.geolocation.watchPosition(callback_success, callback_error, options);
+    save: function (position) {
+      location.latitude = position.coords.latitude;
+      location.longitude = position.coords.longitude;
+      location.altitude = position.coords.altitude;
+      location.accuracy = position.coords.accuracy;
+      location.altitudeAccuracy = position.coords.altitudeAccuracy;
+      location.heading = position.coords.heading;
+      location.speed = position.coords.speed;
+      location.timestamp = position.timestamp;
+
+      location.watchID = watchID;
+
+      $localstorage.setObject('location', location);
+
+      // console.log('Position: ' + JSON.stringify(location));
     },
 
     location: function () {
@@ -69,21 +73,33 @@ service.factory('Geolocation', function ($http, _) {
       return location;
     },
 
-    distance: function (latitude, longitude) {
+    watch: function (callback_success, callback_error) {
+      
+      console.log('watching position ...');
+      
+      var options = { 
+        maximumAge: 3000, 
+        timeout: 20000, 
+        enableHighAccuracy: true 
+      };
+      
+      watchID = navigator.geolocation.watchPosition(callback_success, callback_error, options);
+    },
+
+    distance: function (lat1, lng1, latitude, longitude) {
 
       var d = 0;
-      var position = geolocation.location();
-
+      
       // console.log('check distance about: ' + JSON.stringify(position) + '-' + latitude + ',' + longitude)
 
       var R = 6371; // Radius of the earth in km
       var dStr = '';
       
-      var dLat = _deg2rad(position.latitude - latitude);  // deg2rad below
-      var dLon = _deg2rad(position.longitude - longitude); 
+      var dLat = _deg2rad(lat1 - latitude);  // deg2rad below
+      var dLon = _deg2rad(lng1 - longitude); 
       
       var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(_deg2rad(latitude)) * Math.cos(_deg2rad(position.latitude)) * 
+              Math.cos(_deg2rad(latitude)) * Math.cos(_deg2rad(lat1)) * 
               Math.sin(dLon/2) * Math.sin(dLon/2);
       
       var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 

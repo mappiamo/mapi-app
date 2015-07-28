@@ -39,10 +39,14 @@ service.factory('GeoJSON', function (_, async) {
 		        
 		        var feature = { 
 		          type: "Feature", 
-		          properties: item, 
+		          properties: {
+		          	title: item.title,
+		          	address: item.address,
+		          	marker: item.meta[1].value
+		          }, 
 		          "geometry": { 
 		              type: "Point", 
-		              "coordinates": [ Number(item.lng), Number(item.lat) ] 
+		              "coordinates": [ Number(item.lon), Number(item.lat) ] 
 		          }
 		        };
 

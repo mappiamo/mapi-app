@@ -1,6 +1,6 @@
 angular.module('gal.services', [])
 
-.factory('Gal', function ($http, Weather, async, _, TEST) {
+.factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO) {
 
   // Some fake testing data
   var gal_json = {
@@ -177,30 +177,59 @@ angular.module('gal.services', [])
         lng: 18.1607648
       }],
 
-      route: function (name, callback) {
-        
-        if (TEST.value) {
-          callback(false, TEST.url);
-        } else {
-
-          var url = 'http://travocial.com/index.php?module=api&task=category&object=5&callback=JSON_CALLBACK';
-          
-          console.log('getting data by ' + url);
+      detail: function (id, callback) {
 
           var options = {
             method: 'GET',
-            url: url,
+            url: MAPPIAMO.url,
             dataType: 'jsonp',
           };
 
           $http(options)
             .success(function(data) {
-                console.log('success: ' + data);
+                console.log('success: ' + JSON.stringify(data[0]));
                 // done(data.name, data.weather[0].description);
-                var d = _.filter(gal_json.itinerari, function (item) {
-                  return item.meta.name == 'tipo_itine' && 
-                         item.meta.value == name;
+                
+                var d = _.filter(data, function (item) {
+                  console.log(JSON.stringify(item));
+                  return item.id == id;
                 });
+
+                console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
+                callback(false, d);
+            })
+            .error(function(data, status, headers, config) {
+                console.log('Unable to get itinerario ' + name);
+                callback(true, null);
+            });
+
+      },
+
+      route: function (name, callback) {
+        
+        if (TEST.value) {
+          callback(false, TestData.data);
+        } else {
+          
+          console.log('getting data by ' + url);
+
+          var options = {
+            method: 'GET',
+            url: MAPPIAMO.url,
+            dataType: 'jsonp',
+          };
+
+          $http(options)
+            .success(function(data) {
+                console.log('success: ' + JSON.stringify(data[0]));
+                // done(data.name, data.weather[0].description);
+                
+                var d = _.filter(data, function (item) {
+                  console.log(JSON.stringify(item));
+                  return item.meta[0].name == 'tipo_itine' && 
+                         item.meta[0].value == name;
+                });
+
                 console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
                 callback(false, d);
             })
@@ -209,6 +238,7 @@ angular.module('gal.services', [])
                 callback(true, null);
             });
           };
+          
       },
 
       /**
