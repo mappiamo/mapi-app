@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive'])
+angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S'])
 
 .run(function($ionicPlatform, Geolocation) {
   $ionicPlatform.ready(function() {
@@ -42,7 +42,9 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
 })
 
 .constant('MAPPIAMO', {
-  url: 'http://test.mappiamo.org/travotest/index.php?module=api&task=category&object=5&callback=JSON_CALLBACK'    
+  jsonp: '&callback=JSON_CALLBACK',
+  content: 'http://test.mappiamo.org/travotest/index.php?module=api&task=content&object=',
+  poi: 'http://test.mappiamo.org/travotest/index.php?module=api&task=category&object='    
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -62,6 +64,7 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
 
   // Each tab has its own nav history stack:
 
+  // home page
   .state('tab.home', {
     url: '/home',
     views: {
@@ -72,6 +75,7 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
     }
   })
 
+  // realtà aumentata
   .state('tab.real', {
     url: '/real',
     views: {
@@ -82,6 +86,7 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
     }
   })
 
+  // lista degli itinerari
   .state('tab.explore', {
       url: '/explore',
       views: {
@@ -92,32 +97,46 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
       }
     })
 
-    .state('tab.list', {
-      url: '/explore/:name',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/explore-list.html',
-          controller: 'ExploreListCtrl'
-        }
-      }
-    })
-
-    .state('tab.map', {
-      url: '/map/:name',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/explore-map.html',
-          controller: 'ExploreMapCtrl'
-        }
-      }
-    })
-
+    // dettaglio del percorso
     .state('tab.detail', {
-      url: '/details/:id',
+      url: '/explore/:id',
       views: {
         'tab-explore': {
           templateUrl: 'templates/explore-detail.html',
           controller: 'ExploreDetailCtrl'
+        }
+      }
+    })
+
+    // lista dei punti di interesse
+    .state('tab.pois', {
+      url: '/pois/:id',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-list.html',
+          controller: 'PoiListCtrl'
+        }
+      }
+    })
+
+    // mappa dei punti di interesse
+    .state('tab.map', {
+      url: '/map/:id',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-map.html',
+          controller: 'PoiMapCtrl'
+        }
+      }
+    })
+
+    // dettaglio del POI
+    .state('tab.poi', {
+      url: '/poi/:id/:idpoi',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-detail.html',
+          controller: 'PoiDetailCtrl'
         }
       }
     })

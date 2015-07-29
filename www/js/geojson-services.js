@@ -18,9 +18,46 @@
 
 var service = angular.module('gal.geojson', []);
 
-service.factory('GeoJSON', function (_, async) {
+service.factory('GeoJSON', function (_, async, S) {
 
 	var geojson_json = {
+
+		route: function (route_str, color, callback_service) {
+
+			var route_array = route_str.split(',');
+			var r = [];
+
+			var data_geojson = {
+		  		type : "FeatureCollection",
+		  		features: []
+			};
+
+			async.each(route_array, function (item, callback) {
+				var si = S(item).trim().s
+				r.push(si.split(' ').map(Number));
+				callback();
+			}, function (err) {
+
+				console.log(r[0]);
+
+				var feature = { 
+		          type: "Feature", 
+		          properties: {
+		          	color: color
+		          }, 
+		          "geometry": { 
+		              type: "LineString", 
+		              coordinates: r 
+		          }
+		        };
+
+		        data_geojson.features.push(feature);
+
+		        // console.log('geojson created ' + JSON.stringify(data_geojson.features[0]));
+		        callback_service(err, data_geojson);
+			});
+
+		},
 
 		/////////////////////////////////////////
 	    // 

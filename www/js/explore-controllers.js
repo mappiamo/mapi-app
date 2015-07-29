@@ -1,5 +1,6 @@
 var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 
+// lista degli itinerari
 ctrls.controller('ExploreCtrl', function($scope, Gal) {
   
   $scope.$on('$ionicView.enter', function(e) {
@@ -12,41 +13,84 @@ ctrls.controller('ExploreCtrl', function($scope, Gal) {
   
 });
 
-ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal) {
+// dettagli dell'itinerario
+ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal, GeoJSON, S, Geolocation) {
 
   var id = $stateParams.id;
+  var it = Gal.itinerario(id);
+  var geojson;
 
-  console.log('Id Details: ' + id);
+  $scope.title = it.title;
 
-  Gal.detail(id, function (err, data) {
+  console.log('Explore details: ' + id);
+
+  var location = Geolocation.location();
+
+  angular.extend($scope, {
+    center: {
+      lat: location.latitude,
+      lng: location.longitude,
+      zoom: 8
+    },
+      defaults: {
+          scrollWheelZoom: false
+      }
+  })
+
+  Gal.content(id, function (err, data) {
     if (!err) {
-      $scope.poi = data[0];
+
+      data.text = S(S(data.text).stripTags().s).decodeHTMLEntities().s;
+      data.meta[3].value = S(S(data.meta[3].value).stripTags().s).decodeHTMLEntities().s;
+      data.meta[7].value = S(S(data.meta[7].value).stripTags().s).decodeHTMLEntities().s;
+
+      $scope.explore = data;
+
+      var d = S(data.route).strip('MULTILINESTRING', '((', '))', '(', ')').s
+
+      GeoJSON.route(d, data.meta[0].value, function(err, data_geojson) {
+        // console.log(JSON.stringify(data_geojson));
+        geojson = data_geojson;
+
+        angular.extend($scope, {
+          geojson: {
+            data: data_geojson,
+            style: {
+                color: data.meta[0].value
+            }
+          }
+        });
+
+      });
     }
   });
 
 });
 
-ctrls.controller('ExploreListCtrl', function($scope, $stateParams, Gal) {
+// lista dei punti di interesse
+ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal) {
   
-  var route = $stateParams.name;
-  $scope.route_name = route;
+  var id = $stateParams.id;
+  var it = Gal.itinerario(id);
+
+  $scope.route_name = it.name;
   
-  console.log('Param: ' + route);
+  console.log('Param: ' + id);
 
   $scope.$on('$ionicView.enter', function(e) {
     //
   });
 
-  $scope.goBack = function () {
-    window.location.href = '#/tab/explore';
+  $scope.goBack = function (id) {
+    window.location.href = '#/tab/explore/' + id;
   };
 
-  $scope.goMap = function (route_name) {
+  $scope.goMap = function (id) {
     console.log('go to map: ' + route_name);
-    window.location.href = '#/tab/explore/map/{{route_name}}'
+    window.location.href = '#/tab/map/' + id;
   };
 
-  Gal.route(route, function (err, data) {
+  Gal.poi(id, null, function (err, data) {
     // creo un file geojson con i dati 
     // la lista dei luoghi di interesse ordinati per coordinate
     // mappa da poter visualizzare
@@ -58,7 +102,8 @@ ctrls.controller('ExploreListCtrl', function($scope, $stateParams, Gal) {
   
 });
 
-ctrls.controller('ExploreMapCtrl', function($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON) {
+// mappa dei punti di interesse
+ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON) {
 
   var marker;
   var layer_control;
@@ -93,9 +138,10 @@ ctrls.controller('ExploreMapCtrl', function($scope, $stateParams, Gal, leafletDa
 
   function _refresh() {
     _initMap();
-    Gal.route(route, function (err, data) {
+    Gal.poi(route, function (err, data) {
       if (!err) {
         // $scope.routes = data;
+        console.log(JSON.stringify(data));
         GeoJSON.create(data, function (err, data_geojson) {
           geojson = data_geojson;
           console.log(JSON.stringify(data_geojson));

@@ -1,0 +1,51 @@
+<ion-view view-title="{{ title }}" hide-nav-bar="true">
+  <ion-header-bar align-title="left" class="bar-positive">
+  <div class="buttons">
+    <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore"></a>
+  </div>
+  <h1 class="title">{{ title }}</h1>
+  <div class="buttons">
+    <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{route_name}}"></a>
+  </div>
+</ion-header-bar>
+  <ion-content class="has-header">
+      
+      <div class="list card">
+
+        <div class="item item-avatar">
+          <img src="img/markers/{{ poi.meta[1].value }}" width="32px" height="37px" />
+          <h2> {{ poi.title }} </h2>
+          <h3> {{ poi.address }} </h3>
+          <p> {{ poi.meta[2].value }} </p>
+        </div>
+
+        <div class="item item-body item-text-wrap">
+          <img class="full-image" src="{{ poi.media[1].url }}">
+          <p>
+            {{ poi.text }}
+          </p>
+        </div>
+
+        <div class="item tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item" href="#" ng-click="getPhotos()">
+            <i class="icon ion-ios-camera"></i>
+            Foto
+          </a>
+          <a class="tab-item" href="#" ng-click="getVideo()">
+            <i class="icon ion-ios-videocam"></i>
+            Video
+          </a>
+          <a class="tab-item" href="#" ng-click="view360()">
+            <i class="icon ion-ios-loop-strong"></i>
+            360°
+          </a>
+          <a class="tab-item" href="#" ng-click="share()">
+            <i class="icon ion-share"></i>
+            Share
+          </a>
+        </div>
+
+      </div>
+
+  </ion-content>
+</ion-view>
