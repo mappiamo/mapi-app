@@ -1,6 +1,6 @@
 angular.module('gal.services', [])
 
-.factory('Gal', function ($http, Weather, async, _) {
+.factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO) {
 
   // Some fake testing data
   var gal_json = {
@@ -71,19 +71,27 @@ angular.module('gal.services', [])
     itinerari:[
       {
         name: 'Paduli',
-        image: 'img/itinerari/paduli.jpg'
+        image: 'img/itinerari/paduli.jpg',
+        description: 'L’itinerario Paduli è un percorso che si snoda lungo sei comuni del basso Salento, partendo da Nociglia, il comune più a nord, per toccare Montesano Salentino, Miggiano, Taurisano, Ruffano e Specchia.',
+        api: 'http://test.mappiamo.org/travotest/index.php?module=api&task=content&object=154'
       },
       {
         name: 'Fede',
-        image: 'img/itinerari/fede.jpg'
+        image: 'img/itinerari/fede.jpg',
+        description: 'L\'Itinerario della Fede porta il visitatore a scoprire il territorio del Capo di Leuca seguendo un affascinante percorso costellato di chiese rurali, cripte, luoghi di ristoro, attraversando una campagna ricca di quelle testimonianze rurali tipiche del territorio salentino: muretti a secco, uliveti terrazzati, pajare e costruzioni in pietre a secco che testimoniano lo sforzo della popolazione locale a rendere coltivabile quest\'area.',
+        api: 'http://test.mappiamo.org/travotest/index.php?module=api&task=content&object=156'
       },
       {
         name: 'Naturalistico/Archeologico',
-        image: 'img/itinerari/paduli.jpg'
+        image: 'img/itinerari/paduli.jpg',
+        description: 'L\'itinerario Naturalistico-Archeologico è un percorso che attraversa i comuni di Ugento, Salve, Morciano di Leuca, Presicce ed Acquarica del Capo. L\'itinerario tocca numerose tipologie di monumenti, dai beni archeologici a quelli architettonici, dalle chiese rurali alle masserie e a i monumenti di pietra del Salento, fino a raggiungere il famoso Parco Naturale Litorale di Ugento caratterizzato da cordoni dunali, aree paludose e bacini collegati tra loro tramite canali collettori e con il mare attraverso tre foci.',
+        api: 'http://test.mappiamo.org/travotest/index.php?module=api&task=content&object=155'
       },
       {
         name: 'Falesie',
-        image: 'img/itinerari/falesie.jpg'
+        image: 'img/itinerari/falesie.jpg',
+        description: 'L\'itinerario delle Falesie si dispiega lungo la costa adriatica del Capo di Leuca, un paesaggio spettacolare dove il mare e la terra quasi si scontrano lungo la linea di costa, alta, rocciosa, costellata di grotte e insenature',
+        api: 'http://test.mappiamo.org/travotest/index.php?module=api&task=content&object=154'
       }
     ],
 
@@ -169,6 +177,70 @@ angular.module('gal.services', [])
         lng: 18.1607648
       }],
 
+      detail: function (id, callback) {
+
+          var options = {
+            method: 'GET',
+            url: MAPPIAMO.url,
+            dataType: 'jsonp',
+          };
+
+          $http(options)
+            .success(function(data) {
+                console.log('success: ' + JSON.stringify(data[0]));
+                // done(data.name, data.weather[0].description);
+                
+                var d = _.filter(data, function (item) {
+                  console.log(JSON.stringify(item));
+                  return item.id == id;
+                });
+
+                console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
+                callback(false, d);
+            })
+            .error(function(data, status, headers, config) {
+                console.log('Unable to get itinerario ' + name);
+                callback(true, null);
+            });
+
+      },
+
+      route: function (name, callback) {
+        
+        if (TEST.value) {
+          callback(false, TestData.data);
+        } else {
+          
+          console.log('getting data by ' + url);
+
+          var options = {
+            method: 'GET',
+            url: MAPPIAMO.url,
+            dataType: 'jsonp',
+          };
+
+          $http(options)
+            .success(function(data) {
+                console.log('success: ' + JSON.stringify(data[0]));
+                // done(data.name, data.weather[0].description);
+                
+                var d = _.filter(data, function (item) {
+                  console.log(JSON.stringify(item));
+                  return item.meta[0].name == 'tipo_itine' && 
+                         item.meta[0].value == name;
+                });
+
+                console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
+                callback(false, d);
+            })
+            .error(function(data, status, headers, config) {
+                console.log('Unable to get itinerario ' + name);
+                callback(true, null);
+            });
+          };
+          
+      },
+
       /**
        * @ngdoc function
        * @name core.Services.Gal#method2
@@ -183,7 +255,7 @@ angular.module('gal.services', [])
           
           async.each(this.comuni, function (item, callback) {
               console.log('get forecast data by ' + item.name);
-              Weather.forecast(item.lat, item.lng, function (data) {
+              Weather.forecast(item.lat, item.lng, function (err, data) {
                   
                   var w = {
                       item: item,
@@ -192,7 +264,7 @@ angular.module('gal.services', [])
                   };
                   
                   weather_json.push(w); 
-                  callback();   
+                  callback(err);   
               });
           }, function (err) {
               done(err, weather_json);

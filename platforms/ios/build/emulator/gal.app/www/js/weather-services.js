@@ -17,11 +17,16 @@ angular.module('gal.weather.services', [])
         })
           .success(function(data, status, headers, config) {
               console.log('success: ' + data.name);
-              done(data.name, data.weather[0].description);
+              var d = {
+                name: data.name,
+                description: data.weather[0].description
+              }
+              done(false, d);
           })
           .error(function(data, status, headers, config) {
               console.log('Unable to get weather');
               throw new Error('Unable to get weather');
+              done(true, {});
           });
     },
 
@@ -37,12 +42,12 @@ angular.module('gal.weather.services', [])
         })
           .success(function(data, status, headers, config) {
               // console.log('success: ' + JSON.stringify(data));
-              done(data.list);
+              done(false, data.list);
           })
           .error(function(data, status, headers, config) {
               var msg = 'Unable to get weather by ' + url
               console.log(msg);
-              throw new Error(msg);
+              done(true, null);
           });
     }
 

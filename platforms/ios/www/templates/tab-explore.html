@@ -1,16 +1,27 @@
-<ion-view view-title="Chats">
-  <ion-content>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+<ion-view view-title="Itinerari" hide-nav-bar="true">
 
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
+  <ion-header-bar align-title="left" class="bar-positive">
+    <div class="buttons">
+      <a class="button button-icon icon ion-ios-home" ng-click="goHome()"></a>
+    </div>
+    <h1 class="title">Itinerari</h1>
+  </ion-header-bar>
+
+  <ion-content class="has-header">
+      <!---
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+      -->
+
+      <div class="list card" 
+           collection-repeat="route in routes"
+           item-height="260px">
+
+        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/explore/{{route.name}}">
+          <img src="{{route.image}}">
+          <h2>{{route.name}}</h2>
+          <p>{{route.description}}</p>
+        </a>
+    </div>
+        
   </ion-content>
 </ion-view>

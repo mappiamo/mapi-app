@@ -17,7 +17,7 @@
  under the License.
  */
 //
-// Prefix header for all source files of the 'HelloCordova' target in the 'HelloCordova' project
+// Prefix header for all source files of the 'gal' target in the 'gal' project
 //
 
 #ifdef __OBJC__

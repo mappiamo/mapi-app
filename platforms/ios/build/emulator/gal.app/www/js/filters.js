@@ -82,6 +82,31 @@ filters.filter('weather_icon', function() {
 	}
 });
 
+filters.filter('distance', function(Geolocation) {
+	return function (input) {
+
+		var location = Geolocation.location();
+
+		var distance = Geolocation.distance(location.latitude, location.longitude, Number(input.lat), Number(input.lng)) + ' Km';
+		console.log('location ok -> ' + distance);
+			
+
+			/*
+				location.latitude = position.coords.latitude;
+      location.longitude = position.coords.longitude;
+      location.altitude = position.coords.altitude;
+      location.accuracy = position.coords.accuracy;
+      location.altitudeAccuracy = position.coords.altitudeAccuracy;
+      location.heading = position.coords.heading;
+      location.speed = position.coords.speed;
+      location.timestamp = position.timestamp;
+		*/		
+			
+		return distance;
+		
+	};
+});
+
 filters.filter('weather', function() {
 	return function (input) {
         

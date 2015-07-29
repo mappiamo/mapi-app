@@ -13,15 +13,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
@@ -37,6 +29,10 @@
                             "count": 1
                         },
                         {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"Camera\"><param name=\"ios-package\" value=\"CDVCamera\" /></feature>",
                             "count": 1
                         },
@@ -49,12 +45,6 @@
             },
             "framework": {
                 "parents": {
-                    "CoreGraphics.framework": [
-                        {
-                            "xml": false,
-                            "count": 4
-                        }
-                    ],
                     "CoreMotion.framework": [
                         {
                             "xml": false,
@@ -71,6 +61,12 @@
                         {
                             "xml": false,
                             "count": 3
+                        }
+                    ],
+                    "CoreGraphics.framework": [
+                        {
+                            "xml": false,
+                            "count": 4
                         }
                     ],
                     "ImageIO.framework": [
@@ -101,33 +97,29 @@
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
+            "PACKAGE_NAME": "com.ionicframework.gal622273"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
+            "PACKAGE_NAME": "com.ionicframework.gal622273"
         },
         "cordova-plugin-device-motion": {
             "PACKAGE_NAME": "com.ionicframework.gal622273"
         },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.gal622273"
+        },
         "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "com.ionicframework.gal622273"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.ionicframework.gal622273"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ionicframework.gal622273"
         },
         "org.apache.cordova.camera": {
             "PACKAGE_NAME": "com.ionicframework.gal622273"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
-        }
-    }
+    "dependent_plugins": {}
 }
