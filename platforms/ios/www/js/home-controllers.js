@@ -12,7 +12,7 @@
 
 var ctrls = angular.module('gal.home.controllers', []);
 
-ctrls.controller('HomeCtrl', function($scope, $stateParams, $timeout, Gal) {
+ctrls.controller('HomeCtrl', function($scope, $stateParams, $timeout, Gal, Geolocation) {
 
   /*
 
@@ -49,8 +49,17 @@ ctrls.controller('HomeCtrl', function($scope, $stateParams, $timeout, Gal) {
   */
 
   Gal.weather(function (err, data) {
-    $scope.weathers = data;
-    console.log(JSON.stringify(data[0]));  
+    
+    console.log('location: ' + JSON.stringify(location));
+
+    var d_sorted = _.sortBy(data, function (item) {
+      return Geolocation.distance(item.location.latitude, item.location.longitude);
+    });
+
+    $scope.weathers = d_sorted;
+
+
+    // console.log(JSON.stringify(data[0]));  
   }); 
 
 });

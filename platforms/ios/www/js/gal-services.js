@@ -298,6 +298,10 @@ angular.module('gal.services', [])
                   var w = {
                       item: item,
                       forecast: data,
+                      location: {
+                        latitude: item.lat,
+                        longitude: item.lng
+                      },
                       sizes: _.size(data)    
                   };
                   

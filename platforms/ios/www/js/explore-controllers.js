@@ -93,7 +93,7 @@ ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal, GeoJSO
 // **
 // ** lista dei punti di interesse
 
-ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal) {
+ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal, _, Geolocation) {
   
   var id = $stateParams.id;
   var it = Gal.itinerario(id);
@@ -123,7 +123,12 @@ ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal) {
     // mappa da poter visualizzare
     // filtro dei punti di interesse
     if (!err) {
-      $scope.pois = data;
+      
+      var d_sorted = _.sortBy(data, function (item) {
+        return Geolocation.distance(item.lat, item.lon);
+      });
+
+      $scope.pois = d_sorted;
     }
   });
   
