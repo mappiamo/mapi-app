@@ -12,19 +12,21 @@
 	<div class="card" ng-repeat="weather in weathers">
 		  	<div class="item item-divider">
 		    	{{ weather.item.name }}
+		    	<span class="item-note">{{ weather.location | distance }}
+		    	</span>
 		  	</div>
-		  	<div class="item item-text-wrap">
 
-		  	<div class="list" ng-repeat="forecast in weather.forecast | limitTo:3">
-			    <a class="item item-avatar" href="#">
-			      	<img ng-src="{{ forecast.wind | wind_img }}">
-			      	<h2><i class="icon ion-ios-time-outline"> {{ forecast.dt_txt | forecast_date}}</i></h2>
-		      		<span class="item-note">
-		      			<i class="{{ forecast.weather[0].icon | weather_icon }}"></i>
-		      			<i class="icon icon-058"></i> {{ forecast.main.temp_min | number:0 }}-{{ forecast.main.temp_max | number:0 }} C°
-		      		</span>
-			    </a>
-			</div>
+		  	<div class="item item-text-wrap">
+			  	<div class="list" ng-repeat="forecast in weather.forecast | limitTo:3">
+				    <a class="item item-avatar" href="#">
+				      	<img ng-src="{{ forecast.wind | wind_img }}">
+				      	<h2><i class="icon ion-ios-time-outline"> {{ forecast.dt_txt | forecast_date}}</i></h2>
+			      		<span class="item-note">
+			      			<i class="{{ forecast.weather[0].icon | weather_icon }}"></i>
+			      			<i class="icon icon-058"></i> {{ forecast.main.temp_min | number:0 }}-{{ forecast.main.temp_max | number:0 }} C°
+			      		</span>
+				    </a>
+				</div>
 		  </div>
 	 </div>
 

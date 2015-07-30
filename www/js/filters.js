@@ -99,24 +99,25 @@ filters.filter('weather_icon', function() {
 filters.filter('distance', function(Geolocation) {
 	return function (input) {
 
-		var location = Geolocation.location();
+		var d = Geolocation.distance(input.latitude, input.longitude) + ' Km';
 
-		var distance = Geolocation.distance(location.latitude, location.longitude, Number(input.lat), Number(input.lng)) + ' Km';
-		console.log('location ok -> ' + distance);
-			
+		// var distance = Geolocation.distance(Number(input.lat), Number(input.lng));
+		console.log('location ok -> ' + d);
 
-			/*
-				location.latitude = position.coords.latitude;
-      location.longitude = position.coords.longitude;
-      location.altitude = position.coords.altitude;
-      location.accuracy = position.coords.accuracy;
-      location.altitudeAccuracy = position.coords.altitudeAccuracy;
-      location.heading = position.coords.heading;
-      location.speed = position.coords.speed;
-      location.timestamp = position.timestamp;
-		*/		
-			
-		return distance;
+		return d;
+		
+	};
+});
+
+filters.filter('distance_poi', function(Geolocation) {
+	return function (input) {
+
+		var d = Geolocation.distance(input.lat, input.lon) + ' Km';
+
+		// var distance = Geolocation.distance(Number(input.lat), Number(input.lng));
+		console.log('location ok -> ' + d);
+					
+		return d;
 		
 	};
 });
@@ -183,4 +184,8 @@ function _get_icon_weather(input) {
 
 	return icon;
 
+};
+
+function _deg2rad(deg) {
+    return deg * (Math.PI/180)
 };

@@ -86,9 +86,16 @@ service.factory('Geolocation', function ($http, _, $localstorage) {
       watchID = navigator.geolocation.watchPosition(callback_success, callback_error, options);
     },
 
-    distance: function (lat1, lng1, latitude, longitude) {
+    distance: function (latitude, longitude) {
 
       var d = 0;
+
+      var location = geolocation.location();
+
+      console.log('calculate distance about: ' + JSON.stringify(location));
+
+      var lat1 = location.latitude;
+      var lng1 = location.longitude;
       
       // console.log('check distance about: ' + JSON.stringify(position) + '-' + latitude + ',' + longitude)
 

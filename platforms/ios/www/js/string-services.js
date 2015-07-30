@@ -10,8 +10,6 @@
  *
  */
 
-angular.module('async.services', [])
-
-.factory('async', function () {
-	return window.async; 
+angular.module('S', []).factory('S', function() {
+    return window.S; 
 });

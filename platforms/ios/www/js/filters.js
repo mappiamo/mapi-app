@@ -1,3 +1,15 @@
+/*!
+ * Copyright 2015 Giuseppe Zileni
+ * http://giuseppezileni.github.io
+ *
+ * Ionic, v1.0.0
+ * http://ionicframework.com/
+ *
+ * By @gzileni
+ *
+ *
+ */
+
 var filters = angular.module('gal.filters', []);
 
 filters.filter("forecast_date", function ($moment) {
@@ -74,6 +86,8 @@ filters.filter("wind_img", function () {
 
 filters.filter('weather_icon', function() {
 	return function (input) {
+
+		// console.log('icon: ' + input);
 
 		var icon = 'icon icon-' + _get_icon_weather(input);
 

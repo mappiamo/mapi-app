@@ -1,3 +1,15 @@
+/*!
+ * Copyright 2015 Giuseppe Zileni
+ * http://giuseppezileni.github.io
+ *
+ * Ionic, v1.0.0
+ * http://ionicframework.com/
+ *
+ * By @gzileni
+ *
+ *
+ */
+
 var ctrls = angular.module('gal.real.controllers', ['cordovaDeviceMotion', 'cordovaCapture']);
 
 // Realtà aumentata

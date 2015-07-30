@@ -1,3 +1,15 @@
+/*!
+ * Copyright 2015 Giuseppe Zileni
+ * http://giuseppezileni.github.io
+ *
+ * Ionic, v1.0.0
+ * http://ionicframework.com/
+ *
+ * By @gzileni
+ *
+ *
+ */
+
 var ctrls = angular.module('gal.home.controllers', []);
 
 ctrls.controller('HomeCtrl', function($scope, $stateParams, $timeout, Gal) {
