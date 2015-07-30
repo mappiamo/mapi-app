@@ -1,3 +1,15 @@
+/*!
+ * Copyright 2015 Giuseppe Zileni
+ * http://giuseppezileni.github.io
+ *
+ * Ionic, v1.0.0
+ * http://ionicframework.com/
+ *
+ * By @gzileni
+ *
+ *
+ */
+
 angular.module('gal.services', [])
 
 .factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO) {
@@ -210,22 +222,26 @@ angular.module('gal.services', [])
 
         $http(options)
             .success(function(data) {
-                console.log('success: ' + JSON.stringify(data[0]));
+                // console.log('success: ' + JSON.stringify(data[0]));
                 // done(data.name, data.weather[0].description);
                 
                 var d;
 
                 if (idpoi != null) {
+                  console.log('filter poi by :' + idpoi);
+
                   d = _.filter(data, function (item) {
-                    console.log(JSON.stringify(item));
-                    return item.meta[0].name == 'tipo_itine' && 
-                           item.meta[0].value == name;
+                    // console.log(JSON.stringify(item));
+                    return item.id == idpoi;
                   });
+
+                  console.log('trovato -> ' + JSON.stringify(d));
+                
                 } else {
                   d = data;
+                  // console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
                 };
 
-                console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
                 callback(false, d);
             })
             .error(function(data, status, headers, config) {
@@ -253,7 +269,7 @@ angular.module('gal.services', [])
 
         $http(options)
           .success(function(data) {
-              console.log('success: ' + JSON.stringify(data));
+              // console.log('success: ' + JSON.stringify(data));
               callback(false, data);
           })
           .error(function(data, status, headers, config) {

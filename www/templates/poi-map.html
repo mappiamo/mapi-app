@@ -4,14 +4,15 @@
     <div class="buttons">
       <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore"></a>
     </div>
-    <h1 class="title">{{ route_name }}</h1>
+    <h1 class="title">{{ title }}</h1>
     <div class="buttons">
-      <a class="button button-icon icon ion-ios-list-outline" href="#/tab/explore/{{route_name}}"></a>
+      <a class="button button-icon icon ion-ios-list-outline" href="#/tab/pois/{{ id }}"></a>
     </div>
   </ion-header-bar>
 
   <ion-content data-tap-disabled="true" class="has-header">
       <leaflet id="map"
+               center="center" 
                defaults="defaults">
       </leaflet> 
   </ion-content>

@@ -1,6 +1,22 @@
+/*!
+ * Copyright 2015 Giuseppe Zileni
+ * http://giuseppezileni.github.io
+ *
+ * Ionic, v1.0.0
+ * http://ionicframework.com/
+ *
+ * By @gzileni
+ *
+ *
+ */
+
 var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 
-// lista degli itinerari
+// *****************************
+// **
+// **
+// ** lista degli itinerari
+
 ctrls.controller('ExploreCtrl', function($scope, Gal) {
   
   $scope.$on('$ionicView.enter', function(e) {
@@ -13,12 +29,17 @@ ctrls.controller('ExploreCtrl', function($scope, Gal) {
   
 });
 
-// dettagli dell'itinerario
+// *****************************
+// **
+// **
+// ** dettagli dell'itinerario
+
 ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal, GeoJSON, S, Geolocation) {
 
   var id = $stateParams.id;
   var it = Gal.itinerario(id);
   var geojson;
+  var layer_geojson;
 
   $scope.title = it.title;
 
@@ -35,7 +56,7 @@ ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal, GeoJSO
       defaults: {
           scrollWheelZoom: false
       }
-  })
+  });
 
   Gal.content(id, function (err, data) {
     if (!err) {
@@ -67,13 +88,19 @@ ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal, GeoJSO
 
 });
 
-// lista dei punti di interesse
+// *****************************
+// **
+// **
+// ** lista dei punti di interesse
+
 ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal) {
   
   var id = $stateParams.id;
   var it = Gal.itinerario(id);
 
-  $scope.route_name = it.name;
+  $scope.id = id;
+
+  $scope.title = it.title;
   
   console.log('Param: ' + id);
 
@@ -96,24 +123,31 @@ ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal) {
     // mappa da poter visualizzare
     // filtro dei punti di interesse
     if (!err) {
-      $scope.routes = data;
+      $scope.pois = data;
     }
   });
   
 });
 
-// mappa dei punti di interesse
+// *****************************
+// **
+// **
+// ** Mappa dei punti di interesse
+
 ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON) {
 
   var marker;
   var layer_control;
   var geojson;
-  var layer_geojson
+  var layer_geojson;
 
-  var route = $stateParams.name;
-  $scope.route_name = route;
+  var id = $stateParams.id;
+  var it = Gal.itinerario(id);
+
+  $scope.title = it.title;
+  $scope.id = id;
   
-  console.log('Param Map: ' + route);
+  console.log('Param Map: ' + id);
 
   // $scope.refresh(); 
 
@@ -130,15 +164,22 @@ ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, 
     window.location.href = '#/tab/explore/{{route_name}}'
   };
 
+  var location = Geolocation.location();
+
   angular.extend($scope, {
-    defaults: {
-          scrollWheelZoom: true
+    center: {
+      lat: location.latitude,
+      lng: location.longitude,
+      zoom: 9
+    },
+      defaults: {
+          scrollWheelZoom: false
       }
   });
 
   function _refresh() {
     _initMap();
-    Gal.poi(route, function (err, data) {
+    Gal.poi(id, null, function (err, data) {
       if (!err) {
         // $scope.routes = data;
         console.log(JSON.stringify(data));
@@ -255,6 +296,41 @@ ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, 
 
     });
   };
+
+});
+
+// *****************************
+// **
+// **
+// ** dettaglio del punto di interesse
+
+ctrls.controller('PoiDetailCtrl', function($scope, $stateParams, Gal, S) {
+
+  var id = $stateParams.id;
+  var idpoi = $stateParams.idpoi;
+
+  $scope.id = id;
+  
+  var it = Gal.itinerario(id);
+
+  $scope.title = it.title;
+
+  $scope.goBack = function (id) {
+    window.location.href = '#/tab/explore/' + id;
+  };
+
+  console.log('searching details poi by ' + idpoi);
+
+  Gal.poi(id, idpoi, function (err, data) {
+    // creo un file geojson con i dati 
+    // la lista dei luoghi di interesse ordinati per coordinate
+    // mappa da poter visualizzare
+    // filtro dei punti di interesse
+    if (!err) {
+      data[0].text = S(S(data[0].text).stripTags().s).decodeHTMLEntities().s;
+      $scope.poi = data[0];
+    }
+  });
 
 });
 

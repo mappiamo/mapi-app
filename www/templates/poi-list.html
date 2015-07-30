@@ -1,23 +1,23 @@
-<ion-view view-title="{{ route_name }}" hide-nav-bar="true">
+<ion-view view-title="{{ title }}" hide-nav-bar="true">
   <ion-header-bar align-title="left" class="bar-positive">
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore"></a>
+    <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore/{{ id }}"></a>
   </div>
-  <h1 class="title">{{ route_name }}</h1>
+  <h1 class="title">{{ title }}</h1>
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{route_name}}"></a>
+    <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{ id }}"></a>
   </div>
 </ion-header-bar>
   <ion-content class="has-header">
-      <div class="list" collection-repeat="route in routes">
+      <div class="list" collection-repeat="poi in pois">
 
-        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/details/{{ route.id }}">
-          <img src="{{ route.media[1].url }}" ng-if="route.media[1].url != ''">
+        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/poi/{{ id }}/{{ poi.id }}">
+          <img src="{{ poi.media[1].url }}" ng-if="poi.media[1].url != ''">
           <h2><strong>
-           {{ route.title }}</strong></h2>
-          <h4>{{ route.meta[2].value }}</h4>
-          <p>{{ route.address }}</p>
-          <p><img src="img/markers/{{ route.meta[1].value }}" width="18px" height="18px"><strong> {{ route | distance }} </strong></p>
+           {{ poi.title }}</strong></h2>
+          <h4>{{ poi.meta[2].value }}</h4>
+          <p>{{ poi.address }}</p>
+          <p><img src="img/markers/{{ poi.meta[1].value }}" width="18px" height="18px"><strong> {{ poi | distance }} </strong></p>
         </a>
     </div>
   </ion-content>
