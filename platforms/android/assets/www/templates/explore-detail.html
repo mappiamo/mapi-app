@@ -24,7 +24,7 @@
 
     -->
       
-      <div class="list card">
+      <div class="list card" ng-if="dataOk">
 
         <div class="item item-thumbnail-left item-text-wrap">
           <img src="{{ explore.media[0].url }}" />
@@ -81,10 +81,12 @@
             <i class="icon ion-ios-location"></i>
             Punti di Interesse
           </a>
+          <!--
           <a class="tab-item" href="#" ng-click="share()">
             <i class="icon ion-share"></i>
             Share
           </a>
+          -->
         </div>
 
       </div>

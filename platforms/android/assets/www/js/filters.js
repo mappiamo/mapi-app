@@ -122,7 +122,7 @@ filters.filter('distance_poi', function(Geolocation) {
 	};
 });
 
-filters.filter('weather', function() {
+filters.filter('weather_img', function() {
 	return function (input) {
         
         var icon = 'img/weather/' + _get_icon_weather(input) + '.png';

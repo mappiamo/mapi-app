@@ -1,0 +1,108 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"wp-package\" value=\"Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Accelerometer\"><param name=\"wp-package\" value=\"Accelerometer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"wp-package\" value=\"Compass\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"wp-package\" value=\"File\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Capture\"><param name=\"wp-package\" value=\"Capture\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"wp-package\" value=\"SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"wp-package\" value=\"Camera\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "Properties/WMAppManifest.xml": {
+                "parents": {
+                    "/Deployment/App/Capabilities": [
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_IDENTITY_DEVICE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_SENSORS\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_AUDIO\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_PHOTO\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_PLAYBACK\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MICROPHONE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_ISV_CAMERA\" />",
+                            "count": 2
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "org.apache.cordova.camera": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        }
+    },
+    "dependent_plugins": {}
+}

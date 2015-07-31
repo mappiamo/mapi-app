@@ -1,0 +1,2 @@
+/Users/gzileni/GitHub/mapi-app/platforms/android/build/intermediates/classes/release
+/Users/gzileni/GitHub/mapi-app/platforms/android/build/intermediates/pre-dexed/release/classes-dae994692c6425e619af4b6d8c0ddb5ed199f365.jar

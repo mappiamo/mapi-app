@@ -14,14 +14,8 @@
 
 angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S', 'CordovaDeviceOrientation'])
 
-.run(function($ionicPlatform, Geolocation) {
+.run(function($ionicPlatform, Geolocation, $cordovaDeviceOrientation) {
   $ionicPlatform.ready(function() {
-
-    Geolocation.watch(function (position) {
-      Geolocation.save(position);
-    }, function (err) {
-      console.log('error to get location...')
-    });
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
