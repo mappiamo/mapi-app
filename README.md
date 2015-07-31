@@ -18,3 +18,9 @@ App dedicata ai luoghi del Salento del GAL Capo di S.Maria di Leuca
 	Gestione avanzata dei media per la descrizione dei POI e condivisione sui social network
 	Versione App per ISO/Android/Windows Phone
 
+### Support
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mappiamo/mapi-app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+### Developer
+[Giuseppe Zileni](http://giuseppezileni.github.io) | [Twitter](http://www.twitter.com/gzileni) | [mail](mailto:giuseppe.zileni@gmail.com)
+
