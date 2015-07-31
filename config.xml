@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.gal" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.galleuca" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>GAL Leuca</name>
   <description>
         Applicazione del GAL Capo S.Maria di Leuca
@@ -17,6 +17,12 @@
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
+  <feature name="Compass">
+    <param name="ios-package" value="CDVLocation" />
+  </feature>
+  <feature name="Compass">
+    <param name="android-package" value="org.apache.cordova.deviceorientation.CompassListener" />
+  </feature>
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>

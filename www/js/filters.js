@@ -30,7 +30,7 @@ filters.filter("forecast_date", function ($moment) {
 
 		var d = h1 + ':00';
 
-		console.log(d);
+		// console.log(d);
 
 		return d;
 
@@ -102,7 +102,7 @@ filters.filter('distance', function(Geolocation) {
 		var d = Geolocation.distance(input.latitude, input.longitude) + ' Km';
 
 		// var distance = Geolocation.distance(Number(input.lat), Number(input.lng));
-		console.log('location ok -> ' + d);
+		// console.log('location ok -> ' + d);
 
 		return d;
 		
@@ -122,7 +122,7 @@ filters.filter('distance_poi', function(Geolocation) {
 	};
 });
 
-filters.filter('weather', function() {
+filters.filter('weather_img', function() {
 	return function (input) {
         
         var icon = 'img/weather/' + _get_icon_weather(input) + '.png';

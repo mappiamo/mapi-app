@@ -292,7 +292,7 @@ angular.module('gal.services', [])
           console.log('weather start ...');
           
           async.each(this.comuni, function (item, callback) {
-              console.log('get forecast data by ' + item.name);
+              // console.log('get forecast data by ' + item.name);
               Weather.forecast(item.lat, item.lng, function (err, data) {
                   
                   var w = {

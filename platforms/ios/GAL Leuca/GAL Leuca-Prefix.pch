@@ -17,7 +17,7 @@
  under the License.
  */
 //
-// Prefix header for all source files of the 'gal' target in the 'gal' project
+// Prefix header for all source files of the 'GAL Leuca' target in the 'GAL Leuca' project
 //
 
 #ifdef __OBJC__

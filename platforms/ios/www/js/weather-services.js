@@ -46,7 +46,7 @@ angular.module('gal.weather.services', [])
         
         var url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lng + '&units=metric';
         
-        console.log(url);
+        // console.log(url);
         
         $http({
           method: 'GET', 

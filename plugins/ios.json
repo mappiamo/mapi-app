@@ -21,6 +21,10 @@
                             "count": 1
                         },
                         {
+                            "xml": "<feature name=\"Compass\"><param name=\"ios-package\" value=\"CDVCompass\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"File\"><param name=\"ios-package\" value=\"CDVFile\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -45,16 +49,10 @@
             },
             "framework": {
                 "parents": {
-                    "CoreMotion.framework": [
+                    "ImageIO.framework": [
                         {
-                            "xml": false,
+                            "xml": true,
                             "count": 1
-                        }
-                    ],
-                    "AssetsLibrary.framework": [
-                        {
-                            "xml": false,
-                            "count": 2
                         }
                     ],
                     "MobileCoreServices.framework": [
@@ -63,19 +61,29 @@
                             "count": 3
                         }
                     ],
+                    "CoreLocation.framework": [
+                        {
+                            "xml": false,
+                            "count": 2
+                        }
+                    ],
                     "CoreGraphics.framework": [
                         {
                             "xml": false,
                             "count": 4
                         }
                     ],
-                    "ImageIO.framework": [
+                    "AssetsLibrary.framework": [
                         {
-                            "xml": true,
-                            "count": 1
+                            "xml": false,
+                            "count": 2
                         }
                     ],
-                    "CoreLocation.framework": [
+                    "CoreImage.framework": [],
+                    "OpenGLES.framework": [],
+                    "GLKit.framework": [],
+                    "CoreVideo.framework": [],
+                    "CoreMotion.framework": [
                         {
                             "xml": false,
                             "count": 1
@@ -97,28 +105,31 @@
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "cordova-plugin-device-motion": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "cordova-plugin-media-capture": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "org.apache.cordova.camera": {
-            "PACKAGE_NAME": "com.ionicframework.gal622273"
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
         }
     },
     "dependent_plugins": {}

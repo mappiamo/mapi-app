@@ -17,10 +17,35 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function($scope, Gal) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading) {
+
+  $scope.dataOk = false;
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+      showSpinner(true);
+  });
+
+  function showSpinner (view, message) {
+
+      var msg = '<ion-spinner icon="lines"></ion-spinner>';
+
+      if (typeof message !== 'undefined') {
+        msg = message;
+      };
+
+      if (view) {  
+        $ionicLoading.show({
+            template: msg
+        });
+      } else {
+        $ionicLoading.hide();
+      }
+  };
   
   $scope.$on('$ionicView.enter', function(e) {
-    $scope.routes = Gal.itinerari; 
+    $scope.routes = Gal.itinerari;
+    $scope.dataOk = true;
+    showSpinner(false); 
   });
 
   $scope.goHome = function () {
@@ -34,57 +59,98 @@ ctrls.controller('ExploreCtrl', function($scope, Gal) {
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal, GeoJSON, S, Geolocation) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading) {
 
   var id = $stateParams.id;
   var it = Gal.itinerario(id);
   var geojson;
   var layer_geojson;
 
+  $scope.dataOk = false;
   $scope.title = it.title;
 
   console.log('Explore details: ' + id);
 
-  var location = Geolocation.location();
-
-  angular.extend($scope, {
-    center: {
-      lat: location.latitude,
-      lng: location.longitude,
-      zoom: 8
-    },
-      defaults: {
-          scrollWheelZoom: false
-      }
+  $scope.$on('$ionicView.beforeEnter', function() {
+      showSpinner(true);
+      Geolocation.get(_onSuccess, _onError);
   });
 
-  Gal.content(id, function (err, data) {
-    if (!err) {
+  $scope.$on('$ionicView.enter', function(e) {
+    _refresh();
+  });
 
-      data.text = S(S(data.text).stripTags().s).decodeHTMLEntities().s;
-      data.meta[3].value = S(S(data.meta[3].value).stripTags().s).decodeHTMLEntities().s;
-      data.meta[7].value = S(S(data.meta[7].value).stripTags().s).decodeHTMLEntities().s;
+  function showSpinner (view, message) {
 
-      $scope.explore = data;
+      var msg = '<ion-spinner icon="lines"></ion-spinner>';
 
-      var d = S(data.route).strip('MULTILINESTRING', '((', '))', '(', ')').s
+      if (typeof message !== 'undefined') {
+        msg = message;
+      };
 
-      GeoJSON.route(d, data.meta[0].value, function(err, data_geojson) {
-        // console.log(JSON.stringify(data_geojson));
-        geojson = data_geojson;
-
-        angular.extend($scope, {
-          geojson: {
-            data: data_geojson,
-            style: {
-                color: data.meta[0].value
-            }
-          }
+      if (view) {  
+        $ionicLoading.show({
+            template: msg
         });
+      } else {
+        $ionicLoading.hide();
+      }
+  };
 
-      });
-    }
-  });
+  function _onSuccess(position) {
+
+    // init map  
+    angular.extend($scope, {
+      center: {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        zoom: 8
+      },
+        defaults: {
+            scrollWheelZoom: false
+        }
+    });
+
+  };
+
+  function _onError(error) {
+    console.log('error to get location ...')
+  };
+
+  function _refresh() {
+
+    Gal.content(id, function (err, data) {
+      if (!err) {
+
+        data.text = S(S(data.text).stripTags().s).decodeHTMLEntities().s;
+        data.meta[3].value = S(S(data.meta[3].value).stripTags().s).decodeHTMLEntities().s;
+        data.meta[7].value = S(S(data.meta[7].value).stripTags().s).decodeHTMLEntities().s;
+
+        $scope.explore = data;
+
+        var d = S(data.route).strip('MULTILINESTRING', '((', '))', '(', ')').s
+
+        GeoJSON.route(d, data.meta[0].value, function(err, data_geojson) {
+          // console.log(JSON.stringify(data_geojson));
+          geojson = data_geojson;
+
+          angular.extend($scope, {
+            geojson: {
+              data: data_geojson,
+              style: {
+                  color: data.meta[0].value
+              }
+            }
+          });
+
+          $scope.dataOk = true;
+
+          showSpinner(false);
+
+        });
+      }
+    });
+  };
 
 });
 
@@ -93,20 +159,41 @@ ctrls.controller('ExploreDetailCtrl', function($scope, $stateParams, Gal, GeoJSO
 // **
 // ** lista dei punti di interesse
 
-ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal, _, Geolocation) {
+ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading) {
   
   var id = $stateParams.id;
   var it = Gal.itinerario(id);
 
   $scope.id = id;
-
   $scope.title = it.title;
+  $scope.dataOk = false;
   
   console.log('Param: ' + id);
 
   $scope.$on('$ionicView.enter', function(e) {
-    //
+    _refresh();
   });
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+      showSpinner(true);
+  });
+
+  function showSpinner (view, message) {
+
+      var msg = '<ion-spinner icon="lines"></ion-spinner>';
+
+      if (typeof message !== 'undefined') {
+        msg = message;
+      };
+
+      if (view) {  
+        $ionicLoading.show({
+            template: msg
+        });
+      } else {
+        $ionicLoading.hide();
+      }
+  };
 
   $scope.goBack = function (id) {
     window.location.href = '#/tab/explore/' + id;
@@ -117,7 +204,8 @@ ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal, _, Geolocati
     window.location.href = '#/tab/map/' + id;
   };
 
-  Gal.poi(id, null, function (err, data) {
+  function _refresh() {
+    Gal.poi(id, null, function (err, data) {
     // creo un file geojson con i dati 
     // la lista dei luoghi di interesse ordinati per coordinate
     // mappa da poter visualizzare
@@ -129,8 +217,11 @@ ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal, _, Geolocati
       });
 
       $scope.pois = d_sorted;
+      $scope.dataOk = true;
+      showSpinner(false);
     }
   });
+  };
   
 });
 
@@ -139,7 +230,7 @@ ctrls.controller('PoiListCtrl', function($scope, $stateParams, Gal, _, Geolocati
 // **
 // ** Mappa dei punti di interesse
 
-ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON) {
+ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading) {
 
   var marker;
   var layer_control;
@@ -151,13 +242,33 @@ ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, 
 
   $scope.title = it.title;
   $scope.id = id;
+  $scope.dataOk = false;
   
   console.log('Param Map: ' + id);
 
-  // $scope.refresh(); 
+  function showSpinner (view, message) {
+
+      var msg = '<ion-spinner icon="lines"></ion-spinner>';
+
+      if (typeof message !== 'undefined') {
+        msg = message;
+      };
+
+      if (view) {  
+        $ionicLoading.show({
+            template: msg
+        });
+      } else {
+        $ionicLoading.hide();
+      }
+  };
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+      showSpinner(true);
+      _initMap();
+  });
 
   $scope.$on('$ionicView.enter', function(e) {
-    // 
     _refresh();
   });
 
@@ -169,29 +280,56 @@ ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, 
     window.location.href = '#/tab/explore/{{route_name}}'
   };
 
-  var location = Geolocation.location();
+  Geolocation.get(_onSuccess, _onError);
 
-  angular.extend($scope, {
-    center: {
-      lat: location.latitude,
-      lng: location.longitude,
-      zoom: 9
-    },
-      defaults: {
-          scrollWheelZoom: false
-      }
-  });
+  function _onSuccess(position) {
+
+    // init map  
+    angular.extend($scope, {
+      center: {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        zoom: 8
+      },
+        defaults: {
+            scrollWheelZoom: false
+        }
+    });
+
+    leafletData.getMap('map').then(function(map) {
+
+      var ll = L.latLng(position.coords.latitude, position.coords.longitude);
+
+        marker = L.userMarker(ll, {
+          pulsing: true, 
+          accuracy: 100, 
+          smallIcon: true,
+          opacity: 0.2
+        });
+        marker.addTo(map);
+
+        map.setView([location.latitude, location.longitude], 9);
+
+        map.invalidateSize();
+    });
+
+  };
+
+  function _onError(error) {
+    console.log('error to get location ...');
+  };
 
   function _refresh() {
-    _initMap();
     Gal.poi(id, null, function (err, data) {
       if (!err) {
         // $scope.routes = data;
         console.log(JSON.stringify(data));
         GeoJSON.create(data, function (err, data_geojson) {
           geojson = data_geojson;
-          console.log(JSON.stringify(data_geojson));
+          // console.log(JSON.stringify(data_geojson));
           _geojson();
+          $scope.dataOk = true;
+          showSpinner(false);
         });
       }
     });
@@ -257,22 +395,6 @@ ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, 
           map.removeLayer(layer_geojson);
       };
 
-      // marker della posizione del device
-      if (location.latitude != 0 && location.longitude != 0) {
-
-        var ll = L.latLng(location.latitude, location.longitude);
-
-        marker = L.userMarker(ll, {
-          pulsing: true, 
-          accuracy: 100, 
-          smallIcon: true,
-          opacity: 0.2
-        });
-        marker.addTo(map);
-
-        map.setView([location.latitude, location.longitude], 9);
-      };
-
       var options_weather_layer = {
         showLegend: false, 
         opacity: 0.2 
@@ -309,7 +431,7 @@ ctrls.controller('PoiMapCtrl', function($scope, $stateParams, Gal, leafletData, 
 // **
 // ** dettaglio del punto di interesse
 
-ctrls.controller('PoiDetailCtrl', function($scope, $stateParams, Gal, S) {
+ctrls.controller('PoiDetailCtrl', function($scope, $stateParams, Gal, S, $ionicLoading) {
 
   var id = $stateParams.id;
   var idpoi = $stateParams.idpoi;
@@ -319,23 +441,54 @@ ctrls.controller('PoiDetailCtrl', function($scope, $stateParams, Gal, S) {
   var it = Gal.itinerario(id);
 
   $scope.title = it.title;
+  $scope.dataOk = false;
 
   $scope.goBack = function (id) {
     window.location.href = '#/tab/explore/' + id;
   };
 
+  function showSpinner (view, message) {
+
+      var msg = '<ion-spinner icon="lines"></ion-spinner>';
+
+      if (typeof message !== 'undefined') {
+        msg = message;
+      };
+
+      if (view) {  
+        $ionicLoading.show({
+            template: msg
+        });
+      } else {
+        $ionicLoading.hide();
+      }
+  };
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+      showSpinner(true);
+  });
+
+  $scope.$on('$ionicView.enter', function(e) {
+    _refresh();
+  });
+
   console.log('searching details poi by ' + idpoi);
 
-  Gal.poi(id, idpoi, function (err, data) {
-    // creo un file geojson con i dati 
-    // la lista dei luoghi di interesse ordinati per coordinate
-    // mappa da poter visualizzare
-    // filtro dei punti di interesse
-    if (!err) {
-      data[0].text = S(S(data[0].text).stripTags().s).decodeHTMLEntities().s;
-      $scope.poi = data[0];
-    }
-  });
+  function _refresh() {
+
+    Gal.poi(id, idpoi, function (err, data) {
+      // creo un file geojson con i dati 
+      // la lista dei luoghi di interesse ordinati per coordinate
+      // mappa da poter visualizzare
+      // filtro dei punti di interesse
+      if (!err) {
+        data[0].text = S(S(data[0].text).stripTags().s).decodeHTMLEntities().s;
+        $scope.poi = data[0];
+        $scope.dataOk = true;
+        showSpinner(false);
+      }
+    });
+  };
 
 });
 

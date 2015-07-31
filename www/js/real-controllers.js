@@ -13,47 +13,40 @@
 var ctrls = angular.module('gal.real.controllers', ['cordovaDeviceMotion', 'cordovaCapture']);
 
 // Realtà aumentata
-ctrls.controller('RealCtrl', function($scope, $cordovaDeviceMotion, $cordovaCapture) {
+ctrls.controller('RealCtrl', function($scope, $cordovaDeviceMotion, $cordovaCapture, Geolocation, $cordovaDeviceOrientation) {
 
-	var w;
+	var orientation;
 
-	console.log('Real init ...');
+	// Create a variable to store the transform value
+	$scope.transform = "rotate(0deg)";
+	
+	// When the number changes, update the transform string
+	$scope.$watch("magnetic", function(val) {
+	    $scope.transform = "rotate("+val+"deg)";
+	});  
 
-	$scope.accelerometer = function () {
-		$cordovaDeviceMotion.accelerometer(function (err, acc) {
-			console.log('Acceleration: ');
-			var X = acc.x;
-	      	var Y = acc.y;
-	      	var Z = acc.z;
-	      	var timeStamp = acc.timestamp;
-	      	var msg = 'X: ' + X + ' Y:' + Y + ' - ' + timeStamp;
-	      	$scope.coordinates = msg;
-		});
-	};
+	function _onSuccess(result) {
+		console.log('success orientation');
+		orientation.magneticHeading = result.magneticHeading;
+        orientation.trueHeading = result.trueHeading;
+        orientation.accuracy = result.headingAccuracy;
+        orientation.timeStamp = result.timestamp;
+        $scope.magnetic = result.magneticHeading;
+	};  
 
-	$scope.watch = function () {
-		$cordovaDeviceMotion.watch(function (err, acc, wId) {
-			console.log('Watch: ');
-			
-			w = wId;
-			var X = acc.x;
-	      	var Y = acc.y;
-	      	var Z = acc.z;
-	      	var timeStamp = acc.timestamp;
-	      	var msg = 'Watch X: ' + X + ' Y:' + Y + ' - ' + timeStamp;
-	      	$scope.coordinates = msg;
-		});
-	};
+	function _onError(err) {
+		console.log('error to orientation');
+	};    
 
-	$scope.captureImage = function() {
-	    console.log('capture init ...');
+	// $scope.magnetic = 90;
 
-	    $cordovaCapture.getImage(function (err, imageData) {
-	    	console.log('ok.');
-	    	var smallImage = angular.element('#image_capture');
-			smallImage.style.display = 'block';
-      		smallImage.src = "data:image/jpeg;base64," + imageData;
-	    });
-	};
-  
+	$scope.location = Geolocation.location();
+
+	$scope.magnetic = 0;
+                 
+    console.log('start device orientation');
+
+    // The watch id references the current `watchHeading`
+    $cordovaDeviceOrientation.watch(_onSuccess, _onError);
+
 });

@@ -1,0 +1,73 @@
+<ion-view view-title="Dashboard" hide-nav-bar="true">
+	<ion-header-bar align-title="left" class="bar-positive">
+		<h1 class="title"><a href="#/tab/home"><img src="img/logo/logo-gal_tra_small.png"></img></a></h1>
+		<div class="buttons">
+			<button class="button"><i class="icon ion-ios-cloud-download"></i></button>
+		</div>
+	</ion-header-bar>
+	<ion-content class="has-header">
+
+	<div id="home"></div>
+
+	<div class="card" ng-repeat="weather in weathers">
+		  	<div class="item item-divider">
+		    	{{ weather.item.name }}
+		    	<span class="item-note">{{ weather.location | distance }}
+		    	</span>
+		  	</div>
+
+		  	<div class="item item-text-wrap">
+			  	<div class="list" ng-repeat="forecast in weather.forecast | limitTo:3">
+				    <a class="item item-avatar" href="#">
+				      	<img ng-src="{{ forecast.wind | wind_img }}">
+				      	<h2><i class="icon ion-ios-time-outline"> {{ forecast.dt_txt | forecast_date}}</i></h2>
+			      		<span class="item-note">
+			      			<i class="{{ forecast.weather[0].icon | weather_icon }}"></i>
+			      			<i class="icon icon-058"></i> {{ forecast.main.temp_min | number:0 }}-{{ forecast.main.temp_max | number:0 }} C°
+			      		</span>
+				    </a>
+				</div>
+		  </div>
+	 </div>
+
+	 <!--
+		{
+			"dt":1438635600,
+			"main":{
+				"temp":27.86,
+				"temp_min":27.86,
+				"temp_max":27.86,
+				"pressure":1023.17,
+				"sea_level":1027.25,
+				"grnd_level":1023.17,
+				"humidity":77,
+				"temp_kf":0
+			},
+			"weather":[
+				{
+					"id":800,
+					"main":"Clear",
+					"description":"sky is clear",
+					"icon":"01n"
+				}
+			],
+			"clouds":{
+				"all":0
+			},
+			"wind":{
+				"speed":4.52,
+				"deg":350.501
+			},
+			"sys":{
+				"pod":"n"
+			},
+			"dt_txt":"2015-08-03 21:00:00"
+		}
+
+	 -->
+
+	</ion-content>
+</ion-view>
+
+<script src="lib/vegas/dist/vegas.min.js"></script>
+<script src="lib/bg-slider.js"></script>

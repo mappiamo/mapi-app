@@ -12,16 +12,10 @@
 
 // Ionic Starter App
 
-angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S'])
+angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S', 'CordovaDeviceOrientation'])
 
-.run(function($ionicPlatform, Geolocation) {
+.run(function($ionicPlatform, Geolocation, $cordovaDeviceOrientation) {
   $ionicPlatform.ready(function() {
-
-    Geolocation.watch(function (position) {
-      Geolocation.save(position);
-    }, function (err) {
-      console.log('error to get location...')
-    });
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -54,7 +48,9 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
   poi: 'http://test.mappiamo.org/travotest/index.php?module=api&task=category&object='    
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+
+  $ionicConfigProvider.tabs.position('bottom');
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router

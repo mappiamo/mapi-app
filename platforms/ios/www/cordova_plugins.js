@@ -29,6 +29,27 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
+        "id": "cordova-plugin-device-orientation.CompassError",
+        "clobbers": [
+            "CompassError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
+        "id": "cordova-plugin-device-orientation.CompassHeading",
+        "clobbers": [
+            "CompassHeading"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
+        "id": "cordova-plugin-device-orientation.compass",
+        "clobbers": [
+            "navigator.compass"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "id": "cordova-plugin-file.DirectoryEntry",
         "clobbers": [
@@ -265,6 +286,7 @@ module.exports.metadata =
     "com.ionic.keyboard": "1.0.4",
     "cordova-plugin-device": "1.0.1",
     "cordova-plugin-device-motion": "1.1.1",
+    "cordova-plugin-device-orientation": "1.0.1",
     "cordova-plugin-file": "2.1.0",
     "cordova-plugin-media-capture": "1.0.1",
     "cordova-plugin-splashscreen": "2.1.0",

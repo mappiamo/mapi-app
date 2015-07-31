@@ -69,7 +69,7 @@ service.factory('Geolocation', function ($http, _, $localstorage) {
 
     location: function () {
       var location = $localstorage.getObject('location');
-      console.log('get location about ' + location.latitude + ',' + location.longitude);
+      // console.log('get location about ' + location.latitude + ',' + location.longitude);
       return location;
     },
 
@@ -92,7 +92,7 @@ service.factory('Geolocation', function ($http, _, $localstorage) {
 
       var location = geolocation.location();
 
-      console.log('calculate distance about: ' + JSON.stringify(location));
+      // console.log('calculate distance about: ' + JSON.stringify(location));
 
       var lat1 = location.latitude;
       var lng1 = location.longitude;
