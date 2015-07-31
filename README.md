@@ -1,5 +1,5 @@
 # GAL Capo di S.Maria di Leuca
-![GAL](resources/ios/splash/Default-iphone.png)
+![GAL](resources/android/splash-android-1.png)
 
 App dedicata ai luoghi del Salento del GAL Capo di S.Maria di Leuca
 
