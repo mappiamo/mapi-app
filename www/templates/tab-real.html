@@ -1,14 +1,15 @@
 <ion-view view-title="Realtà aumentata" hide-nav-bar="true">
   <ion-content>
 
-  	<div class="list card" ng-if="dataOk">
-	  <div class="item item-avatar">
-	    <h2>{{ location.latitude | number: 4 }}, {{ location.longitude | number: 4 }}</h2>
-	    <p> {{ magnetic }}</p>
-	  </div>
+  	<button ng-click="getPhoto()" class="button button-full button-positive"><i class="icon ion-ios-camera"></i> Punta il dispositivo in una direzione e scatta una foto</button>
 
-	  <div class="item item-image">
-	    <img src="img/compass/compass.png"
+  	<div class="list card" ng-show="isPhoto">
+
+	  <div class="item item-image" ng-show="isImage">
+
+	  	<img ng-src="{{lastPhoto}}" style="max-width: 100%" />
+
+	    <img align="center" src="img/compass/compass_380.png"
             ng-style="
 	  		 {
 			 	'transform': transform, 
@@ -19,9 +20,30 @@
 			}" />
 	  </div>
 
-	  <!-- lista dei POI -->
+	  <h2 align="center" ng-show="isLocation"><i class="icon ion-ios-location"></i> {{ location.latitude | number: 4 }}, {{ location.longitude | number: 4 }}</h2>
+
+	  <p class="assertive" ng-if="error" align="center"><i class="icon ion-android-warning"></i> {{ error_msg }}</p>
 	  
 	</div>
+
+	<hr />
+
+	<!-- lista dei POI -->
+	  <div class="list" collection-repeat="poi in pois">
+
+        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/poi/{{ poi.itinerario._id }}/{{ poi.item.id }}">
+          <img src="{{ poi.item.media[1].url }}" ng-if="poi.item.media[1].url != ''">
+          <h2><strong>
+           {{ poi.item.title }}</strong></h2>
+          <h3>Itinerario {{ poi.itinerario.title }}</h3>
+          <h4>{{ poi.item.meta[2].value }}</h4>
+          <p>{{ poi.item.address }}</p>
+          <p><img src="img/markers/{{ poi.item.meta[1].value }}" width="18px" height="18px"><strong> {{ poi.item | distance_poi }} </strong></p>
+        
+        </a>
+    </div>
+
+	
 
   </ion-content>
 </ion-view>

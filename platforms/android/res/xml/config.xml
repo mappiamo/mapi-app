@@ -69,4 +69,8 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <feature name="CameraPreview">
+        <param name="android-package" value="com.mbppower.CameraPreview" />
+        <param name="onload" value="true" />
+    </feature>
 </widget>

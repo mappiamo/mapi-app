@@ -13,9 +13,11 @@
 var ctrls = angular.module('gal.real.controllers', ['cordovaDeviceMotion', 'cordovaCapture']);
 
 // Realtà aumentata
-ctrls.controller('RealCtrl', function($scope, $cordovaDeviceMotion, $cordovaCapture, Geolocation, $cordovaDeviceOrientation) {
+ctrls.controller('RealCtrl', function($scope, $cordovaDeviceMotion, $cordovaCapture, Geolocation, $cordovaDeviceOrientation, $cordovaCamera) {
 
 	var orientation;
+	$scope.dataOk = true;
+	$scope.isPhoto = false;
 
 	// Create a variable to store the transform value
 	$scope.transform = "rotate(0deg)";
@@ -47,6 +49,54 @@ ctrls.controller('RealCtrl', function($scope, $cordovaDeviceMotion, $cordovaCapt
     console.log('start device orientation');
 
     // The watch id references the current `watchHeading`
-    $cordovaDeviceOrientation.watch(_onSuccess, _onError);
+    // $cordovaDeviceOrientation.watch(_onSuccess, _onError);
+
+    function _getOrientation() {
+    	$cordovaDeviceOrientation.get(_onSuccess, _onError);
+    };
+
+    $scope.getPhoto = function() {
+	    console.log('Getting camera');
+
+	    /*
+	    Camera.getPicture({
+	      quality: 75,
+	      targetWidth: 320,
+	      targetHeight: 320,
+	      saveToPhotoAlbum: false
+	    }).then(function(imageURI) {
+	      console.log(imageURI);
+	      $scope.lastPhoto = imageURI;
+	      _getOrientation();
+	      $scope.isPhoto = true;
+	    }, function(err) {
+	      console.err(err);
+	    });
+*/
+
+	    var options = {
+	      quality: 50,
+	      destinationType: Camera.DestinationType.DATA_URL,
+	      sourceType: Camera.PictureSourceType.CAMERA,
+	      allowEdit: true,
+	      encodingType: Camera.EncodingType.JPEG,
+	      targetWidth: 100,
+	      targetHeight: 100,
+	      popoverOptions: CameraPopoverOptions,
+	      saveToPhotoAlbum: false
+	    };
+
+	    $cordovaCamera.getPicture(options).then(function(imageData) {
+	      // var image = document.getElementById('myImage');
+	      $scope.lastPhoto = "data:image/jpeg;base64," + imageData;
+	      // console.log(imageURI);
+	      // $scope.lastPhoto = imageURI;
+		  _getOrientation();
+		  $scope.isPhoto = true;
+	    }, function(err) {
+	      // error
+	    });
+
+	  }
 
 });

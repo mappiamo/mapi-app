@@ -102,6 +102,9 @@
         },
         "org.apache.cordova.camera": {
             "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
+        },
+        "com.mbppower.camerapreview": {
+            "PACKAGE_NAME": "{46a155a0-375e-11e5-aa1e-155e1ad3c86a}"
         }
     },
     "dependent_plugins": {}

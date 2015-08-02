@@ -12,7 +12,7 @@
 
 // Ionic Starter App
 
-angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S', 'CordovaDeviceOrientation'])
+angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S', 'CordovaDeviceOrientation', 'ngCordova.plugins.camera'])
 
 .run(function($ionicPlatform, Geolocation, $cordovaDeviceOrientation) {
   $ionicPlatform.ready(function() {
@@ -35,6 +35,10 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
   $momentProvider
     .asyncLoading(false)
     .scriptUrl('lib/moment/moment.js');
+})
+
+.config(function($compileProvider){
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
 })
 
 .constant('TEST', {

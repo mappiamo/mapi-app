@@ -1,6 +1,6 @@
 {
   "name": "gal",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "gal: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",

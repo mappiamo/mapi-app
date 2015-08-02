@@ -1,14 +1,26 @@
 <ion-view view-title="Realtà aumentata" hide-nav-bar="true">
   <ion-content>
 
-  	<div class="list card" ng-if="dataOk">
+  	<button ng-click="getPhoto()" class="button button-full button-positive">Take Photo</button>
+
+  	<div class="list card" ng-if="isPhoto">
+	  
+	  <!--
 	  <div class="item item-avatar">
 	    <h2>{{ location.latitude | number: 4 }}, {{ location.longitude | number: 4 }}</h2>
 	    <p> {{ magnetic }}</p>
 	  </div>
+	  -->
 
-	  <div class="item item-image">
-	    <img src="img/compass/compass.png"
+
+
+	  <div class="item item-image" id="transparent">
+
+	  	
+	  	
+	  	<img ng-src="{{lastPhoto}}" style="max-width: 100%" />
+
+	    <img align="center" src="img/compass/compass_380.png"
             ng-style="
 	  		 {
 			 	'transform': transform, 

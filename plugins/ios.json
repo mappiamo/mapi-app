@@ -43,6 +43,10 @@
                         {
                             "xml": "<preference name=\"CameraUsesGeolocation\" value=\"false\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"CameraPreview\"><param name=\"ios-package\" onload=\"true\" value=\"CameraPreview\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -52,37 +56,57 @@
                     "ImageIO.framework": [
                         {
                             "xml": true,
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "MobileCoreServices.framework": [
                         {
                             "xml": false,
-                            "count": 3
+                            "count": 4
                         }
                     ],
                     "CoreLocation.framework": [
                         {
                             "xml": false,
-                            "count": 2
+                            "count": 3
                         }
                     ],
                     "CoreGraphics.framework": [
                         {
                             "xml": false,
-                            "count": 4
+                            "count": 6
                         }
                     ],
                     "AssetsLibrary.framework": [
                         {
                             "xml": false,
-                            "count": 2
+                            "count": 3
                         }
                     ],
-                    "CoreImage.framework": [],
-                    "OpenGLES.framework": [],
-                    "GLKit.framework": [],
-                    "CoreVideo.framework": [],
+                    "CoreImage.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
+                    "OpenGLES.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
+                    "GLKit.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
+                    "CoreVideo.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
                     "CoreMotion.framework": [
                         {
                             "xml": false,
@@ -129,6 +153,9 @@
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "org.apache.cordova.camera": {
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
+        },
+        "com.mbppower.camerapreview": {
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         }
     },

@@ -58,6 +58,13 @@
 		D9ED0D9F317B42FDAF96880E /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7259ED3558448A9A511852 /* CoreMotion.framework */; };
 		E022882168FE4FA5A7AE4D8E /* UIWebViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = C61EF22594CB401F9E749779 /* UIWebViewExtension.m */; };
 		E92D99427E3F404AA006D09C /* CDVJpegHeaderWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D72A7FC2C3E48F7A0DBE6CD /* CDVJpegHeaderWriter.m */; };
+		59A0B12C8CAA47C29CB395CE /* CameraPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 04139CB3FF9348C5A4B2DFD3 /* CameraPreview.m */; };
+		FF29EFCA4EC74CB8891BF862 /* CameraSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D0944C58944F0FAC9FA9DD /* CameraSessionManager.m */; };
+		773B80C4C0E84C93A7CFB0D0 /* CameraRenderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68921CD280424D3ABEDAE1F7 /* CameraRenderController.m */; };
+		2668DFAFAAA24E9B9876EC2C /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF669D1FC26743BBB54585E4 /* CoreImage.framework */; };
+		347DFD71C1ED4236B733AB71 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0E9A1914BD64F55BFF58DB1 /* OpenGLES.framework */; };
+		A8346848873E420794EC464E /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88392F9B2155489C90575D0D /* GLKit.framework */; };
+		97FE99D8A0674DAEA61D612F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F281B69CE2E4B0E89038810 /* CoreVideo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,6 +162,16 @@
 		F7C83CBFB01D493F9906A949 /* CoreLocation.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = "GAL Leuca/config.xml"; sourceTree = "<group>"; };
 		FE7259ED3558448A9A511852 /* CoreMotion.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		04139CB3FF9348C5A4B2DFD3 /* CameraPreview.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CameraPreview.m"; path = "com.mbppower.camerapreview/CameraPreview.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		03D0944C58944F0FAC9FA9DD /* CameraSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CameraSessionManager.m"; path = "com.mbppower.camerapreview/CameraSessionManager.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		68921CD280424D3ABEDAE1F7 /* CameraRenderController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CameraRenderController.m"; path = "com.mbppower.camerapreview/CameraRenderController.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		2F2F3418570F41938C75E347 /* CameraPreview.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CameraPreview.h"; path = "com.mbppower.camerapreview/CameraPreview.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		567C5FFB0E314798B48D83C7 /* CameraSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CameraSessionManager.h"; path = "com.mbppower.camerapreview/CameraSessionManager.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		5140CD94FDD0407DA64C73A6 /* CameraRenderController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CameraRenderController.h"; path = "com.mbppower.camerapreview/CameraRenderController.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		CF669D1FC26743BBB54585E4 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreImage.framework"; path = "System/Library/Frameworks/CoreImage.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		D0E9A1914BD64F55BFF58DB1 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "OpenGLES.framework"; path = "System/Library/Frameworks/OpenGLES.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		88392F9B2155489C90575D0D /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "GLKit.framework"; path = "System/Library/Frameworks/GLKit.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		2F281B69CE2E4B0E89038810 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreVideo.framework"; path = "System/Library/Frameworks/CoreVideo.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +187,10 @@
 				37986A271A174541BEE828F4 /* ImageIO.framework in Frameworks */,
 				273A01A79FD54DA38F35D105 /* CoreLocation.framework in Frameworks */,
 				D9ED0D9F317B42FDAF96880E /* CoreMotion.framework in Frameworks */,
+				2668DFAFAAA24E9B9876EC2C /* CoreImage.framework in Frameworks */,
+				347DFD71C1ED4236B733AB71 /* OpenGLES.framework in Frameworks */,
+				A8346848873E420794EC464E /* GLKit.framework in Frameworks */,
+				97FE99D8A0674DAEA61D612F /* CoreVideo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +268,10 @@
 				E5ECC085B4A44E04BF67A479 /* ImageIO.framework */,
 				F7C83CBFB01D493F9906A949 /* CoreLocation.framework */,
 				FE7259ED3558448A9A511852 /* CoreMotion.framework */,
+				CF669D1FC26743BBB54585E4 /* CoreImage.framework */,
+				D0E9A1914BD64F55BFF58DB1 /* OpenGLES.framework */,
+				88392F9B2155489C90575D0D /* GLKit.framework */,
+				2F281B69CE2E4B0E89038810 /* CoreVideo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -291,6 +316,12 @@
 				7AA91EEDC2584AE98447AD51 /* CDVCamera.h */,
 				B26CF7CAC1864EE48F9BC1A2 /* CDVJpegHeaderWriter.h */,
 				662786EEFD184B609A8E8553 /* CDVExif.h */,
+				04139CB3FF9348C5A4B2DFD3 /* CameraPreview.m */,
+				03D0944C58944F0FAC9FA9DD /* CameraSessionManager.m */,
+				68921CD280424D3ABEDAE1F7 /* CameraRenderController.m */,
+				2F2F3418570F41938C75E347 /* CameraPreview.h */,
+				567C5FFB0E314798B48D83C7 /* CameraSessionManager.h */,
+				5140CD94FDD0407DA64C73A6 /* CameraRenderController.h */,
 			);
 			name = Plugins;
 			path = "GAL Leuca/Plugins";
@@ -502,6 +533,9 @@
 				54BCB0B710834E0F8D73B4F9 /* UIImage+CropScaleOrientation.m in Sources */,
 				9E513000405A47E9B4C60E97 /* CDVCamera.m in Sources */,
 				E92D99427E3F404AA006D09C /* CDVJpegHeaderWriter.m in Sources */,
+				59A0B12C8CAA47C29CB395CE /* CameraPreview.m in Sources */,
+				FF29EFCA4EC74CB8891BF862 /* CameraSessionManager.m in Sources */,
+				773B80C4C0E84C93A7CFB0D0 /* CameraRenderController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
