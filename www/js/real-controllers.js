@@ -23,7 +23,7 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 		// $scope.isPhoto = false;
 		$scope.error = false;
 		$scope.isLocation = false;
-		$scope.magnetic = 0;
+		_setMagnetic(0);
       	Geolocation.get(_onSuccess, _onError);
   	});
   	
@@ -59,12 +59,14 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 	};
 
 	// Create a variable to store the transform value
-	$scope.transform = "rotate(0deg)";
+	// $scope.transform = "rotate(0deg)";
 	
 	// When the number changes, update the transform string
+	/*
 	$scope.$watch("magnetic", function(val) {
 	    $scope.transform = "rotate("+val+"deg)";
 	});  
+	*/
 
 	function _onSuccess(result) {
 		console.log('success geolocation');
@@ -93,33 +95,31 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 	    });
     };
 
-    $scope.watchHeading = function () {
+    var options = {
+      frequency: 3000,
+      filter: true     // if frequency is set, filter is ignored
+    }
 
-    	var options = {
-    		frequency: 1000
-    	};
-      
-      	$scope.this_watch = $cordovaDeviceOrientation.watchHeading(options);
+    var watch = $cordovaDeviceOrientation.watchHeading(options).then(
+      null,
+      function(error) {
+        // An error occurred
+        console.log('error to device orientation');
+      },
+      function(result) {   // updates constantly (depending on frequency value)
+        var magneticHeading = result.magneticHeading;
+        var trueHeading = result.trueHeading;
+        var accuracy = result.headingAccuracy;
+        var timeStamp = result.timestamp;
+        _setMagnetic(result.magneticHeading);
+      });
 
-		$scope.this_watch.then(
-			function () {
-			  /* unused */
-			},
-			function (err) {
-			  console.log(err.message);
-			},
-			function (position) {
-			  $timeout(function () {
-			  	_setMagnetic(position.magneticHeading);
-			  });
-			}
-		);
-    };
 
     function _setMagnetic(m) {
     	console.log('Magnetic Heading: ' + m);
     	magnetic = m;
     	$scope.magnetic = m;
+    	$scope.transform = "rotate(" + m + "deg)";
     };
 
     var el = angular.element('#compass');
@@ -214,13 +214,13 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 
 	$scope.id = id;
 	$scope.idpoi = idpoi;
+	$scope.isLocation = false;
 
 	var lat = $stateParams.lat;
 	var lng = $stateParams.lng;
 	var dir;
 	var layer_control;
-
-	$scope.dataOk = false;
+	var routing_control;
 
 	console.log('route to ' + lat + ',' + lng);
 
@@ -234,18 +234,20 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
             scrollWheelZoom: false
         }
     });
-  	
-  	$scope.$on('$ionicView.beforeEnter', function() {
-		showSpinner(true);
-		_initMap();
-	  	Geolocation.get(_onSuccess, _onError);
+
+    // Geolocation.get(_onSuccess, _onError);
+
+    _initMap();
+	
+	$scope.$on('$ionicView.beforeEnter', function() {
+		showSpinner(true);	
 	});
 
 	$scope.$on('$ionicView.enter', function(e) {
 		// _refresh();
-		_refresh();
 	});
 
+	/*
 	function _onSuccess(position) {
 
 		location.latitude = position.coords.latitude;
@@ -266,6 +268,7 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 	function _onError(error) {
 		console.log('error to get location ...')
 	};
+	*/
   
   	function showSpinner (view, message) {
 
@@ -288,21 +291,30 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 
 	    leafletData.getMap('map_route').then(function(map) {
 
-		      var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-		      var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
-		      var osm = new L.TileLayer(osmUrl, {
+	    	var location = Geolocation.location();
+	    	$scope.location = location;
+	    	$scope.isLocation = true;
+
+		    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		    var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
+		    
+		    var osm = new L.TileLayer(osmUrl, {
 		        maxZoom: 18, 
 		        attribution: osmAttribution
-		      }).addTo(map);
+		    }).addTo(map);
 
-		      if (layer_control) {
-		        layer_control.removeFrom(map);
-		      };
+		    if (layer_control) {
+		    	layer_control.removeFrom(map);
+		    };
+
+		    if (routing_control) {
+		    	routing_control.removeFrom(map);
+		    }
 		                   
-		      var options_weather_layer = {
-		        showLegend: false, 
-		        opacity: 0.2 
-		      };
+			var options_weather_layer = {
+				showLegend: false, 
+				opacity: 0.2 
+			};
 
 		      var clouds = L.OWM.clouds(options_weather_layer);
 		      var city = L.OWM.current({intervall: 15, lang: 'it'});
@@ -323,29 +335,20 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 		      };
 		      layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
 		      
+		      routing_control = L.Routing.control({
+				    waypoints: [
+				        L.latLng(location.latitude, location.longitude),
+				        L.latLng(lat, lng)
+				    ],
+				    routeWhileDragging: true,
+				    reverseWaypoints: true
+				
+				}).addTo(map);
+
 		      map.invalidateSize();
+		      showSpinner(false);
 
 		    });
 	};
-
-	function _refresh() {
-
-		console.log('start routing map ...');
-
-		leafletData.getMap('map_route').then(function(map) {
-
-			L.Routing.control({
-			    waypoints: [
-			        L.latLng(location.latitude, location.longitude),
-			        L.latLng(lat, lng)
-			    ],
-			    routeWhileDragging: true,
-			    reverseWaypoints: true
-			}).addTo(map);
-
-			$scope.dataOk = true;
-			showSpinner(false);
-		});
-	}
 
 });

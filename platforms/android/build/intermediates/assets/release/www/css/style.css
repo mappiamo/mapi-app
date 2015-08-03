@@ -1,3 +1,107 @@
+body{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+p {
+  color: #555;
+  font-family:"OpenSansRegular";
+  font-size: 14px;
+  line-height:21px;
+}
+
+.logo {
+  float: right;
+  color: #fff;
+  font-family:"NexaBold";
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  line-height: 30px;
+  text-transform: uppercase;
+}
+
+.super-heading{
+  font-family:"NexaLight";
+  text-transform: uppercase;
+  font-size: 96px;
+  line-height: 103px;
+  color: #030303; 
+  font-weight: 200;
+}
+
+.promo-heading{
+  font-family:"NexaBold";
+  text-transform: uppercase;
+  font-size: 48px;
+  line-height: 55px;
+  color: #121212;
+  padding-bottom: 15px;
+  padding-top: 20px;
+}
+
+.promo-text{
+  font-family:"OpenSansLight";
+  font-size: 24px;
+  line-height:31px;
+  color: #888;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.main-heading{
+  font-family:"NexaBold";
+  text-transform: uppercase;
+  font-size: 36px;
+  line-height: 43px;
+  color: #000000;
+}
+
+.sub-heading{
+  font-family:"OpenSansLight";
+  margin-bottom: 30px;
+  font-size: 26px;
+  line-height:33px;
+  color: #000000;
+  font-weight: 200;
+}
+
+.small-heading{
+  margin-bottom: 40px;
+  font-weight: 200;
+}
+
+.small-heading > span{
+  font-family:"OpenSansLight";
+  font-weight: 200;
+  font-size: 16px;
+  line-height:23px;
+  color: #fff;
+  border: solid 1px #fff;
+  padding: 10px 20px;
+  text-transform: uppercase;
+}
+
+.inner-heading{
+  font-family:"OpenSansLight";
+  font-weight: 200;
+}
+
+.caption{
+  margin-bottom: 30px;
+}
+
+.caption > span{
+  padding: 10px;
+  background: #ccc;
+  color: #222;
+  font-family:"OpenSansLight";
+  font-weight: 200;
+  font-size: 16px;
+  line-height:23px;
+}
+
+
 #home {
 	width: 100%;
 	height: 100%;

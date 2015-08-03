@@ -23,7 +23,7 @@
 
     		  <p>
     		  	<div class="row" ng-repeat="forecast in weather.forecast | limitTo:4">
-				  <div class="col col-50">
+				  <div class="col">
 				  	<i class="icon ion-ios-time-outline"></i> 
 			    	{{ forecast.dt_txt | time_to }}
 			      </div>
@@ -36,11 +36,7 @@
 				</div>
     		  </p>
 		    </a>
-			 
 		</div>
-
-		
-
 		<!--
 		<div class="home transparent">
 

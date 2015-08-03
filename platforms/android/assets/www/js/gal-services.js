@@ -12,7 +12,7 @@
 
 angular.module('gal.services', [])
 
-.factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO, Geolocation, MAPQUEST) {
+.factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO, Geolocation, MAPQUEST, $utility) {
 
   // Some fake testing data
   var gal_json = {
@@ -207,13 +207,13 @@ angular.module('gal.services', [])
 
       },
 
-      poi_nearest: function (degree, done) {
+      poi_nearest: function (direction, done) {
         
         var nearest_pois = [];
 
-        var direction = _getDirection(degree);
+        // var direction = $utility._getDirection(degree);
 
-        console.log('degree: ' + degree + ' direction: ' + direction);
+        console.log(' direction: ' + direction);
 
         async.each(gal_json.itinerari, function (item, callback) {
 
@@ -244,7 +244,7 @@ angular.module('gal.services', [])
             var location = Geolocation.get(function (position) {
               var lat = position.coords.latitude;
               var lng = position.coords.longitude;
-              var url = _getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
+              var url = $utility._getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
 
               var options = {
                 method: 'GET',
@@ -384,42 +384,5 @@ angular.module('gal.services', [])
   };
 
   return gal_json;
+
 });
-
-function _getDirection (degree) {
-
-  /*
-  none = 0
-  north = 1
-  northwest = 2
-  northeast = 3
-  south = 4
-  southeast= 5
-  southwest = 6
-  west = 7
-  east = 8
-  */
-
-    var directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-
-    var d;
-
-    if (parseFloat(degree) > 338) {
-      d = 360 - parseFloat(degree);
-    } else {
-      d = parseFloat(degree);
-    };
-
-    var index = Math.floor((d + 22) / 45);
-    var dir = directions[index];
-
-    return index+1;
-
-};
-
-function _getUrlRoute(from_lat, from_lng, to_lat, to_lng, key) {
-
-  var url = 'http://open.mapquestapi.com/directions/v2/route?key=' + key + '&destinationManeuverDisplay=true&outFormat=json&routeType=fastest&timeType=1&narrativeType=html&enhancedNarrative=false&shapeFormat=cmp&generalize=0&locale=it_IT&unit=k&from=' + from_lat + ',' + from_lng + '&to=' + to_lat + ',' + to_lng + '&drivingStyle=2&highwayEfficiency=21.0';
-  console.log(url);
-  return url;
-}

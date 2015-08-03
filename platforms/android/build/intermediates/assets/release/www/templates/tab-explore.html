@@ -13,12 +13,11 @@
       -->
 
       <div class="list card" 
-           collection-repeat="route in routes"
-           item-height="240px">
+           collection-repeat="route in routes">
 
         <a class="item item-thumbnail-left item-text-wrap" href="#/tab/explore/{{route._id}}">
           <img src="{{route.image}}">
-          <h2>{{route.title}}</h2>
+          <h2 class="promo-heading">{{route.title}}</h2>
           <p>{{route.description}}</p>
         </a>
     </div>

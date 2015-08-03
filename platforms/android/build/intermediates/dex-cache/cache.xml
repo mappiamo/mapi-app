@@ -5,7 +5,7 @@
         jar="/Users/gzileni/GitHub/mapi-app/platforms/android/build/intermediates/exploded-aar/android/CordovaLib/unspecified/release/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="20def99632a8bc8152cb1d3fa41d082362967e87">
+        sha1="9910b0c57db2797279170caaf43f7e716411cb2a">
         <dex dex="/Users/gzileni/GitHub/mapi-app/platforms/android/build/intermediates/pre-dexed/release/classes-dae994692c6425e619af4b6d8c0ddb5ed199f365.jar" />
     </item>
 

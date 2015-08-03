@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility) {
 
   $scope.dataOk = false;
 
@@ -59,12 +59,13 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading) {
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData) {
 
   var id = $stateParams.id;
   var it = Gal.itinerario(id);
   var geojson;
   var layer_geojson;
+  var color;
 
   $scope.dataOk = false;
   $scope.title = it.title;
@@ -128,7 +129,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         };
 
         var myStyle = {
-            "color": data.meta[0].value,
+            "color": color,
             "weight": 5,
             "opacity": 0.65
         };
@@ -156,7 +157,9 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
         var d = S(data.route).strip('MULTILINESTRING', '((', '))', '(', ')').s
 
-        GeoJSON.route(d, data.meta[0].value, function(err, data_geojson) {
+        color = data.meta[0].value;
+
+        GeoJSON.route(d, color, function(err, data_geojson) {
           // console.log(JSON.stringify(data_geojson));
           geojson = data_geojson;
           _geojson();
