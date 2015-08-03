@@ -1,63 +1,47 @@
-angular.module('CordovaDeviceOrientation', [])
-  .factory('$cordovaDeviceOrientation', ['$q', '$localstorage', function ($q, $localstorage) {
+angular.module('ngCordova.plugins.deviceOrientation', [])
 
-    var watch;
-
-    var orientation = {
-      magneticHeading: 0,
-      trueHeading: 0,
-      accuracy: 0,
-      timeStamp: 0,
-      watchID: 0
+  .factory('$cordovaDeviceOrientation', ['$q', function ($q) {
+    var defaultOptions = {
+      frequency: 3000 // every 3s
     };
-    
-    var deviceorientation_json = {
+    return {
+      getCurrentHeading: function () {
+        var q = $q.defer();
 
-      load: function (done) {
-        var orientation = $localstorage.getObject('orientation');
-        // console.log('get location about ' + location.latitude + ',' + location.longitude);
-        done(orientation);
+        navigator.compass.getCurrentHeading(function (result) {
+          q.resolve(result);
+        }, function (err) {
+          q.reject(err);
+        });
+
+        return q.promise;
       },
 
-      save: function (orientation) {
-        orientation.magneticHeading = result.magneticHeading;
-        orientation.trueHeading = result.trueHeading;
-        orientation.accuracy = result.headingAccuracy;
-        orientation.timeStamp = result.timestamp;
+      watchHeading: function (options) {
+        var q = $q.defer();
 
-        orientation.watchID = watch;
+        var _options = angular.extend(defaultOptions, options);
+        var watchID = navigator.compass.watchHeading(function (result) {
+          q.notify(result);
+        }, function (err) {
+          q.reject(err);
+        }, _options);
 
-        $localstorage.setObject('orientation', orientation);
-
-        // console.log('Position: ' + JSON.stringify(location));
-      },
-
-      get: function (_onSuccess, _onError) {
-        //document.addEventListener("deviceready", function () {
-          console.log('device orientation init ...');
-          navigator.compass.getCurrentHeading(_onSuccess, _onError);
-        //});
-      },
-      
-      watch: function (_onSuccess, _onError) {
-        
-        var options = {
-          frequency: 1000
+        q.promise.cancel = function () {
+          navigator.compass.clearWatch(watchID);
         };
 
-        console.log('watch orientation ...')
+        q.promise.clearWatch = function (id) {
+          navigator.compass.clearWatch(id || watchID);
+        };
 
-        // document.addEventListener("deviceready", function () {
-          watch = navigator.compass.watchHeading(_onSuccess, _onError, options);
-        //});
+        q.promise.watchID = watchID;
 
+        return q.promise;
       },
 
-      clear: function () {
-        watch.clearWatch();
+      clearWatch: function (watchID) {
+        return navigator.compass.clearWatch(watchID);
       }
     };
-
-    return deviceorientation_json;
-
-}]);
+  }]);

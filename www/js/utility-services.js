@@ -34,3 +34,62 @@ app_storage.factory('$localstorage', ['$window', function($window) {
     }
   }
 }]);
+
+app_storage.factory('$utility', function () {
+
+  var utility_json = {
+
+    _directions: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'],
+
+    _getWindRose: function (degree) {
+          var d = _calcDegrees(degree);
+          var index = Math.floor((d + 22) / 45);
+          var dir = utility_json.directions[index];
+
+          return dir;
+    },
+
+    _getDirection: function (degree) {
+
+        /*
+        none = 0
+        north = 1
+        northwest = 2
+        northeast = 3
+        south = 4
+        southeast= 5
+        southwest = 6
+        west = 7
+        east = 8
+        */
+
+        var d = _calcDegrees(degree);
+        var index = Math.floor((d + 22) / 45) + 1;
+        
+        return index;
+
+    },
+
+    _getUrlRoute: function (from_lat, from_lng, to_lat, to_lng, key) {
+
+      var url = 'http://open.mapquestapi.com/directions/v2/route?key=' + key + '&destinationManeuverDisplay=true&outFormat=json&routeType=fastest&timeType=1&narrativeType=html&enhancedNarrative=false&shapeFormat=cmp&generalize=0&locale=it_IT&unit=k&from=' + from_lat + ',' + from_lng + '&to=' + to_lat + ',' + to_lng + '&drivingStyle=2&highwayEfficiency=21.0';
+      console.log(url);
+      return url;
+    }
+  };
+
+  return utility_json;
+
+});
+
+function _calcDegrees(degree) {
+  var d;
+
+  if (parseFloat(degree) > 338) {
+    d = 360 - parseFloat(degree);
+  } else {
+    d = parseFloat(degree);
+  };
+
+  return d;
+};

@@ -9,57 +9,37 @@
 	</ion-header-bar>
 	<ion-content class="has-header">
 
-		<ion-slide-box on-slide-changed="slideHasChanged($index)" class="home">
-		  <ion-slide>
-		    <div class="box blue">
-		    	<div class="list transparent" ng-repeat="weather in weathers">
-		    		<a class="item" href="#">
-				      <h1 align="center"><strong>{{ weather.item.name }}</strong></h1>
-				      <h2 align="center">
-				      	<i class="icon ion-ios-time-outline"> {{ weather.forecast[0].dt_txt | forecast_date}}</i></h2>
-				      <p align="center">
-				      	
-				      	<img ng-src="{{ weather.forecast[0].weather[0].icon | weather_img }}">
-				      <img ng-src="{{ weather.forecast[0].wind | wind_img }}" width="48px" height="48px"></p>
-				      <p align="center"><i class="icon icon-058"></i> {{ weather.forecast[0].main.temp_min | number:0 }}-{{ weather.forecast[0].main.temp_max | number:0 }} C°</p>
-				    </a>
-				</div>
+		<div class="home">
+		</div>
 
-		    </div>
-		  </ion-slide>
-		  <ion-slide>
-		    <div class="box blue">
-		    	<div class="list transparent" ng-repeat="weather in weathers">
-		    		<a class="item" href="#">
-				      <h1 align="center"><strong>{{ weather.item.name }}</strong></h1>
-				      <h2 align="center">
-				      	<i class="icon ion-ios-time-outline"> {{ weather.forecast[1].dt_txt | forecast_date}}</i></h2>
-				      <p align="center">
-				      	
-				      	<img ng-src="{{ weather.forecast[1].weather[0].icon | weather_img }}">
-				      <img ng-src="{{ weather.forecast[1].wind | wind_img }}" width="48px" height="48px"></p>
-				      <p align="center"><i class="icon icon-058"></i> {{ weather.forecast[1].main.temp_min | number:0 }}-{{ weather.forecast[1].main.temp_max | number:0 }} C°</p>
-				    </a>
+		<div class="list" ng-repeat="weather in weathers">
+    		<a class="item item-avatar" href="#">
+    		  <img ng-src="{{ weather.forecast[1].weather[0].icon | weather_img }}" />
+    		  <h2 class="positive"><strong>{{ weather.item.name }}</strong></h2>
+
+    		  <p>
+    		  	<i class="icon ion-ios-location"></i> {{ weather.location | distance }}
+    		  </p>
+
+    		  <p>
+    		  	<div class="row" ng-repeat="forecast in weather.forecast | limitTo:4">
+				  <div class="col col-50">
+				  	<i class="icon ion-ios-time-outline"></i> 
+			    	{{ forecast.dt_txt | time_to }}
+			      </div>
+				  <div class="col" align="center">
+				  	<img ng-src="{{ forecast.weather[0].icon | weather_img }}" width="24px" height="24px" />
+				  </i><p><span class="wind"> <i class="icon icon-058"></i>
+			    {{ forecast.main.temp_min | number:0 }}-{{ forecast.main.temp_max | number:0 }} C°</span></p></div>
+			      <div class="col" align="center"><img ng-src="{{ forecast.wind | wind_img }}" width="24px" height="24px" /><p>
+		    		<span class="wind">{{ forecast.wind.speed | number: 2 }} m/s</span></p></div>
 				</div>
-		    </div>
-		  </ion-slide>
-		  <ion-slide>
-		    <div class="box blue">
-		    	<div class="list transparent" ng-repeat="weather in weathers">
-		    		<a class="item" href="#">
-				      <h1 align="center"><strong>{{ weather.item.name }}</strong></h1>
-				      <h2 align="center">
-				      	<i class="icon ion-ios-time-outline"> {{ weather.forecast[2].dt_txt | forecast_date}}</i></h2>
-				      <p align="center">
-				      	
-				      	<img ng-src="{{ weather.forecast[2].weather[0].icon | weather_img }}">
-				      <img ng-src="{{ weather.forecast[2].wind | wind_img }}" width="48px" height="48px"></p>
-				      <p align="center"><i class="icon icon-058"></i> {{ weather.forecast[2].main.temp_min | number:0 }}-{{ weather.forecast[2].main.temp_max | number:0 }} C°</p>
-				    </a>
-				</div>
-		    </div>
-		  </ion-slide>
-		</ion-slide-box>
+    		  </p>
+		    </a>
+			 
+		</div>
+
+		
 
 		<!--
 		<div class="home transparent">
@@ -77,8 +57,7 @@
 			</div>
 		</div>
 		-->
-	</div>
-
+	
 	<!--
 	<div id="home"></div>
 	-->

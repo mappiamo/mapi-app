@@ -78,14 +78,5 @@
         },
         "is_top_level": true,
         "variables": {}
-    },
-    "com.mbppower.camerapreview": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/mbppower/CordovaCameraPreview.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
     }
 }

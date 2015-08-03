@@ -12,7 +12,7 @@
 
 angular.module('gal.services', [])
 
-.factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO) {
+.factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO, Geolocation, MAPQUEST) {
 
   // Some fake testing data
   var gal_json = {
@@ -207,6 +207,75 @@ angular.module('gal.services', [])
 
       },
 
+      poi_nearest: function (degree, done) {
+        
+        var nearest_pois = [];
+
+        var direction = _getDirection(degree);
+
+        console.log('degree: ' + degree + ' direction: ' + direction);
+
+        async.each(gal_json.itinerari, function (item, callback) {
+
+          var n = {
+            itinerario: item,
+            item: null,
+            onRoute: false,
+            direction: 0,
+            route: null
+          };
+
+          gal_json.poi(item._id, null, function (err, data) {
+
+            // console.log('first element: ' + JSON.stringify(data));
+            console.log('n element: ' + _.size(data));
+
+            var p = _.sortBy(data, function (item) {
+              return Geolocation.distance(item.lat, item.lon);
+            });
+
+            // console.log(JSON.stringify(p[0]));
+
+            console.log('Coordinate POI: ' + p[0].lat + ',' + p[0].lon);
+
+            n.item = p[0];
+
+            // calcolo il percorso di routing
+            var location = Geolocation.get(function (position) {
+              var lat = position.coords.latitude;
+              var lng = position.coords.longitude;
+              var url = _getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
+
+              var options = {
+                method: 'GET',
+                url: url,
+                dataType: 'json'
+              };
+
+              $http.get(url)
+                .success(function(data_route) {
+                    //console.log(JSON.stringify(data_route.route.legs.maneuvers));
+                    n.direction = data_route.route.legs[0].maneuvers[0].direction;
+                    n.onRoute = (n.direction = data_route.route.legs[0].maneuvers[0].direction);
+                    console.log('Same Route: ' + n.onRoute);
+                    nearest_pois.push(n);
+                    callback();
+                })
+                .error(function(data_route, status, headers, config) {
+                    console.log('Unable to get itinerario ' + name);
+                    callback(true);
+                });
+            }, function (err) {
+              callback(true);
+            });
+          });
+
+        }, function (err) {
+          done(err, nearest_pois, direction);
+        });
+
+      },
+
       // punti di interesse
       poi: function (id, idpoi, callback) {
         
@@ -264,7 +333,7 @@ angular.module('gal.services', [])
         var options = {
           method: 'GET',
           url: url,
-          dataType: 'jsonp',
+          dataType: 'jsonp'
         };
 
         $http(options)
@@ -316,3 +385,41 @@ angular.module('gal.services', [])
 
   return gal_json;
 });
+
+function _getDirection (degree) {
+
+  /*
+  none = 0
+  north = 1
+  northwest = 2
+  northeast = 3
+  south = 4
+  southeast= 5
+  southwest = 6
+  west = 7
+  east = 8
+  */
+
+    var directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+
+    var d;
+
+    if (parseFloat(degree) > 338) {
+      d = 360 - parseFloat(degree);
+    } else {
+      d = parseFloat(degree);
+    };
+
+    var index = Math.floor((d + 22) / 45);
+    var dir = directions[index];
+
+    return index+1;
+
+};
+
+function _getUrlRoute(from_lat, from_lng, to_lat, to_lng, key) {
+
+  var url = 'http://open.mapquestapi.com/directions/v2/route?key=' + key + '&destinationManeuverDisplay=true&outFormat=json&routeType=fastest&timeType=1&narrativeType=html&enhancedNarrative=false&shapeFormat=cmp&generalize=0&locale=it_IT&unit=k&from=' + from_lat + ',' + from_lng + '&to=' + to_lat + ',' + to_lng + '&drivingStyle=2&highwayEfficiency=21.0';
+  console.log(url);
+  return url;
+}

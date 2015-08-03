@@ -12,6 +12,34 @@
 
 var filters = angular.module('gal.filters', []);
 
+filters.filter("time_to", function ($moment) {
+	return function (input) {
+
+		var m = $moment().diff(input, 'hour');
+		var t = ''
+
+		if (m > 0) {
+			if (m == 1) {
+				t = m + ' ora fà';
+			} else {
+				t = m + ' ore fà';
+			}
+			
+		} else if (m == 0) {
+			t = 'adesso'
+		} else {
+			if (m == -1) {
+				t = 'tra ' + -m + ' ora';
+			} else {
+				t = 'tra ' + -m + ' ore';	
+			}
+			
+		}
+
+		return t;
+	};	
+});
+
 filters.filter("forecast_date", function ($moment) {
 
 	return function (input) {

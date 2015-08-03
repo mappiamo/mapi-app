@@ -265,13 +265,6 @@ module.exports = [
         "clobbers": [
             "CameraPopoverHandle"
         ]
-    },
-    {
-        "file": "plugins/com.mbppower.camerapreview/www/CameraPreview.js",
-        "id": "com.mbppower.camerapreview.CameraPreview",
-        "clobbers": [
-            "cordova.plugins.camerapreview"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -285,8 +278,7 @@ module.exports.metadata =
     "cordova-plugin-media-capture": "1.0.1",
     "cordova-plugin-splashscreen": "2.1.0",
     "cordova-plugin-whitelist": "1.0.0",
-    "org.apache.cordova.camera": "0.3.6",
-    "com.mbppower.camerapreview": "0.0.8"
+    "org.apache.cordova.camera": "0.3.6"
 }
 // BOTTOM OF METADATA
 });

@@ -99,6 +99,8 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   function _onSuccess(position) {
 
+    Geolocation.save(position);
+
     // init map  
     angular.extend($scope, {
       center: {
@@ -117,6 +119,30 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
     console.log('error to get location ...')
   };
 
+  function _geojson() {
+
+      leafletData.getMap('map_explore').then(function(map) {
+
+        if (layer_geojson) {
+          map.removeLayer(layer_geojson);
+        };
+
+        var myStyle = {
+            "color": data.meta[0].value,
+            "weight": 5,
+            "opacity": 0.65
+        };
+
+        layer_geojson = L.geoJson(geojson, {
+            style: myStyle
+        }).addTo(map);
+
+        map.invalidateSize();
+
+    });
+
+  };
+
   function _refresh() {
 
     Gal.content(id, function (err, data) {
@@ -133,7 +159,9 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         GeoJSON.route(d, data.meta[0].value, function(err, data_geojson) {
           // console.log(JSON.stringify(data_geojson));
           geojson = data_geojson;
+          _geojson();
 
+          /*
           angular.extend($scope, {
             geojson: {
               data: data_geojson,
@@ -142,6 +170,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
               }
             }
           });
+          */
 
           $scope.dataOk = true;
 
@@ -284,6 +313,8 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
   function _onSuccess(position) {
 
+    Geolocation.save(position);
+
     // init map  
     angular.extend($scope, {
       center: {
@@ -373,8 +404,6 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   function _initMap () {
 
     leafletData.getMap('map').then(function(map) {
-
-      var location = Geolocation.location();
 
       var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';

@@ -12,7 +12,7 @@
 
 // Ionic Starter App
 
-angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S', 'CordovaDeviceOrientation'])
+angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S', 'ngCordova.plugins.deviceOrientation', 'ngCordova.plugins.camera', 'gal.mapquest'])
 
 .run(function($ionicPlatform, Geolocation, $cordovaDeviceOrientation) {
   $ionicPlatform.ready(function() {
@@ -37,6 +37,10 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
     .scriptUrl('lib/moment/moment.js');
 })
 
+.config(function($compileProvider){
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
+})
+
 .constant('TEST', {
   url: 'test/data.json',  // nome del database
   value: false
@@ -46,6 +50,10 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
   jsonp: '&callback=JSON_CALLBACK',
   content: 'http://test.mappiamo.org/travotest/index.php?module=api&task=content&object=',
   poi: 'http://test.mappiamo.org/travotest/index.php?module=api&task=category&object='    
+})
+
+.constant('MAPQUEST', {
+  key: 'Fmjtd|luur2ha7n9,b5=o5-9wb0q0'  
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -140,6 +148,16 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
         'tab-explore': {
           templateUrl: 'templates/poi-detail.html',
           controller: 'PoiDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.route', {
+      url: '/route/:id/:idpoi/:lat/:lng',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-route.html',
+          controller: 'RealMapCtrl'
         }
       }
     })

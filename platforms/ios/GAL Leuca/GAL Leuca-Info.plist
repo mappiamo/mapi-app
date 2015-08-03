@@ -6,17 +6,6 @@
     <string>English</string>
     <key>CFBundleDisplayName</key>
     <string>${PRODUCT_NAME}</string>
-    <key>CFBundleDocumentTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleTypeName</key>
-        <string>MKDirectionsRequest</string>
-        <key>LSItemContentTypes</key>
-        <array>
-          <string>com.apple.maps.directionsrequest</string>
-        </array>
-      </dict>
-    </array>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
     <key>CFBundleIconFile</key>
@@ -67,28 +56,18 @@
     <string>${PRODUCT_NAME}</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
-    <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>1.0.0</string>
+    <string>1.1.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.1.0</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
-    <key>MKDirectionsApplicationSupportedModes</key>
-    <array>
-      <string>MKDirectionsModeOther</string>
-    </array>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string></string>
     <key>NSMainNibFile</key>
     <string></string>
     <key>NSMainNibFile~ipad</key>
     <string></string>
-    <key>UIBackgroundModes</key>
-    <array>
-      <string>location</string>
-    </array>
     <key>UILaunchImages</key>
     <array>
       <dict>
@@ -192,5 +171,7 @@
         <string>{768, 1024}</string>
       </dict>
     </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string></string>
   </dict>
 </plist>
