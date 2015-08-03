@@ -13,9 +13,9 @@
 
         <a class="item item-thumbnail-left item-text-wrap" href="#/tab/poi/{{ id }}/{{ poi.id }}">
           <img src="{{ poi.media[1].url }}" ng-if="poi.media[1].url != ''">
-          <h2><strong>
-           {{ poi.title }}</strong></h2>
-          <h4>{{ poi.meta[2].value }}</h4>
+          <h2 class="main-heading">
+           {{ poi.title }}</h2>
+          <h3 class="sub-heading">{{ poi.meta[2].value }}</h3>
           <p>{{ poi.address }}</p>
           <p><img src="img/markers/{{ poi.meta[1].value }}" width="18px" height="18px"><strong> {{ poi | distance_poi }} </strong></p>
         </a>

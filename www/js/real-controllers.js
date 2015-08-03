@@ -228,21 +228,23 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 		latitude: 0,
 		longitude: 0
 	};
-  	
-  	$scope.$on('$ionicView.beforeEnter', function() {
-		showSpinner(true);
-	  	Geolocation.get(_onSuccess, _onError);
-	});
-
-	$scope.$on('$ionicView.enter', function(e) {
-		// _refresh();
-	});
 
 	angular.extend($scope, {
         defaults: {
             scrollWheelZoom: false
         }
     });
+  	
+  	$scope.$on('$ionicView.beforeEnter', function() {
+		showSpinner(true);
+		_initMap();
+	  	Geolocation.get(_onSuccess, _onError);
+	});
+
+	$scope.$on('$ionicView.enter', function(e) {
+		// _refresh();
+		_refresh();
+	});
 
 	function _onSuccess(position) {
 
@@ -259,8 +261,6 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 
 	    Geolocation.save(position);
 	    
-	    _initMap();
-	    _refresh();
 	 };
 
 	function _onError(error) {

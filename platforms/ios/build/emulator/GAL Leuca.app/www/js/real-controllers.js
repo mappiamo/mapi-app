@@ -13,14 +13,21 @@
 var ctrls = angular.module('gal.real.controllers', ['cordovaDeviceMotion', 'cordovaCapture', 'leaflet-directive']);
 
 // Realtà aumentata
-ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCapture, Geolocation, $cordovaDeviceOrientation, $cordovaCamera, Gal, _, $ionicLoading, TEST) {
+ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCapture, Geolocation, $cordovaDeviceOrientation, $cordovaCamera, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture) {
+
+	var test;
+	var magnetic = 0;
 
 	$scope.$on('$ionicView.beforeEnter', function() {
-      // 
+		test = TEST.value;
+		// $scope.isPhoto = false;
+		$scope.error = false;
+		$scope.isLocation = false;
+		$scope.magnetic = 0;
+      	Geolocation.get(_onSuccess, _onError);
   	});
-
-  	$scope.isLocation = false;
-  	$scope.isImage = false;
+  	
+  	// $scope.isImage = false;
 
   	function showSpinner (view, message) {
 
@@ -51,10 +58,6 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 		longitude: 0
 	};
 
-	$scope.isPhoto = false;
-	var test = TEST.value;
-	$scope.error = false;
-
 	// Create a variable to store the transform value
 	$scope.transform = "rotate(0deg)";
 	
@@ -76,9 +79,7 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 		console.log('error to orientation');
 	};    
 	
-	$scope.magnetic = 0;
-                 
-    function _getOrientation() {
+	function _getOrientation() {
     	console.log('start device orientation');
     	$cordovaDeviceOrientation.getCurrentHeading().then(function(result) {
 	       var magneticHeading = result.magneticHeading;
@@ -91,6 +92,44 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 	      console.log('error to device orientation')
 	    });
     };
+
+    $scope.watchHeading = function () {
+
+    	var options = {
+    		frequency: 1000
+    	};
+      
+      	$scope.this_watch = $cordovaDeviceOrientation.watchHeading(options);
+
+		$scope.this_watch.then(
+			function () {
+			  /* unused */
+			},
+			function (err) {
+			  console.log(err.message);
+			},
+			function (position) {
+			  $timeout(function () {
+			  	_setMagnetic(position.magneticHeading);
+			  });
+			}
+		);
+    };
+
+    function _setMagnetic(m) {
+    	console.log('Magnetic Heading: ' + m);
+    	magnetic = m;
+    	$scope.magnetic = m;
+    };
+
+    var el = angular.element('#compass');
+
+    $ionicGesture.on('hold', function(e) {
+       // Process drag
+       var degrees = $utility._getDirection(magnetic);
+       console.log('search in ' + degrees);
+       _getPois(degrees);
+    }, el);
 
     $scope.getPhoto = function() {
 
@@ -131,11 +170,11 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 
 	  };
 
-	function _getPois(degrees) {
+	function _getPois(direction) {
 		
 		showSpinner(true);
 
-		Gal.poi_nearest(degrees, function (err, data, direction) {
+		Gal.poi_nearest(direction, function (err, data, direction) {
 			console.log('Direction to filter: ' + direction);
 			
 			var d = _.sortBy(data, function (item) {
@@ -159,6 +198,13 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 
 		});
 	};
+
+	$timeout(function() {
+     	if (test) {
+     		var m = Math.floor((Math.random() * 360) + 1);
+     		_setMagnetic(m);
+     	}
+  	}, 1000);
 });
 
 ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest) {
