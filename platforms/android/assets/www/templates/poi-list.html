@@ -9,16 +9,16 @@
   </div>
 </ion-header-bar>
   <ion-content class="has-header">
-      <div class="list" collection-repeat="poi in pois">
-
-        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/poi/{{ id }}/{{ poi.id }}">
-          <img src="{{ poi.media[1].url }}" ng-if="poi.media[1].url != ''">
-          <h2 class="main-heading">
-           {{ poi.title }}</h2>
-          <h3 class="sub-heading">{{ poi.meta[2].value }}</h3>
-          <p>{{ poi.address }}</p>
-          <p><img src="img/markers/{{ poi.meta[1].value }}" width="18px" height="18px"><strong> {{ poi | distance_poi }} </strong></p>
-        </a>
+    <div class="list" ng-repeat="poi in pois">
+      <div class="item item-button-right fadeInUp">
+        {{ poi.title }}
+        <h3>{{ poi.address }}</h3>
+        <h4>{{ poi | distance_poi }}</h4>
+        <p>{{ poi.text }}</p>
+        <button class="button button-positive" ng-click="viewRoute(id, poi.id, poi.lat, poi.lon)">
+          <i class="icon ion-android-map"></i>
+        </button>
+      </div>
     </div>
   </ion-content>
 </ion-view>

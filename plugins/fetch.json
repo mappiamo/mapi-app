@@ -39,13 +39,19 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-media-capture": {
+    "cordova-plugin-device-orientation": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-media-capture"
+            "id": "cordova-plugin-device-orientation"
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "org.apache.cordova.file": {
+        "source": {
+            "type": "local",
+            "path": "/Applications/Intel XDK.app/Contents/Resources/app.nw/components/server/cordova-plugins/org.apache.cordova.file"
+        }
     },
     "cordova-plugin-file": {
         "source": {
@@ -55,18 +61,10 @@
         "is_top_level": false,
         "variables": {}
     },
-    "org.apache.cordova.camera": {
+    "cordova-plugin-geolocation": {
         "source": {
             "type": "registry",
-            "id": "org.apache.cordova.camera"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-device-orientation": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-device-orientation"
+            "id": "cordova-plugin-geolocation"
         },
         "is_top_level": true,
         "variables": {}
@@ -77,6 +75,46 @@
             "id": "org.apache.cordova.device-orientation"
         },
         "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.media-capture": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.media-capture"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.device-motion": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.device-motion"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-dialogs"
+        },
+        "is_top_level": false,
+        "variables": {}
+    },
+    "org.transistorsoft.cordova.background-geolocation": {
+        "source": {
+            "type": "registry",
+            "id": "org.transistorsoft.cordova.background-geolocation"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.geolocation": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.geolocation"
+        },
+        "is_top_level": false,
         "variables": {}
     }
 }

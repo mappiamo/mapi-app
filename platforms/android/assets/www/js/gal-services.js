@@ -12,7 +12,7 @@
 
 angular.module('gal.services', [])
 
-.factory('Gal', function ($http, Weather, async, _, TEST, TestData, MAPPIAMO, Geolocation, MAPQUEST, $utility) {
+.factory('Gal', function ($http, Weather, async, _, TEST, MAPPIAMO, Geolocation, MAPQUEST, $utility) {
 
   // Some fake testing data
   var gal_json = {
@@ -83,7 +83,7 @@ angular.module('gal.services', [])
     itinerari:[
       {
         title: 'Paduli',
-        _id: 154,
+        _id: 449,
         poi: 1,
         name: 'Paduli',
         image: 'img/itinerari/paduli.jpg',
@@ -91,7 +91,7 @@ angular.module('gal.services', [])
       },
       {
         title: 'Fede',
-        _id: 153,
+        _id: 448,
         poi: 1,
         name: 'Fede',
         image: 'img/itinerari/fede.jpg',
@@ -99,7 +99,7 @@ angular.module('gal.services', [])
       },
       {
         title: 'Naturalistico/Archeologico',
-        _id: 156,
+        _id: 451,
         poi: 47,
         name: 'Naturalistico\/archeologico',
         image: 'img/itinerari/natura.jpg',
@@ -107,7 +107,7 @@ angular.module('gal.services', [])
       },
       {
         title: 'Falesie',
-        _id: 155,
+        _id: 450,
         poi: 44,
         name: 'Falesie',
         image: 'img/itinerari/falesie.jpg',
@@ -289,6 +289,8 @@ angular.module('gal.services', [])
           dataType: 'jsonp',
         };
 
+        console.log('getting data by: ' + url);
+
         $http(options)
             .success(function(data) {
                 // console.log('success: ' + JSON.stringify(data[0]));
@@ -317,8 +319,6 @@ angular.module('gal.services', [])
                 console.log('Unable to get itinerario ' + name);
                 callback(true, null);
             });
-
-
       },
 
       // itinerari

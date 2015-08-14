@@ -12,9 +12,30 @@
 
 // Ionic Starter App
 
-angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 'gal.explore.controllers', 'gal.services', 'gal.filters', 'gal.weather.services', 'gal.geolocation', 'gal.geojson', 'gal.test', 'gal.utils', 'async.services', 'underscore', 'angular-momentjs', 'cordovaDeviceMotion', 'cordovaCapture', 'turf', 'leaflet-directive', 'S', 'ngCordova.plugins.deviceOrientation', 'ngCordova.plugins.camera', 'gal.mapquest'])
+angular.module('gal', ['ionic', 
+                       'ngCordova', 
+                       'gal.home.controllers', 
+                       'gal.real.controllers', 
+                       'gal.explore.controllers', 
+                       'gal.services', 
+                       'gal.filters', 
+                       'gal.weather.services', 
+                       'gal.geolocation', 
+                       'gal.geojson', 
+                       'gal.utils', 
+                       'async.services', 
+                       'underscore', 
+                       'angular-momentjs', 
+                       'turf', 
+                       'leaflet-directive', 
+                       'S', 
+                       'gal.mapquest', 
+                       'gal.mapbox',
+                       'CameraPreview',
+                       'CanvasCamera'])
 
-.run(function($ionicPlatform, Geolocation, $cordovaDeviceOrientation) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
+  
   $ionicPlatform.ready(function() {
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -22,13 +43,31 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
+    };
 
-    }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
-    }
+    };
+
+    var options = {
+      desiredAccuracy: 1000,
+      stopOnTerminate: true
+    };
+
+    $cordovaBackgroundGeolocation.configure(options)
+      .then(
+        null, // Background never resolves
+        function (err) { // error callback
+          console.error(err);
+        },
+        function (location) { // notify callback
+          console.log(location);
+          Geolocation.save(location);
+        });
+
   });
+
 })
 
 .config(function($momentProvider){
@@ -43,20 +82,24 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
 
 .constant('TEST', {
   url: 'test/data.json',  // nome del database
-  value: false
+  value: true
 })
 
 .constant('MAPPIAMO', {
   jsonp: '&callback=JSON_CALLBACK',
-  content: 'http://test.mappiamo.org/travotest/index.php?module=api&task=content&object=',
-  poi: 'http://test.mappiamo.org/travotest/index.php?module=api&task=category&object='    
+  content: 'http://web.galpuglia.info/index.php?module=api&task=content&object=',
+  poi: 'http://web.galpuglia.info/index.php?module=api&task=category&object='    
 })
 
 .constant('MAPQUEST', {
-  key: 'Fmjtd|luur2ha7n9,b5=o5-9wb0q0'  
+  key: 'Fmjtd|luur2ha7n9,b5=o5-9wb0q0'
 })
 
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+.constant('MAPBOX', {
+  access_token: 'pk.eyJ1IjoiZ3ppbGVuaSIsImEiOiJlVmxEaHJzIn0.GFrZQ08L-B96nN7dHjAa7g' 
+})
+
+.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
 
@@ -93,6 +136,16 @@ angular.module('gal', ['ionic', 'gal.home.controllers', 'gal.real.controllers', 
       'tab-real': {
         templateUrl: 'templates/tab-real.html',
         controller: 'RealCtrl'
+      }
+    }
+  })
+
+  .state('tab.camera', {
+    url: '/camera',
+    views: {
+      'tab-camera': {
+        templateUrl: 'templates/poi-real-camera.html',
+        controller: 'RealCameraCtrl'
       }
     }
   })

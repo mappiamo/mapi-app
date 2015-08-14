@@ -3,6 +3,38 @@ body{
   overflow-x: hidden;
 }
 
+.bg {
+  height: 260px;
+  text-align: center;
+}
+
+.bg-1 {
+  background-image: url("../img/bg/01.jpg");
+}
+
+.bg-2 {
+  background-image: url("../img/bg/02.jpg");
+}
+
+.bg-3 {
+  background-image: url("../img/bg/03.jpg");
+}
+
+.camera {
+  background-color: #ffffff;
+  height:400px;
+  width: 1200px;
+  position: absolute;
+  top:30px;
+  z-index:2;
+  background-color : transparent;
+}
+
+.awesome-marker i {
+        font-size: 18px;
+        margin-top: 8px;
+    }
+
 p {
   color: #555;
   font-family:"OpenSansRegular";
@@ -30,7 +62,28 @@ p {
   font-weight: 200;
 }
 
-.promo-heading{
+.promo-home {
+  font-family:"NexaBold";
+  text-transform: uppercase;
+}
+
+.promo-home-heading {
+  font-size: 55px;
+  line-height: 55px;
+  color: #f0ff03;
+  padding-bottom: 60px;
+  padding-top: 20px;
+}
+
+.promo-home-subheading {
+  font-size: 32px;
+  line-height: 32px;
+  color: #000000;
+  padding-bottom: 30px;
+  padding-top: 20px;
+}
+
+.promo-heading {
   font-family:"NexaBold";
   text-transform: uppercase;
   font-size: 48px;
@@ -40,11 +93,38 @@ p {
   padding-top: 20px;
 }
 
+.promo-heading-white {
+  font-family:"NexaBold";
+  text-transform: uppercase;
+  font-size: 56px;
+  line-height: 55px;
+  color: #ffffff;
+  padding-bottom: 15px;
+  padding-top: 20px;
+}
+
 .promo-text{
   font-family:"OpenSansLight";
   font-size: 24px;
   line-height:31px;
   color: #888;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.promo-text-home{
+  font-family:"OpenSansLight";
+  font-size: 32px;
+  line-height:31px;
+  color: #000000;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.warning-text{
+  font-family:"OpenSansLight";
+  font-size: 14px;
+  line-height:31px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -130,7 +210,6 @@ p {
 }
 
 .transparent {
-    margin: 30px;
     background-color: #ffffff;
     border: 0px solid black;
     opacity: 0.6;

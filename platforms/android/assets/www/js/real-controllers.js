@@ -10,25 +10,183 @@
  *
  */
 
-var ctrls = angular.module('gal.real.controllers', ['cordovaDeviceMotion', 'cordovaCapture', 'leaflet-directive']);
+var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-// Realtà aumentata
-ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCapture, Geolocation, $cordovaDeviceOrientation, $cordovaCamera, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture) {
+ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, $cordovaDeviceOrientation, $cordovaCapture, $ionicPlatform, $cordovaBarcodeScanner, $camerapreview, $canvascamera) {
 
-	var test;
+	var magneticHeading;
+	var trueHeading;
+	var accuracy;
+	var timeStamp;
+
+	var objCanvas = angular.element("#canvas");
+
+    var options = {
+    	frequency: 3000,
+     	filter: true     // if frequency is set, filter is ignored
+    };
+     
+     $scope.magnetic = 0;
+     _canvas();
+
+    var watch = $cordovaDeviceOrientation.watchHeading(options).then(
+      null,
+      function(error) {
+        // An error occurred
+        console.log('error to device orientation');
+      },
+      function(result) {   // updates constantly (depending on frequency value)
+        magneticHeading = result.magneticHeading;
+        trueHeading = result.trueHeading;
+        accuracy = result.headingAccuracy;
+        timeStamp = result.timestamp;
+        _setMagnetic(magneticHeading);
+    });
+
+    function _setMagnetic(m) {
+    	console.log('Magnetic Heading: ' + m);
+    	$scope.magnetic = m;
+    };
+
+    function _capture() {
+        $scope.message = 'start capture image ...';
+        
+        var options = { 
+        	limit: 1
+        };
+
+        $cordovaCapture.captureImage(options).then(function(imageData) {
+	      // Success! Image data is here
+	      $scope.preview = "data:image/jpeg;base64," + imageData
+	      console.log('ok');
+	    }, function(err) {
+	      // An error occurred. Show a message to the user
+	      console.log('error');
+	    });
+	};
+
+	function _canvas() {
+		
+    	$canvascamera.initialize(objCanvas);
+    	var options = {
+	        quality: 75,
+	        destinationType: CanvasCamera.DestinationType.DATA_URL,
+	        encodingType: CanvasCamera.EncodingType.JPEG,
+	        width: 640,
+	        height: 480
+    	};
+    	$canvascamera.start(options);
+	};
+
+	function _scanner () {
+		$cordovaBarcodeScanner
+	      .scan()
+	      .then(function(barcodeData) {
+	        // Success! Barcode data is here
+	        // $scope.magnetic = 100;
+	      }, function(error) {
+	        // An error occurred
+	      });
+	};
+
+	function _capture_preview() {
+
+		// $ionicPlatform.ready(function() {
+			
+			_setMagnetic(80);
+			
+			var tapEnabled = true; //enable tap take picture
+			var dragEnabled = true; //enable preview box drag across the screen
+			var toBack = true; //send preview box to the back of the webview
+			
+			var rect = {
+				x: 100, 
+				y: 100, 
+				width: 200, 
+				height:200
+			};
+		
+			$camerapreview.startCamera(rect, 'front', tapEnabled, dragEnabled, toBack);
+			
+			_setMagnetic(90);
+
+			$camerapreview.show();
+
+			_setMagnetic(100);
+
+			$camerapreview.setOnPictureTakenHandler(function(result){
+				_setMagnetic(110);
+				$scope.preview = result[1];
+			});
+		// });
+
+	};
+
+});
+
+// Bussola
+ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal) {
+
+	var test = false;
 	var magnetic = 0;
+	$scope.spinner = false;
+	$scope.dataOk = false;
+	$scope.isPOI = false;
+
+	$ionicModal.fromTemplateUrl('templates/poi-list-modal.html', {
+	    scope: $scope,
+	    animation: 'slide-in-up'
+	  }).then(function(modal) {
+	    $scope.modal = modal;
+	});
+	 
+	$scope.openModal = function() {
+		$scope.modal.show();
+	};
+
+	$scope.viewRoute = function (id, idpoi, lat, lon) {
+		$scope.closeModal();
+		window.location.href = '#/tab/route/' + id + '/' + idpoi + '/' + lat + '/' + lon;
+	};
+
+	$scope.closeModal = function() {
+		$scope.isPOI = false;
+		$scope.modal.hide();
+	};
+
+	//Cleanup the modal when we're done with it!
+	$scope.$on('$destroy', function() {
+		$scope.modal.remove();
+	});
+
+	// Execute action on hide modal
+	$scope.$on('modal.hidden', function() {
+	// Execute action
+	});
+	
+	// Execute action on remove modal
+	$scope.$on('modal.removed', function() {
+	// Execute action
+	});
 
 	$scope.$on('$ionicView.beforeEnter', function() {
-		test = TEST.value;
-		// $scope.isPhoto = false;
+		// test = TEST.value;
+		
 		$scope.error = false;
 		$scope.isLocation = false;
-		_setMagnetic(0);
+		
+		if (test) {
+			var m = Math.floor((Math.random() * 360) + 1);
+			_setMagnetic(90);
+			// _setMagnetic(m);
+		} else {
+			_setMagnetic(0);
+		};
+
       	Geolocation.get(_onSuccess, _onError);
+
   	});
   	
-  	// $scope.isImage = false;
-
   	function showSpinner (view, message) {
 
       var msg = '<ion-spinner icon="lines"></ion-spinner>';
@@ -58,15 +216,9 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 		longitude: 0
 	};
 
-	// Create a variable to store the transform value
-	// $scope.transform = "rotate(0deg)";
-	
-	// When the number changes, update the transform string
-	/*
-	$scope.$watch("magnetic", function(val) {
-	    $scope.transform = "rotate("+val+"deg)";
-	});  
-	*/
+	var location = Geolocation.location();
+	$scope.location = location;
+	$scope.isLocation = true;
 
 	function _onSuccess(result) {
 		console.log('success geolocation');
@@ -79,7 +231,7 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
 
 	function _onError(err) {
 		console.log('error to orientation');
-	};    
+	};
 	
 	function _getOrientation() {
     	console.log('start device orientation');
@@ -100,114 +252,95 @@ ctrls.controller('RealCtrl', function ($scope, $cordovaDeviceMotion, $cordovaCap
       filter: true     // if frequency is set, filter is ignored
     }
 
-    var watch = $cordovaDeviceOrientation.watchHeading(options).then(
-      null,
-      function(error) {
-        // An error occurred
-        console.log('error to device orientation');
-      },
-      function(result) {   // updates constantly (depending on frequency value)
-        var magneticHeading = result.magneticHeading;
-        var trueHeading = result.trueHeading;
-        var accuracy = result.headingAccuracy;
-        var timeStamp = result.timestamp;
-        _setMagnetic(result.magneticHeading);
-      });
-
+    if (!test) {
+	    var watch = $cordovaDeviceOrientation.watchHeading(options).then(
+	      null,
+	      function(error) {
+	        // An error occurred
+	        console.log('error to device orientation');
+	      },
+	      function(result) {   // updates constantly (depending on frequency value)
+	        var magneticHeading = result.magneticHeading;
+	        var trueHeading = result.trueHeading;
+	        var accuracy = result.headingAccuracy;
+	        var timeStamp = result.timestamp;
+	        _setMagnetic(result.magneticHeading);
+	    });
+	};
 
     function _setMagnetic(m) {
     	console.log('Magnetic Heading: ' + m);
     	magnetic = m;
     	$scope.magnetic = m;
     	$scope.transform = "rotate(" + m + "deg)";
+    	// $scope.npois = 'Trovati n.0 punti di interesse';
     };
 
+    // Hold Compass
     var el = angular.element('#compass');
-
     $ionicGesture.on('hold', function(e) {
-       // Process drag
-       var degrees = $utility._getDirection(magnetic);
-       console.log('search in ' + degrees);
-       _getPois(degrees);
+    	$scope.spinner = true;
+    	$scope.isPOI = false;
+       _getPois(magnetic);
     }, el);
 
-    $scope.getPhoto = function() {
+    function _getPois(magnetic) {
 
-    	if (test) {
-    		$scope.magnetic = 10;
-    		Geolocation.get(_onSuccess, _onError);
-    		_getPois($scope.magnetic);
-			$scope.isPhoto = true;
-			$scope.isImage = true;
-    	} else {
-
-		    console.log('Getting camera');
-
-		    var options = {
-		      quality: 50,
-		      destinationType: Camera.DestinationType.DATA_URL,
-		      sourceType: Camera.PictureSourceType.CAMERA,
-		      allowEdit: false,
-		      encodingType: Camera.EncodingType.JPEG,
-		      targetWidth: 100,
-		      targetHeight: 100,
-		      popoverOptions: CameraPopoverOptions,
-		      saveToPhotoAlbum: false
-		    };
-
-		    $cordovaCamera.getPicture(options).then(function(imageData) {
-		      $scope.cameraimage = "data:image/jpeg;base64," + imageData;
-		      $scope.isImage = true;
-		      Geolocation.get(_onSuccess, _onError);
-			  _getOrientation();
-			  _getPois($scope.magnetic);
-			  
-		    }, function(err) {
-		      // error
-		      console.log('error to get photo');
-		    });
-		};
-
-	  };
-
-	function _getPois(direction) {
+    	var direction = $utility._getDirection(magnetic);
+    	console.log('search pois in ' + direction);
 		
-		showSpinner(true);
-
 		Gal.poi_nearest(direction, function (err, data, direction) {
-			console.log('Direction to filter: ' + direction);
 			
-			var d = _.sortBy(data, function (item) {
-				return Geolocation.distance(item.item.lat, item.item.lon);
-			});
+			// console.log('Direction to filter: ' + direction);
+			
+			$scope.spinner = false;
 
-			var s = _.filter(d, function (item) {
-				return item.direction == direction;
-			});
+			if (_.size(data) > 0) {
 
-			if (_.size(s) == 0) {
-				$scope.error = true;
-				$scope.error_msg = 'Non ci sono punti di interesse in questa direzione';
-			} else {
+				// console.log(JSON.stringify(data));
+
+				var d = _.sortBy(data, function (item) {
+					return Geolocation.distance(item.item.lat, item.item.lon);
+				});
+
+				// console.log('Direction: ' + direction + ' - ' + JSON.stringify(d));
+
+				var s = _.filter(d, function (item) {
+					return item.direction == direction;
+				});
+
+				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in questa direzione.';
+
+				console.log(JSON.stringify(s));
+
 				$scope.error = false;
-				$scope.pois = s;
+				
+				if (_.size(s) > 0) {
+					$scope.pois = s;
+					$scope.isPOI = true;
+					$scope.openModal();
+				} else {
+					// non sono stati trovati punti di interesse
+					$scope.isPOI = false;
+				};
+
+				// $scope.openModal();
+			} else {
+				$scope.isPOI = false;
 			};
-
-			$scope.isPhoto = true;
-			showSpinner(false);
-
 		});
 	};
 
 	$timeout(function() {
      	if (test) {
      		var m = Math.floor((Math.random() * 360) + 1);
+     		m = 90;
      		_setMagnetic(m);
      	}
   	}, 1000);
 });
 
-ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest) {
+ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest, MapBox) {
 
 	var id = $stateParams.id;
 	var idpoi = $stateParams.idpoi;
@@ -220,7 +353,9 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 	var lng = $stateParams.lng;
 	var dir;
 	var layer_control;
-	var routing_control;
+	var layer_geojson;
+	var layers_geojson = [];
+	var geojson;
 
 	console.log('route to ' + lat + ',' + lng);
 
@@ -235,40 +370,16 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
         }
     });
 
-    // Geolocation.get(_onSuccess, _onError);
-
     _initMap();
 	
 	$scope.$on('$ionicView.beforeEnter', function() {
 		showSpinner(true);	
+		location = Geolocation.location();
 	});
 
 	$scope.$on('$ionicView.enter', function(e) {
 		// _refresh();
 	});
-
-	/*
-	function _onSuccess(position) {
-
-		location.latitude = position.coords.latitude;
-		location.longitude = position.coords.longitude;
-
-		$scope.location = location;
-
-		console.log('start from ' + location.latitude + ',' + location.longitude);
-
-	    // init map  
-
-	    $scope.isLocation = true;
-
-	    Geolocation.save(position);
-	    
-	 };
-
-	function _onError(error) {
-		console.log('error to get location ...')
-	};
-	*/
   
   	function showSpinner (view, message) {
 
@@ -291,13 +402,12 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 
 	    leafletData.getMap('map_route').then(function(map) {
 
-	    	var location = Geolocation.location();
-	    	$scope.location = location;
-	    	$scope.isLocation = true;
+    		$scope.location = location;
+    		$scope.isLocation = true;
 
-		    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-		    var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
-		    
+	    	var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	    	var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
+	    
 		    var osm = new L.TileLayer(osmUrl, {
 		        maxZoom: 18, 
 		        attribution: osmAttribution
@@ -307,48 +417,201 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, leafletData, Geo
 		    	layer_control.removeFrom(map);
 		    };
 
-		    if (routing_control) {
-		    	routing_control.removeFrom(map);
-		    }
-		                   
-			var options_weather_layer = {
+		    var options_weather_layer = {
 				showLegend: false, 
 				opacity: 0.2 
 			};
 
-		      var clouds = L.OWM.clouds(options_weather_layer);
-		      var city = L.OWM.current({intervall: 15, lang: 'it'});
-		      var precipitation = L.OWM.precipitation(options_weather_layer);
-		      var rain = L.OWM.rain(options_weather_layer);
-		      var snow = L.OWM.snow(options_weather_layer);
-		      var temp = L.OWM.temperature(options_weather_layer);
-		      var wind = L.OWM.wind(options_weather_layer);
+	      	var clouds = L.OWM.clouds(options_weather_layer);
+	      	var city = L.OWM.current({intervall: 15, lang: 'it'});
+	      	var precipitation = L.OWM.precipitation(options_weather_layer);
+	      	var rain = L.OWM.rain(options_weather_layer);
+	      	var snow = L.OWM.snow(options_weather_layer);
+	      	var temp = L.OWM.temperature(options_weather_layer);
+	      	var wind = L.OWM.wind(options_weather_layer);
 
-		      var baseMaps = { "OSM Standard": osm };
-		      var overlayMaps = { 
-		        "Clouds": clouds, 
-		        "Precipitazioni": precipitation,
-		        "Neve": snow,
-		        "Temperature": temp,
-		        "vento": wind,
-		        "Cities": city 
-		      };
-		      layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
-		      
-		      routing_control = L.Routing.control({
-				    waypoints: [
-				        L.latLng(location.latitude, location.longitude),
-				        L.latLng(lat, lng)
-				    ],
-				    routeWhileDragging: true,
-				    reverseWaypoints: true
-				
-				}).addTo(map);
+			var baseMaps = { "OSM Standard": osm };
+			var overlayMaps = { 
+				"Clouds": clouds, 
+				"Precipitazioni": precipitation,
+				"Neve": snow,
+				"Temperature": temp,
+				"vento": wind,
+				"Cities": city 
+			};
+	      	
+	      	layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-		      map.invalidateSize();
-		      showSpinner(false);
+	    	map.invalidateSize();
+	      	showSpinner(false);
+	      	_routing();
 
-		    });
+		});
 	};
+
+	function _routing () {
+
+		showSpinner(true);
+
+		var end = {
+			latitude: lat,
+			longitude: lng
+		};
+
+		MapBox.direction (location, end, 0, function (err, data_geojson) {
+			
+			_geojson(data_geojson);
+
+			showSpinner(false);
+		});
+
+	};
+
+	function _geojson(geojson) {
+
+		var bounds = [];
+
+      leafletData.getMap('map_route').then(function(map) {
+
+      	L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+
+      	// cancello tutti i layers
+      	async.each(layers_geojson, function (item, callback) {
+			if (item) {
+      			map.removeLayer(layer_geojson);
+      			callback();
+    		};	
+		}, function (err) {
+			// 
+		});
+
+		var route = { 
+			type: 'FeatureCollection',
+			features: [{ 
+		      	type: 'Feature',
+		        geometry: geojson.routes[0].geometry,
+		        properties: {
+		        	distance: geojson.routes[0].distance,
+		        	duration: geojson.routes[0].duration,
+		        	summary: geojson.routes[0].summary
+		        }
+		    }]
+		};
+
+		var layer_geojson = L.geoJson(route).addTo(map);
+		layers_geojson.push(layer_geojson);
+
+		// console.log(JSON.stringify(geojson.routes[0].steps));
+
+		var steps = { 
+			type: 'FeatureCollection',
+			features: []
+		};
+
+      	// steps
+
+      	var i = 0;
+      	
+		async.each(geojson.routes[0].steps, function (item, callback) {
+
+			var m = item.maneuver;
+
+			// console.log(JSON.stringify(m));
+
+			var f = { 
+		      	type: 'Feature',
+		        geometry: m.location,
+		        properties: {
+		        	type: m.type,
+		        	instruction: m.instruction,
+		        	distance: item.distance,
+		        	duration: item.duration,
+		        	way_name: item.wayname,
+		        	direction: item.direction,
+		        	heading: item.heading,
+		        	icon: {},
+		        	img: ''   // inserire una immagine per la direzione
+		        }
+		    };
+
+		    if (i == 0) {
+		    	f.properties.icon = { 
+		    		icon: 'map-pin', 
+		    		prefix: 'fa', 
+		    		markerColor: 'red', 
+		    		iconColor: '#ffffff'
+		    	};
+		    } else if (i == _.size(geojson.routes[0].steps)-1) {
+		    	f.properties.icon = { 
+		    		icon: 'flag-checkered', 
+		    		prefix: 'fa', 
+		    		markerColor: 'green', 
+		    		iconColor: '#ffffff'
+		    	};
+		    } else {
+		    	// icona per la direzione 
+		    	f.properties.icon = { 
+		    		icon: 'info-circle', 
+		    		prefix: 'fa', 
+		    		markerColor: 'blue', 
+		    		iconColor: '#ffffff'
+		    	};
+		    }
+
+		    i++;
+
+		    // console.log(JSON.stringify(f));
+
+		    steps.features.push(f);
+
+		    callback();
+
+		}, function (err) {
+			console.log('done');
+			
+			layer_geojson = L.geoJson(steps, {
+
+				pointToLayer: function ( feature, latlng ) {
+
+					// console.log(JSON.stringify(feature));
+
+					var icon = L.AwesomeMarkers.icon(feature.properties.icon);
+
+					var d = '<div><h2>' + feature.properties.type + '</h2>';
+
+					if (typeof feature.properties.direction !== 'undefined') {
+						d += '<h3>' + feature.properties.direction + '</h3>';
+					};
+
+					if (typeof feature.properties.instruction !== 'undefined') {
+						d += '<p>' + feature.properties.instruction + '</p>';
+					};
+
+					d += '</div>';
+
+					return L.marker(latlng, {
+						icon: icon
+					}).bindPopup(d);
+
+				},
+
+				onEachFeature: function ( feature, layer ) {
+
+					// 
+				}
+	        });
+	                                       
+	        layer_geojson.addTo(map);
+	        layers_geojson.push(layer_geojson);
+
+	        map.fitBounds(layer_geojson.getBounds());
+
+		});
+
+		map.invalidateSize();
+
+    });
+
+  };
 
 });

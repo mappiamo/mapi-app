@@ -149,11 +149,27 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
     Gal.content(id, function (err, data) {
       if (!err) {
 
-        data.text = S(S(data.text).stripTags().s).decodeHTMLEntities().s;
-        data.meta[3].value = S(S(data.meta[3].value).stripTags().s).decodeHTMLEntities().s;
-        data.meta[7].value = S(S(data.meta[7].value).stripTags().s).decodeHTMLEntities().s;
+        console.log(JSON.stringify(data));
 
+        data.text = S(S(data.text).stripTags().s).decodeHTMLEntities().s;
+        
+        if (typeof data.meta[3] !== undefined) {
+          data.meta[3].value = S(S(data.meta[3].value).stripTags().s).decodeHTMLEntities().s;
+        };
+
+        if (typeof data.meta[7] !== undefined) {
+          data.meta[7].value = S(S(data.meta[7].value).stripTags().s).decodeHTMLEntities().s;
+        };
+      
         $scope.explore = data;
+
+        $scope.dataOk = true;
+
+        showSpinner(false);
+
+        /*
+  
+        percorso dell'itinerario
 
         var d = S(data.route).strip('MULTILINESTRING', '((', '))', '(', ')').s
 
@@ -163,24 +179,10 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
           // console.log(JSON.stringify(data_geojson));
           geojson = data_geojson;
           _geojson();
-
-          /*
-          angular.extend($scope, {
-            geojson: {
-              data: data_geojson,
-              style: {
-                  color: data.meta[0].value
-              }
-            }
-          });
-          */
-
-          $scope.dataOk = true;
-
-          showSpinner(false);
-
+  
         });
-      }
+        */ 
+      };
     });
   };
 
@@ -205,6 +207,10 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
   $scope.$on('$ionicView.enter', function(e) {
     _refresh();
   });
+
+  $scope.viewRoute = function (id, idpoi, lat, lon) {
+    window.location.href = '#/tab/route/' + id + '/' + idpoi + '/' + lat + '/' + lon;
+  };
 
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
@@ -376,6 +382,24 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
         layer_geojson = L.geoJson(geojson, {
           pointToLayer: function ( feature, latlng ) {
 
+            var options_icon = { 
+              icon: 'info-circle', 
+              prefix: 'fa', 
+              markerColor: 'blue', 
+              iconColor: '#ffffff'
+            };
+
+            var icon = L.AwesomeMarkers.icon(options_icon);
+
+            var descr = '<h3>' + feature.properties.title + '</h3><br />' +
+                        '<p>' + feature.properties.address + '</p>';
+
+
+            return L.marker(latlng, {
+              icon: icon
+            }).bindPopup(descr);
+
+            /*
             console.log('icon: ' + feature.properties.marker);
 
             var galIcon = L.icon({
@@ -388,10 +412,9 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
                 popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
             });
             
-            var descr = '<h3>' + feature.properties.title + '</h3><br />' +
-                        '<p>' + feature.properties.address + '</p>';
-
+            
             return L.marker(latlng, {icon: galIcon}).addTo(map).bindPopup(descr);
+            */
             
           }
         });
@@ -514,7 +537,10 @@ ctrls.controller('PoiDetailCtrl', function($scope, $stateParams, Gal, S, $ionicL
       // mappa da poter visualizzare
       // filtro dei punti di interesse
       if (!err) {
-        data[0].text = S(S(data[0].text).stripTags().s).decodeHTMLEntities().s;
+        if (data[0].text != null) {
+          data[0].text = S(S(data[0].text).stripTags().s).decodeHTMLEntities().s;
+        };
+
         $scope.poi = data[0];
         $scope.dataOk = true;
         showSpinner(false);

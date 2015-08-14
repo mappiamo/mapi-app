@@ -12,6 +12,24 @@
 
 var filters = angular.module('gal.filters', []);
 
+filters.filter("background", function () {
+	return function (input) {
+
+		var b;
+
+		if (input === 1) {
+			b = 'has-header bg bg-1';
+		} else if (input === 2) {
+			b = 'has-header bg bg-2';
+		} else if (input === 3) {
+			b = 'has-header bg bg-3';
+		}
+
+		return b;
+
+	}
+});
+
 filters.filter("time_to", function ($moment) {
 	return function (input) {
 
@@ -150,12 +168,29 @@ filters.filter('distance_poi', function(Geolocation) {
 	};
 });
 
+filters.filter('poi_cat', function() {
+	return function (input) {
+
+		var d = 'img/markers/' + input
+
+		return d
+	}
+});
+
 filters.filter('weather_img', function() {
+	
 	return function (input) {
         
-        var icon = 'img/weather/' + _get_icon_weather(input) + '.png';
+		var iw = _get_icon_weather(input);
+		var icon = '';
 
-    	console.log('Filter: ' + JSON.stringify(input) + '->' + icon);
+		// console.log('icon: ' + icon);
+
+		if (typeof iw !== 'undefined') {
+        	icon = 'img/weather/100px/' + iw + '.png';
+        };
+
+        console.log('Filter: ' + JSON.stringify(input) + '->' + icon);
 
         return icon;
     };
@@ -166,15 +201,19 @@ function _get_direction_wind(input) {
 	var directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 
     var degree;
+    var dir = '';
 
-    if (parseFloat(input.deg) > 338) {
-      degree = 360 - parseFloat(input.deg);
-    } else {
-      degree = parseFloat(input.deg);
-    };
+    if (typeof input !== 'undefined') {
 
-    var index = Math.floor((degree + 22) / 45);
-    var dir = directions[index];
+	    if (parseFloat(input.deg) > 338) {
+	      degree = 360 - parseFloat(input.deg);
+	    } else {
+	      degree = parseFloat(input.deg);
+	    };
+
+	    var index = Math.floor((degree + 22) / 45);
+	    dir = directions[index];
+	};
 
     return dir;
 
@@ -184,31 +223,36 @@ function _get_icon_weather(input) {
 
 	var icon = '';
 
-	if (input == '01d') {
-		icon = '023';
-	} else if (input == '01n') {
-		icon = '021';
-	} else if (input == '02d') {
-		icon = '001';
-	} else if (input == '02n') {
-		icon = '022';
-	} else if (input == '03d' || input == '03n') {
-		icon = '003';
-	} else if (input == '04d' || input == '04n') {
-		icon = '022';
-	} else if (input == '09d' || input == '09n') {
-		icon = '007';
-	} else if (input == '010d') {
-		icon = '018';
-	} else if (input == '010n') {
-		icon = '004';
-	} else if (input == '011d' || input == '011n') {
-		icon = '032';
-	} else if (input == '013d' || input == '013n') {
-		icon = '039';
-	} else if (input == '050d' || input == '050n') {
-		icon = '050';
+	if (typeof input !== 'undefined') {
+
+		if (input == '01d') {
+			icon = '023';
+		} else if (input == '01n') {
+			icon = '021';
+		} else if (input == '02d') {
+			icon = '001';
+		} else if (input == '02n') {
+			icon = '022';
+		} else if (input == '03d' || input == '03n') {
+			icon = '003';
+		} else if (input == '04d' || input == '04n') {
+			icon = '022';
+		} else if (input == '09d' || input == '09n') {
+			icon = '007';
+		} else if (input == '010d') {
+			icon = '018';
+		} else if (input == '010n') {
+			icon = '004';
+		} else if (input == '011d' || input == '011n') {
+			icon = '032';
+		} else if (input == '013d' || input == '013n') {
+			icon = '039';
+		} else if (input == '050d' || input == '050n') {
+			icon = '050';
+		};
 	};
+
+	console.log('Input weather icon: ' + input + '->' + icon);
 
 	return icon;
 

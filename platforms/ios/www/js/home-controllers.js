@@ -12,7 +12,7 @@
 
 var ctrls = angular.module('gal.home.controllers', []);
 
-ctrls.controller('HomeCtrl', function($scope, $stateParams, $timeout, Gal, Geolocation, $ionicLoading) {
+ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geolocation, $ionicLoading) {
 
   /*
 
@@ -49,13 +49,19 @@ ctrls.controller('HomeCtrl', function($scope, $stateParams, $timeout, Gal, Geolo
   */
 
   $scope.dataOk = false;
+  $scope.isLocated = false;
+  $scope.bg = Math.floor((Math.random() * 3) + 1);
+
+  var location = Geolocation.location();
+
+  _refresh();
 
   $scope.$on('$ionicView.beforeEnter', function() {
-      showSpinner(true);
+    // showSpinner(true);
   });
 
   $scope.$on('$ionicView.enter', function(e) {
-      _refresh();
+  
   });
 
   function showSpinner (view, message) {
@@ -79,19 +85,29 @@ ctrls.controller('HomeCtrl', function($scope, $stateParams, $timeout, Gal, Geolo
 
     Gal.weather(function (err, data) {
       
-      console.log('location: ' + JSON.stringify(location));
+      if (!err) {
 
-      var d_sorted = _.sortBy(data, function (item) {
-        return Geolocation.distance(item.location.latitude, item.location.longitude);
-      });
+        console.log('location: ' + JSON.stringify(location));
+        // console.log('Weather: ' + JSON.stringify(data));
 
-      $scope.weathers = d_sorted;
+        var d_sorted = _.sortBy(data, function (item) {
+          return Geolocation.distance(item.item.lat, item.item.lng);
+        });
 
-      $scope.dataOk = true;
+        // $scope.weathers = d_sorted;
+
+        // console.log('Weather: ' + JSON.stringify(d_sorted[0]))
+
+        console.log(JSON.stringify(d_sorted[0].forecast[3].weather));
+
+        $scope.weather_near = d_sorted[0];
+
+        $scope.dataOk = true;
+        $scope.isLocated = true;
+      };
 
       showSpinner(false);
 
-      // console.log(JSON.stringify(data[0]));  
     }); 
   };
 

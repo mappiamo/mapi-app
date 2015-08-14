@@ -22,11 +22,13 @@ angular.module('gal.weather.services', [])
         var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lng + '&units=metric';
         
         console.log(url);
-        
-        $http({
+
+        var options = {
           method: 'GET', 
           url: url
-        })
+        };
+        
+        $http(options)
           .success(function(data, status, headers, config) {
               console.log('success: ' + data.name);
               var d = {
@@ -54,6 +56,7 @@ angular.module('gal.weather.services', [])
         })
           .success(function(data, status, headers, config) {
               // console.log('success: ' + JSON.stringify(data));
+              console.log('success weather');
               done(false, data.list);
           })
           .error(function(data, status, headers, config) {

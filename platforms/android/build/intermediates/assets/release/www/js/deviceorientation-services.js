@@ -21,6 +21,7 @@ angular.module('ngCordova.plugins.deviceOrientation', [])
         var q = $q.defer();
 
         var _options = angular.extend(defaultOptions, options);
+        
         var watchID = navigator.compass.watchHeading(function (result) {
           q.notify(result);
         }, function (err) {
