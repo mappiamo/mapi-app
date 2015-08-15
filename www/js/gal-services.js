@@ -14,6 +14,12 @@ angular.module('gal.services', [])
 
 .factory('Gal', function ($http, Weather, async, _, TEST, MAPPIAMO, Geolocation, MAPQUEST, $utility) {
 
+  var data_db = {
+    _id: '',
+    _rev: '',
+    data: null
+  };
+
   // Some fake testing data
   var gal_json = {
 
@@ -48,7 +54,7 @@ angular.module('gal.services', [])
       }
     ],
 
-    // punti di interesse
+    // cateorie punti di interesse
     poi: [
       {
         name: 'Architettura Civile'
@@ -115,7 +121,7 @@ angular.module('gal.services', [])
       }
     ],
 
-    // comuni
+    // comuni del GAL
     comuni: [{
         name: 'Acquarica del Capo',
         lat: 39.9100281,
@@ -207,6 +213,7 @@ angular.module('gal.services', [])
 
       },
 
+      // leggo il punto di interesse più vicino in una direzione
       poi_nearest: function (direction, done) {
         
         var nearest_pois = [];
@@ -242,29 +249,30 @@ angular.module('gal.services', [])
 
             // calcolo il percorso di routing
             var location = Geolocation.get(function (position) {
-              var lat = position.coords.latitude;
-              var lng = position.coords.longitude;
-              var url = $utility._getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var url = $utility._getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
 
-              var options = {
-                method: 'GET',
-                url: url,
-                dataType: 'json'
-              };
+            var options = {
+              method: 'GET',
+              url: url,
+              dataType: 'json'
+            };
 
-              $http.get(url)
-                .success(function(data_route) {
-                    //console.log(JSON.stringify(data_route.route.legs.maneuvers));
-                    n.direction = data_route.route.legs[0].maneuvers[0].direction;
-                    n.onRoute = (n.direction = data_route.route.legs[0].maneuvers[0].direction);
-                    console.log('Same Route: ' + n.onRoute);
-                    nearest_pois.push(n);
-                    callback();
-                })
-                .error(function(data_route, status, headers, config) {
-                    console.log('Unable to get itinerario ' + name);
-                    callback(true);
-                });
+            $http.get(url)
+              .success(function(data_route) {
+                  //console.log(JSON.stringify(data_route.route.legs.maneuvers));
+                  n.direction = data_route.route.legs[0].maneuvers[0].direction;
+                  n.onRoute = (n.direction = data_route.route.legs[0].maneuvers[0].direction);
+                  console.log('Same Route: ' + n.onRoute);
+                  nearest_pois.push(n);
+                  callback();
+              })
+              .error(function(data_route, status, headers, config) {
+                  console.log('Unable to get itinerario ' + name);
+                  callback(true);
+              });
+
             }, function (err) {
               callback(true);
             });

@@ -31,8 +31,8 @@ angular.module('gal', ['ionic',
                        'S', 
                        'gal.mapquest', 
                        'gal.mapbox',
-                       'CameraPreview',
-                       'CanvasCamera'])
+                       'pouchdb',
+                       'pouchdb.services'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
   

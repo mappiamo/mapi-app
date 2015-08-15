@@ -12,8 +12,9 @@
 
 var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, $cordovaDeviceOrientation, $cordovaCapture, $ionicPlatform, $cordovaBarcodeScanner, $camerapreview, $canvascamera) {
+ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, $cordovaDeviceOrientation, $cordovaCapture, $ionicPlatform) {
 
+	/*
 	var magneticHeading;
 	var trueHeading;
 	var accuracy;
@@ -121,7 +122,7 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 		// });
 
 	};
-
+	*/
 });
 
 // Bussola
