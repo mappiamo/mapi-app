@@ -14,12 +14,6 @@ angular.module('gal.services', [])
 
 .factory('Gal', function ($http, Weather, async, _, TEST, MAPPIAMO, Geolocation, MAPQUEST, $utility) {
 
-  var data_db = {
-    _id: '',
-    _rev: '',
-    data: null
-  };
-
   // Some fake testing data
   var gal_json = {
 

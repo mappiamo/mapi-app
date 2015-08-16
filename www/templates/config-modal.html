@@ -1,0 +1,22 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Download</h1>
+    <div class="buttons">
+      <a class="button button-icon icon ion-ios-close-outline" ng-click="closeModal()"></a>
+    </div>
+  </ion-header-bar>
+  
+    <ion-content class="has-header">
+      
+      <ion-toggle ng-model="config.data" 
+                  toggle-class="toggle-calm">
+          Dati off-line
+      </ion-toggle>
+
+      <ion-toggle ng-model="config.media" 
+                  toggle-class="toggle-calm">
+          Media off-line
+      </ion-toggle>
+
+  </ion-content>
+</ion-modal-view>

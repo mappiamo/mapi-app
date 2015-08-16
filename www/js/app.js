@@ -32,7 +32,8 @@ angular.module('gal', ['ionic',
                        'gal.mapquest', 
                        'gal.mapbox',
                        'pouchdb',
-                       'pouchdb.services'])
+                       'pouchdb.services',
+                       'gal.sync'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
   
@@ -81,8 +82,12 @@ angular.module('gal', ['ionic',
 })
 
 .constant('TEST', {
-  url: 'test/data.json',  // nome del database
+  url: 'test/data.json',  
   value: true
+})
+
+.constant('DB', {
+  name: 'galleuca'
 })
 
 .constant('MAPPIAMO', {

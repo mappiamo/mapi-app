@@ -12,12 +12,20 @@
 
 var ctrls = angular.module('gal.home.controllers', []);
 
-ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geolocation, $ionicLoading) {
+ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geolocation, $ionicLoading, $ionicModal, DataSync) {
+
+  $scope.config = {
+    _id: 'config',
+    _rev: '',
+    data: false,
+    media: false
+  };
 
   /*
 
-  {"dt":1437998400,
-   "main":{
+  {
+    "dt":1437998400,
+    "main":{
       "temp":29.87,
       "temp_min":28.61,
       "temp_max":29.87,
@@ -45,7 +53,8 @@ ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geol
       },
     "dt_txt":
         "2015-07-27 12:00:00"
-      }
+  }
+
   */
 
   $scope.dataOk = false;
@@ -63,6 +72,66 @@ ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geol
   $scope.$on('$ionicView.enter', function(e) {
   
   });
+
+  $scope.$watch('config.data', function() {
+      if (!$scope.config.data) {
+        $scope.config.media = false;
+      };
+  });
+
+  $scope.$watch('config.media', function() {
+      if ($scope.config.media) {
+        $scope.config.data = true;
+      };
+  });
+
+  // Modal per configurazione download
+  $ionicModal.fromTemplateUrl('templates/config-modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.openModal = function() {
+    DataSync.config.get(function (err, data) {
+      if (!err) {
+        console.log('Getting config: ' + JSON.stringify(data));
+        $scope.config = data;
+      } else {
+        console.log('Error to get config ...');
+      }
+    });
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function() {
+    console.log('Config: ' + JSON.stringify($scope.config));
+    DataSync.config.save($scope.config, function (err, data) {
+      console.log('Save config: ' + JSON.stringify(data));
+    });
+    $scope.modal.hide();
+  };
+
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
+  // *********************************
+
+  $scope.setConfig = function () {
+    $scope.openModal();
+  };
 
   function showSpinner (view, message) {
 

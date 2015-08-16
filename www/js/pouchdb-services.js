@@ -27,6 +27,7 @@ service.factory('pdb', function (pouchDB) {
 		open: function (name, callback) {
 			
 			var db = pouchDB(name);
+			
 			if (typeof callback === 'function') {
 				callback(db);
 			};
@@ -52,14 +53,20 @@ service.factory('pdb', function (pouchDB) {
 		// aggiunge un documento
 		put: function (db, data, callback) {
 
+			console.log('saving ' + JSON.stringify(data));
+
 			pouchdb_json.get(db, data._id, function (err, doc) {
 				
 				if (!err) {
-					var r = doc._rev;
-					data._rev = r;
+					data._rev = doc._rev;
 				};
+				
+				console.log('saving _rev: ' + JSON.stringify(data));
 
 				var response = db.put(data);
+
+				console.log('response saving ' + JSON.stringify(response));
+
 				if (typeof callback === 'function') {
 		  			callback(false, response);
 		  		};
@@ -70,18 +77,21 @@ service.factory('pdb', function (pouchDB) {
 		// legge un documento
 		get: function(db, id, callback) {
 			
+			console.log('getting doc by id: ' + id);
+
 			db.get(id).then(function (doc) {
 			  // handle doc
-			  	// console.log('doc founded ' + JSON.stringify(doc));
+			  	console.log('doc founded ' + JSON.stringify(doc));
 				if (typeof callback === 'function') {
 					callback(false, doc)
 				}  
 			}).catch(function (err) {
-			  	console.log(err);
+			  	console.log('error to get: ' + err);
 			  	if (typeof callback === 'function') {
 			  		callback(true, null)
 			  	}
 			});
+
 		},
 
 		// cancella un documento
