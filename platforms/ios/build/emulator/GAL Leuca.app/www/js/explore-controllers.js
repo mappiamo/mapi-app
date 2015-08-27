@@ -17,13 +17,138 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading) {
 
   $scope.dataOk = false;
+  // var test = true;
 
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
   });
+
+  $scope.showConfirm = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Download dei dati',
+      template: 'Il download dei dati può durare molto tempo. Sei sicuro?'
+    });
+    
+    confirmPopup.then(function(res) {
+      if(res) {
+
+        console.log('Si. Sono sicuro');
+
+        showSpinner(true);
+
+        // comincia il download dei dati
+        DataSync.download(function (err, data, pois) {
+          console.log('saved ...');
+          // save attachments
+          _downloadMedia(data, pois);
+        });
+
+        
+      } else {
+        console.log('No. Aspetto un secondo momento.');
+      }
+    });
+
+  };
+
+  function showSpinner (view, message) {
+
+      var msg = '<ion-spinner icon="lines"></ion-spinner>';
+
+      if (typeof message !== 'undefined') {
+        msg = message;
+      };
+
+      if (view) {  
+        $ionicLoading.show({
+            template: msg
+        });
+      } else {
+        $ionicLoading.hide();
+      }
+  };
+
+  function _downloadMedia(data, pois) {
+
+    console.log('download media for data n: ' + _.size(data));
+    _downloadDataMedia(data);
+
+    console.log('download media for pois n: ' + _.size(pois));
+    _downloadDataMedia(pois);
+
+  };
+
+  function _downloadDataMedia(data) {
+
+    async.each(data, function (item, callback) {
+
+      _saveMedia(item.media);
+      callback();
+
+    }, function (err) {
+      console.log('done transfer image.');
+      showSpinner(false);
+    });
+
+  };
+
+  function _saveMedia(media) {
+
+    console.log(JSON.stringify(media));
+    var i = 0;
+
+    async.each(media, function (item, callback) {
+
+      var url = item.url;
+      console.log('transfer file : ' + url);
+
+      // if (test) {
+
+        var oReq = new XMLHttpRequest();
+        oReq.open("GET", url, true);
+        oReq.responseType = "arraybuffer";
+
+        oReq.onload = function (oEvent) {
+          var arrayBuffer = oReq.response; // Note: not oReq.responseText
+          
+          console.log(arrayBuffer);
+
+          if (arrayBuffer) {
+            var byteArray = new Uint8Array(arrayBuffer);
+            for (var i = 0; i < byteArray.byteLength; i++) {
+              // do something with each byte in the array
+              console.log((i / byteArray.byteLength) * 100, "Downloading " + item.media.title + ' ... ');
+              showSpinner(true, parseInt((i / byteArray.byteLength) * 100) + ' %');
+            };
+          };
+
+          _saveImage(item._id, i, item.media.title, arrayBuffer);
+          i++;
+          callback(false);
+        };
+
+        oReq.send(null);
+
+    }, function (err) {
+      console.log('download media done.')
+    });
+
+  }
+
+  function _saveImage(id, index, title, buffer) {
+    
+    DataSync.saveImage(id, title, index, buffer, function (err, response) {
+      console.log(JSON.stringify(response));
+    });
+    
+  };
+
+  $scope.download = function () {
+    $scope.showConfirm();
+  };
 
   function showSpinner (view, message) {
 
@@ -43,10 +168,14 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility) 
   };
   
   $scope.$on('$ionicView.enter', function(e) {
-    $scope.routes = Gal.itinerari;
+    _refresh();  
+  });
+
+  function _refresh() {
+    $scope.routes = Gal.routes;
     $scope.dataOk = true;
     showSpinner(false); 
-  });
+  };
 
   $scope.goHome = function () {
     window.location.href = '#/tab/home';
@@ -59,10 +188,10 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility) 
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync) {
 
   var id = $stateParams.id;
-  var it = Gal.itinerario(id);
+  var it = Gal.getRoute(id);
   var geojson;
   var layer_geojson;
   var color;
@@ -80,6 +209,42 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.$on('$ionicView.enter', function(e) {
     _refresh();
   });
+
+  function getSourceImage (data) {
+
+    // var buffer = Base64.encode(buffer);
+    // var data = "data:image/png;base64,"+buffer;
+    // return data;
+
+    console.log(JSON.stringify(data.media));
+    $scope.isMedia = _.size(data.media > 0);
+
+    var id = data._content;
+    var max = _.size(data.media);
+    var i = 0;
+    var mediaAll = [];
+
+    async.each(data, function (item, callback) {
+      
+      var m = {
+        src: ''
+      };
+
+      DataSync(id, i, title, function (err, blob) {
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL( blob );
+        m.src = imageUrl;
+        mediaAll.push(m);
+        i++;
+        callback();
+      });
+
+    }, function (err) {
+      $scope.mediaAll = mediaAll;
+    });
+    
+  };
+
 
   function showSpinner (view, message) {
 
@@ -128,18 +293,15 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
           map.removeLayer(layer_geojson);
         };
 
-        var myStyle = {
-            "color": color,
-            "weight": 5,
-            "opacity": 0.65
-        };
-
         layer_geojson = L.geoJson(geojson, {
-            style: myStyle
-        }).addTo(map);
+          onEachFeature: function (feature, layer) {
+            map.fitBounds(layer.getBounds());
+          }
+        });
+
+        layer_geojson.addTo(map);
 
         map.invalidateSize();
-
     });
 
   };
@@ -147,41 +309,42 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   function _refresh() {
 
     Gal.content(id, function (err, data) {
+
       if (!err) {
 
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data.data));
 
-        data.text = S(S(data.text).stripTags().s).decodeHTMLEntities().s;
+        data.data.text = S(S(data.data.text).stripTags().s).decodeHTMLEntities().s;
         
-        if (typeof data.meta[3] !== undefined) {
-          data.meta[3].value = S(S(data.meta[3].value).stripTags().s).decodeHTMLEntities().s;
+        if (typeof data.data.meta[3] !== undefined) {
+          data.data.meta[3].value = S(S(data.data.meta[3].value).stripTags().s).decodeHTMLEntities().s;
         };
 
-        if (typeof data.meta[7] !== undefined) {
-          data.meta[7].value = S(S(data.meta[7].value).stripTags().s).decodeHTMLEntities().s;
+        if (typeof data.data.meta[7] !== undefined) {
+          data.data.meta[7].value = S(S(data.data.meta[7].value).stripTags().s).decodeHTMLEntities().s;
         };
       
-        $scope.explore = data;
-
+        $scope.explore = data.data;
         $scope.dataOk = true;
 
+        getSourceImage(data.media);
+        
+        // percorso dell'itinerario
+        var geometry = $geo.parse(data.data.route);
+
+        geojson = {
+          "type": "Feature",
+          "geometry": geometry,
+          "properties": {}
+        };
+
+        // console.log(' ----------- ');
+        // console.log('GeoJSON: ' + JSON.stringify(geojson));
+
+        _geojson();
+
         showSpinner(false);
-
-        /*
-  
-        percorso dell'itinerario
-
-        var d = S(data.route).strip('MULTILINESTRING', '((', '))', '(', ')').s
-
-        color = data.meta[0].value;
-
-        GeoJSON.route(d, color, function(err, data_geojson) {
-          // console.log(JSON.stringify(data_geojson));
-          geojson = data_geojson;
-          _geojson();
-  
-        });
-        */ 
+      
       };
     });
   };
@@ -196,7 +359,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading) {
   
   var id = $stateParams.id;
-  var it = Gal.itinerario(id);
+  var it = Gal.getRoute(id);
 
   $scope.id = id;
   $scope.title = it.title;
@@ -276,7 +439,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   var layer_geojson;
 
   var id = $stateParams.id;
-  var it = Gal.itinerario(id);
+  var it = Gal.getRoute(id);
 
   $scope.title = it.title;
   $scope.id = id;
@@ -493,7 +656,7 @@ ctrls.controller('PoiDetailCtrl', function($scope, $stateParams, Gal, S, $ionicL
 
   $scope.id = id;
   
-  var it = Gal.itinerario(id);
+  var it = Gal.getRoute(id);
 
   $scope.title = it.title;
   $scope.dataOk = false;

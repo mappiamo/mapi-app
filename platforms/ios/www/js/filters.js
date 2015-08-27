@@ -12,6 +12,26 @@
 
 var filters = angular.module('gal.filters', []);
 
+filters.filter("stars", ['$sce', function($sce) {
+
+		return function(input){
+
+			console.log(input);
+
+			var h = '';
+
+			for (var i = 1; i <= input; i++) {
+				h += '<i class="icon ion-ios-star"></i>';
+			};
+
+			var r = $sce.trustAsHtml(h);
+
+			console.log(r);
+
+    		return r;
+  		}
+}]);
+
 filters.filter("background", function () {
 	return function (input) {
 

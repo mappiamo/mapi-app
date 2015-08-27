@@ -12,116 +12,13 @@
 
 var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, $cordovaDeviceOrientation, $cordovaCapture, $ionicPlatform, $cordovaBarcodeScanner, $camerapreview, $canvascamera) {
+ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, $cordovaDeviceOrientation, $wikitude, Geolocation) {
 
-	var magneticHeading;
-	var trueHeading;
-	var accuracy;
-	var timeStamp;
-
-	var objCanvas = angular.element("#canvas");
-
-    var options = {
-    	frequency: 3000,
-     	filter: true     // if frequency is set, filter is ignored
-    };
-     
-     $scope.magnetic = 0;
-     _canvas();
-
-    var watch = $cordovaDeviceOrientation.watchHeading(options).then(
-      null,
-      function(error) {
-        // An error occurred
-        console.log('error to device orientation');
-      },
-      function(result) {   // updates constantly (depending on frequency value)
-        magneticHeading = result.magneticHeading;
-        trueHeading = result.trueHeading;
-        accuracy = result.headingAccuracy;
-        timeStamp = result.timestamp;
-        _setMagnetic(magneticHeading);
-    });
-
-    function _setMagnetic(m) {
-    	console.log('Magnetic Heading: ' + m);
-    	$scope.magnetic = m;
-    };
-
-    function _capture() {
-        $scope.message = 'start capture image ...';
-        
-        var options = { 
-        	limit: 1
-        };
-
-        $cordovaCapture.captureImage(options).then(function(imageData) {
-	      // Success! Image data is here
-	      $scope.preview = "data:image/jpeg;base64," + imageData
-	      console.log('ok');
-	    }, function(err) {
-	      // An error occurred. Show a message to the user
-	      console.log('error');
-	    });
-	};
-
-	function _canvas() {
-		
-    	$canvascamera.initialize(objCanvas);
-    	var options = {
-	        quality: 75,
-	        destinationType: CanvasCamera.DestinationType.DATA_URL,
-	        encodingType: CanvasCamera.EncodingType.JPEG,
-	        width: 640,
-	        height: 480
-    	};
-    	$canvascamera.start(options);
-	};
-
-	function _scanner () {
-		$cordovaBarcodeScanner
-	      .scan()
-	      .then(function(barcodeData) {
-	        // Success! Barcode data is here
-	        // $scope.magnetic = 100;
-	      }, function(error) {
-	        // An error occurred
-	      });
-	};
-
-	function _capture_preview() {
-
-		// $ionicPlatform.ready(function() {
-			
-			_setMagnetic(80);
-			
-			var tapEnabled = true; //enable tap take picture
-			var dragEnabled = true; //enable preview box drag across the screen
-			var toBack = true; //send preview box to the back of the webview
-			
-			var rect = {
-				x: 100, 
-				y: 100, 
-				width: 200, 
-				height:200
-			};
-		
-			$camerapreview.startCamera(rect, 'front', tapEnabled, dragEnabled, toBack);
-			
-			_setMagnetic(90);
-
-			$camerapreview.show();
-
-			_setMagnetic(100);
-
-			$camerapreview.setOnPictureTakenHandler(function(result){
-				_setMagnetic(110);
-				$scope.preview = result[1];
-			});
-		// });
-
-	};
-
+	$scope.$on('$ionicView.beforeEnter', function() {
+		console.log('calling wikitude ...');
+		$wikitude.start();
+	});
+    
 });
 
 // Bussola
@@ -129,10 +26,16 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	var test = false;
 	var magnetic = 0;
+	var magneticHeading;
+	var trueHeading;
+	var accuracy;
+	var timeStamp;
+	var watch;
+	
 	$scope.spinner = false;
 	$scope.dataOk = false;
 	$scope.isPOI = false;
-
+	
 	$ionicModal.fromTemplateUrl('templates/poi-list-modal.html', {
 	    scope: $scope,
 	    animation: 'slide-in-up'
@@ -233,6 +136,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		console.log('error to orientation');
 	};
 	
+	/*
 	function _getOrientation() {
     	console.log('start device orientation');
     	$cordovaDeviceOrientation.getCurrentHeading().then(function(result) {
@@ -246,6 +150,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	      console.log('error to device orientation')
 	    });
     };
+    */
 
     var options = {
       frequency: 3000,
@@ -253,17 +158,17 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     }
 
     if (!test) {
-	    var watch = $cordovaDeviceOrientation.watchHeading(options).then(
+	    watch = $cordovaDeviceOrientation.watchHeading(options).then(
 	      null,
 	      function(error) {
 	        // An error occurred
 	        console.log('error to device orientation');
 	      },
 	      function(result) {   // updates constantly (depending on frequency value)
-	        var magneticHeading = result.magneticHeading;
-	        var trueHeading = result.trueHeading;
-	        var accuracy = result.headingAccuracy;
-	        var timeStamp = result.timestamp;
+	       	magneticHeading = result.magneticHeading;
+	        trueHeading = result.trueHeading;
+	        accuracy = result.headingAccuracy;
+	        timeStamp = result.timestamp;
 	        _setMagnetic(result.magneticHeading);
 	    });
 	};
@@ -330,6 +235,17 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 			};
 		});
 	};
+
+	$scope.$on('$ionicView.leave', function() {
+		$cordovaDeviceOrientation.clearWatch(watch)
+	      .then(function(result) {
+	        // Success!
+	        console.log('stop watching Device Orientation');
+	      }, function(err) {
+	        // An error occurred
+	        console.log('errot to stop watching Device Orientation');
+	      });
+	});
 
 	$timeout(function() {
      	if (test) {

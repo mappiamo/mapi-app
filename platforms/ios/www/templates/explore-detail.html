@@ -7,30 +7,22 @@
 </ion-header-bar>
   <ion-content class="has-header">
 
-    <!--
-      
-      0: {"name":"route-color","value":"#99CC66"},
-      1: {"name":"tempi_percorrenza","value":"4 giorni"},
-      2: {"name":"mezzi_consigliati","value":"Bicicletta, piedi, ma \u00e8 percorribile quasi integralmente anche con mezzi a motore."},
-      3: {"name":"caratteristiche","value":"<p>L'itinerario segue per lo pi&ugrave; strade percorribili con l'auto, anche se &egrave; consigliato l'uso di mezzi lenti (bicicletta o a piedi)&nbsp;che permettono di gustare al meglio il territorio da visitare.&nbsp;I punti di interesse del percorso so"},
-      4: {"name":"partenza","value":"Ugento"},
-      5: {"name":"arrivo","value":"Acquarica del Capo"},
-      6: {"name":"periodo_consigliato","value":"Primavera\/autunno\/estate"},
-      7: {"name":"punti_sosta_accoglienza","value":"<p>Lungo il percorso sono presenti&nbsp;numerosi punti di sosta, aree attrezzate, pinete, parchi, in cui &egrave; possibile riposare.<\/p> \n<p>Per dormire sono presenti masserie e strutture ricettive, collocate sia nei centri storici che nelle campagne, lu"},
-      8: {"name":"roadbook","value":"tmpgaqbmb3i2capp28lnmaxbt"},
-      9: {"name":"lunghezza","value":"70"},
-      10: {"name":"modifica","value":"2015-07-20 16:33:22.994171"},
-      11: {"name":"difficolta","value":"3"}
-
-    -->
-      
       <div class="list card" ng-if="dataOk">
 
-        <div class="item item-thumbnail-left item-text-wrap">
+        <div class="item item-text-wrap">
+          <!--
           <img src="{{ explore.media[0].url }}" />
-          <h2 class="main-heading"> {{ explore.title }} </h2>
-          <h3 class="sub-heading"> Tempo di percorrenza {{ explore.meta[1].value }}</h3>
-          <h4 class="sub-heading"> Difficolta {{ explore.meta[12].value }}</h4>
+          -->
+          <h1 class="main-heading"> {{ explore.title }}</h1>
+          <div ng-bind-html="explore.meta[12].value | stars"></div>
+          <h3 class="sub-heading"> Tempo di percorrenza <strong>{{ explore.meta[1].value }}</strong></h3>
+        </div>
+
+        <!-- immagini -->
+        <div class="item item-image" 
+             ng-repeat="media in mediaAll"
+             ng-if="isMedia">
+          <img ng-src="media.src">
         </div>
 
         <div class="item item-body item-text-wrap">
@@ -54,14 +46,11 @@
             </div>
           </div>
 
-          <!--
           <leaflet id="map_explore"
-                   center="center" 
                    geojson="geojson"
                    defaults="defaults">
           </leaflet>
-          -->
-
+          
           <h3>Caratteristiche</h3>
           <p>
             {{ explore.meta[3].value }}

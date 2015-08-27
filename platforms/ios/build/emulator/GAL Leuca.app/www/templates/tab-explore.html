@@ -1,26 +1,34 @@
 <ion-view view-title="Itinerari" hide-nav-bar="true">
 
   <ion-header-bar align-title="left" class="bar-positive">
+    <h1 class="title"><a href="#/tab/home"><img src="img/logo/logo-gal_tra_small.png"></img></a></h1>
     <div class="buttons">
-      <a class="button button-icon icon ion-ios-home" ng-click="goHome()"></a>
+      <button class="button" ng-click="download()"><i class="icon ion-ios-cloud-download"></i></button>
     </div>
-    <h1 class="title">Itinerari</h1>
   </ion-header-bar>
 
   <ion-content class="has-header">
-      <!---
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-      -->
-
+      
       <div class="list card" 
            collection-repeat="route in routes">
 
-        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/explore/{{route._id}}">
+        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/explore/{{route._content}}">
           <img src="{{route.image}}">
           <h2 class="promo-heading">{{route.title}}</h2>
           <p>{{route.description}}</p>
         </a>
-    </div>
+
+        <div class="item tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item" href="#/tab/explore/{{route._content}}">
+            <i class="icon ion-ios-information-outline"></i>
+            More Info
+          </a>
+          <a class="tab-item" href="#/tab/pois/{{ route._content }}">
+            <i class="icon ion-ios-location"></i>
+            Punti di Interesse
+          </a>
+        </div>
+      </div>
         
   </ion-content>
 </ion-view>

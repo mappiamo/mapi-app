@@ -49,9 +49,11 @@
     },
     "org.apache.cordova.file": {
         "source": {
-            "type": "local",
-            "path": "/Applications/Intel XDK.app/Contents/Resources/app.nw/components/server/cordova-plugins/org.apache.cordova.file"
-        }
+            "type": "registry",
+            "id": "org.apache.cordova.file"
+        },
+        "is_top_level": true,
+        "variables": {}
     },
     "cordova-plugin-file": {
         "source": {
@@ -115,6 +117,31 @@
             "id": "org.apache.cordova.geolocation"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "org.apache.cordova.file-transfer": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.file-transfer"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.wikitude.phonegap.WikitudePlugin": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Wikitude/wikitude-cordova-plugin.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.console": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.console"
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

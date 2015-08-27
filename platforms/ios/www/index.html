@@ -14,7 +14,7 @@
 
     <link href="css/style.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
-
+    
     <!--
     <link href="lib/vegas/dist/vegas.min.css" rel="stylesheet">
     -->
@@ -30,9 +30,12 @@
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
-
+    <!--
+    <script src="architect://architect.js"></script>
+    -->
     <script src="lib/jquery/dist/jquery.min.js"></script>
 
+    
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     
@@ -47,7 +50,9 @@
     <script src="lib/angular-momentjs/angular-momentjs.min.js"></script>
      <script type="text/javascript" src="lib/turf/turf.min.js"></script>
     <script type="text/javascript" src="lib/string/string.min.js"></script>
- 
+
+    <script src="lib/jquery/jquery.getimagedata.min.js"></script>
+
     <!-- Angular LeafLet SDK Library -->
     <script type="text/javascript" src="lib/angular-leaflet/leaflet.js"></script>
     <script type="text/javascript" src="lib/angular-leaflet/angular-leaflet-directive.min.js"></script>
@@ -58,6 +63,16 @@
     <script type="text/javascript" src="lib/angular-leaflet/leaflet.spin.js"></script>
     <script type="text/javascript" src="lib/leaflet-routing-machine/leaflet-routing-machine.js"></script>
     <script type="text/javascript" src="lib/leaflet-routing-machine/lrm-mapbox-1.0.1.js"></script>
+
+    <!-- PouchDB -->
+    <script type="text/javascript" src="lib/pouchdb/pouchdb.min.js"></script>
+    <script type="text/javascript" src="lib/pouchdb/pouchdb.idb-alt.min.js"></script>
+    <script type="text/javascript" src="lib/pouchdb/pouchdb.localstorage.min.js"></script>
+    <script type="text/javascript" src="lib/pouchdb/pouchdb.memory.min.js"></script>
+    <script type="text/javascript" src="lib/pouchdb/angular-pouchdb.js"></script>
+
+    <!-- jQuery GEO -->
+    <script type="text/javascript" src="lib/geo/jquery.geo-1.0.0-b2.min.js"></script>
 
     <!-- app's js -->
     <script src="js/app.js"></script>
@@ -72,14 +87,20 @@
     <script src="js/string-services.js"></script>
     <script src="js/mapquest-services.js"></script>
     <script src="js/mapbox-services.js"></script>
+    <script src="js/sync-services.js"></script>
+    <script src="js/pouchdb-services.js"></script>
     <script src="js/geojson-services.js"></script>
-    <script src="js/preview-services.js"></script>
-    <script src="js/canvas-services.js"></script>
+    <script src="js/geo-services.js"></script>
     <script src="js/async-services.js"></script>
     <script src="js/underscore-services.js"></script>
+    <script src="js/imagedata-services.js"></script>
+    <script src="js/plugins-services.js"></script>
+    <script src="js/wikitude-services.js"></script>
+    <script src="js/wikitude-directives.js"></script>
     <script src="js/filters.js"></script>
 
   </head>
+
   <body ng-app="gal" class="platform-ios platform-cordova platform-webview">
     
     <ion-nav-bar class="bar-stable">

@@ -12,13 +12,29 @@
 
 angular.module('gal.services', [])
 
-.factory('Gal', function ($http, Weather, async, _, TEST, MAPPIAMO, Geolocation, MAPQUEST, $utility) {
+.factory('Gal', function ($http, Weather, async, _, TEST, MAPPIAMO, Geolocation, MAPQUEST, $utility, pdb, DB) {
+
+  var db;
 
   // Some fake testing data
   var gal_json = {
 
+    item: function () {
+      
+      var it = {
+        _content: '',
+        _category: '',
+        name: '',
+        data: {},
+        _rev: '',
+        media: []  
+      };
+
+      return it;
+    },
+
     // epoca
-    epoca: [
+    ages: [
       {
         name: 'Contemporanea'
       },
@@ -49,7 +65,7 @@ angular.module('gal.services', [])
     ],
 
     // cateorie punti di interesse
-    poi: [
+    categories: [
       {
         name: 'Architettura Civile'
       },
@@ -80,35 +96,35 @@ angular.module('gal.services', [])
     ],
 
     // itinerari
-    itinerari:[
+    routes:[
       {
         title: 'Paduli',
-        _id: 449,
-        poi: 1,
+        _content: 539,
+        _categories: 37,
         name: 'Paduli',
         image: 'img/itinerari/paduli.jpg',
         description: 'Un percorso che si snoda lungo sei comuni del basso Salento, partendo da Nociglia, il comune più a nord, per toccare Montesano Salentino, Miggiano, Taurisano, Ruffano e Specchia.'
       },
       {
         title: 'Fede',
-        _id: 448,
-        poi: 1,
+        _content: 538,
+        _categories: 11,
         name: 'Fede',
         image: 'img/itinerari/fede.jpg',
         description: 'Un affascinante percorso costellato di chiese rurali, cripte, luoghi di ristoro, attraversando una campagna ricca di quelle testimonianze rurali tipiche del territorio salentino.'
       },
       {
         title: 'Naturalistico/Archeologico',
-        _id: 451,
-        poi: 47,
+        _content: 541,
+        _categories: 57,
         name: 'Naturalistico\/archeologico',
         image: 'img/itinerari/natura.jpg',
         description: 'Un percorso che attraversa i comuni di Ugento, Salve, Morciano di Leuca, Presicce ed Acquarica del Capo, fino a raggiungere il famoso Parco Naturale Litorale di Ugento.'
       },
       {
         title: 'Falesie',
-        _id: 450,
-        poi: 44,
+        _content: 540,
+        _categories: 54,
         name: 'Falesie',
         image: 'img/itinerari/falesie.jpg',
         description: 'Un percorso che si dispiega lungo la costa adriatica del Capo di Leuca, un paesaggio spettacolare dove il mare e la terra quasi si scontrano lungo la linea di costa, alta, rocciosa, costellata di grotte e insenature.'
@@ -116,7 +132,7 @@ angular.module('gal.services', [])
     ],
 
     // comuni del GAL
-    comuni: [{
+    cities: [{
         name: 'Acquarica del Capo',
         lat: 39.9100281,
         lng: 18.2455895
@@ -197,13 +213,66 @@ angular.module('gal.services', [])
         lng: 18.1607648
       }],
 
-      itinerario: function (id) {
+      getRoute: function (id) {
 
-        var it = _.find(gal_json.itinerari, function (item) {
-          return item._id == id;
+        var it = _.find(gal_json.routes, function (item) {
+          return item._content == id;
         });
 
         return it;
+
+      },
+
+      pois: [],
+
+      poi_latlng: function (done) {
+        
+        var pois = [];
+
+        var self = this;
+    
+        async.each(self.routes, function (item, callback) {
+          console.log('getting pois by ' + item._content);
+          self.poi(item._content, null, function (err, data) {
+            self._poi_latlng(data, item._content, function (err) {
+              callback();
+            });
+          });
+
+        }, function (err) {
+          console.log('*** total pois: ' + _.size(self.pois));
+          done(err, self.pois);
+        });
+
+      },
+
+      _poi_latlng: function (data, content, done) {
+
+        var self = this;
+
+        async.each(data, function (item, callback) {
+
+          // console.log('-------------------');
+          // console.log(JSON.stringify(item));
+
+          var poiData = {
+              id: item.id,
+              content: content,
+              category: item.id,
+              longitude: item.lon,
+              latitude: item.lat,
+              altitude: 0,
+              description: item.address,
+              title: item.title
+          };
+
+          self.pois.push(poiData);
+
+          callback();
+
+        }, function (err) {
+          done(err)
+        });
 
       },
 
@@ -211,12 +280,9 @@ angular.module('gal.services', [])
       poi_nearest: function (direction, done) {
         
         var nearest_pois = [];
+        var self = this;
 
-        // var direction = $utility._getDirection(degree);
-
-        console.log(' direction: ' + direction);
-
-        async.each(gal_json.itinerari, function (item, callback) {
+        async.each(self.routes, function (item, callback) {
 
           var n = {
             itinerario: item,
@@ -226,7 +292,7 @@ angular.module('gal.services', [])
             route: null
           };
 
-          gal_json.poi(item._id, null, function (err, data) {
+          gal_json.poi(item._content, null, function (err, data) {
 
             // console.log('first element: ' + JSON.stringify(data));
             console.log('n element: ' + _.size(data));
@@ -281,9 +347,9 @@ angular.module('gal.services', [])
       // punti di interesse
       poi: function (id, idpoi, callback) {
         
-        var it = gal_json.itinerario(id);
+        var it = this.getRoute(id);
 
-        var url = MAPPIAMO.poi + it.poi + MAPPIAMO.jsonp;
+        var url = MAPPIAMO.poi + it._categories + MAPPIAMO.jsonp;
 
         var options = {
           method: 'GET',
@@ -326,9 +392,26 @@ angular.module('gal.services', [])
       // itinerari
       content: function (id, callback) {
 
-        var it = gal_json.itinerario(id);
+        var self = this;
 
-        var url = MAPPIAMO.content + it._id + MAPPIAMO.jsonp;
+        pdb.open(DB.name, function (db_callback) {
+            db = db_callback;
+            pdb.get(db, id, function (err, data) {
+              if (!err) {
+                console.log('getting data by Database ');
+                callback(err, data);
+              } else {
+                console.log('getting data by url')
+                self._content_URI(id, callback);
+              }
+            });
+        });
+      },
+
+      _content_URI: function (id, callback) {
+
+        var url = MAPPIAMO.content + id + MAPPIAMO.jsonp;
+        var self = this; 
 
         console.log('getting data by ' + url);
 
@@ -338,16 +421,19 @@ angular.module('gal.services', [])
           dataType: 'jsonp'
         };
 
+        var d = self.item();
+
         $http(options)
           .success(function(data) {
+              d._content = id;
+              d.data = data;
               // console.log('success: ' + JSON.stringify(data));
-              callback(false, data);
+              callback(false, d, 0);
           })
           .error(function(data, status, headers, config) {
               console.log('Unable to get itinerario ' + name);
-              callback(true, null);
+              callback(true, null, 0);
         });
-          
       },
 
       /**

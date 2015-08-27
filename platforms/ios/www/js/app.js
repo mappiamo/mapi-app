@@ -31,10 +31,16 @@ angular.module('gal', ['ionic',
                        'S', 
                        'gal.mapquest', 
                        'gal.mapbox',
-                       'CameraPreview',
-                       'CanvasCamera'])
+                       'pouchdb',
+                       'pouchdb.services',
+                       'gal.sync',
+                       'jquery.plugin.imagedata',
+                       'jquery.geo',
+                       'wikitude.plugin',
+                       'ionic.cordova.plugin',
+                       'wikitude.directive'])
 
-.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $wikitude) {
   
   $ionicPlatform.ready(function() {
 
@@ -65,7 +71,6 @@ angular.module('gal', ['ionic',
           console.log(location);
           Geolocation.save(location);
         });
-
   });
 
 })
@@ -81,8 +86,12 @@ angular.module('gal', ['ionic',
 })
 
 .constant('TEST', {
-  url: 'test/data.json',  // nome del database
+  url: 'test/data.json',  
   value: true
+})
+
+.constant('DB', {
+  name: 'galleuca'
 })
 
 .constant('MAPPIAMO', {
@@ -130,20 +139,20 @@ angular.module('gal', ['ionic',
   })
 
   // realtà aumentata
-  .state('tab.real', {
-    url: '/real',
+  .state('tab.compass', {
+    url: '/compass',
     views: {
-      'tab-real': {
+      'tab-compass': {
         templateUrl: 'templates/tab-real.html',
         controller: 'RealCtrl'
       }
     }
   })
 
-  .state('tab.camera', {
-    url: '/camera',
+  .state('tab.real', {
+    url: '/real',
     views: {
-      'tab-camera': {
+      'tab-real': {
         templateUrl: 'templates/poi-real-camera.html',
         controller: 'RealCameraCtrl'
       }
@@ -226,6 +235,6 @@ angular.module('gal', ['ionic',
     });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/home');
+    $urlRouterProvider.otherwise('/tab/explore');
 
 });
