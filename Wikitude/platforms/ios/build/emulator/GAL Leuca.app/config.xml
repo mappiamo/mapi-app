@@ -20,6 +20,9 @@
     <feature name="Geolocation">
         <param name="ios-package" value="CDVLocation" />
     </feature>
+    <feature name="Device">
+        <param name="ios-package" value="CDVDevice" />
+    </feature>
     <preference name="BackupWebStorage" value="local" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />

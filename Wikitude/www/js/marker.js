@@ -61,6 +61,17 @@ function Marker(poiData) {
         verticalAnchor: AR.CONST.VERTICAL_ANCHOR.TOP
     });
 
+    this.markerObject = new AR.GeoObject(markerLocation, {
+           drawables: {
+               cam: [    this.markerDrawable_idle, 
+                       this.markerDrawable_selected, 
+                       this.titleLabel, 
+                       this.descriptionLabel ],
+               indicator: this.directionIndicatorDrawable,
+               radar: this.radardrawables
+           }
+    });
+
     /*
         Create the AR.GeoObject with the drawable objects and define the AR.ImageDrawable as an indicator target on the marker AR.GeoObject. The direction indicator is displayed automatically when necessary. AR.Drawable subclasses (e.g. AR.Circle) can be used as direction indicators.
     */
@@ -70,6 +81,8 @@ function Marker(poiData) {
             indicator: this.directionIndicatorDrawable
         }
     });
+
+
 
     return this;
 }

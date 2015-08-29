@@ -22,38 +22,30 @@ var World = {
 		// empty list of visible markers
 		World.markerList = [];
 
+		var msg = _.size(poiData) + ' punti di interesse trovati';
+
 		// Start loading marker assets:
 		// Create an AR.ImageResource for the marker idle-image
-		World.markerDrawable_idle = new AR.ImageResource("img/assets/marker_idle.png");
+		World.markerDrawable_idle = new AR.ImageResource("assets/marker_idle.png");
 		// Create an AR.ImageResource for the marker selected-image
-		World.markerDrawable_selected = new AR.ImageResource("img/assets/marker_selected.png");
+		World.markerDrawable_selected = new AR.ImageResource("assets/marker_selected.png");
 		// Create an AR.ImageResource referencing the image that should be displayed for a direction indicator. 
-		World.markerDrawable_directionIndicator = new AR.ImageResource("img/assets/indi.png");
+		World.markerDrawable_directionIndicator = new AR.ImageResource("assets/indi.png");
 
-		// loop through POI-information and create an AR.GeoObject (=Marker) per POI
-		for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
-			var singlePoi = {
-				"id": poiData[currentPlaceNr].id,
-				"content": poiData[currentPlaceNr].content,
-				"category": poiData[currentPlaceNr].category,
-				"latitude": parseFloat(poiData[currentPlaceNr].latitude),
-				"longitude": parseFloat(poiData[currentPlaceNr].longitude),
-				"altitude": parseFloat(poiData[currentPlaceNr].altitude),
-				"title": poiData[currentPlaceNr].name,
-				"description": poiData[currentPlaceNr].description
-			};
+		async.each(poiData, function (poi, callback) {
+			World.markerList.push(new Marker(poi));
+			callback();
+		}, function (err) {
+			console.log('finish.');
+			// log message
+			console.log(msg);
+		});
 
-			/*
-				To be able to deselect a marker while the user taps on the empty screen, 
-				the World object holds an array that contains each marker.
-			*/
-			World.markerList.push(new Marker(singlePoi));
-		}
-
-		World.updateStatusMessage(currentPlaceNr + ' places loaded');
+		World.updateStatusMessage(msg);
 	},
 
 	// updates status message shon in small "i"-button aligned bottom center
+	
 	updateStatusMessage: function (message, isWarning) {
 
 		var themeToUse = isWarning ? "e" : "c";
@@ -74,11 +66,14 @@ var World = {
 		/*
 			The custom function World.onLocationChanged checks with the flag World.initiallyLoadedData if the function was already called. With the first call of World.onLocationChanged an object that contains geo information will be created which will be later used to create a marker using the World.loadPoisFromJsonData function.
 		*/
+
+		console.log('location changed');
+
 		if (!World.initiallyLoadedData) {
 			/* 
 				requestDataFromLocal with the geo information as parameters (latitude, longitude) creates different poi data to a random location in the user's vicinity.
 			*/
-			World.requestDataFromLocal(lat, lon);
+			World.requestDataFromLocal(lat, lon, alt, acc);
 			World.initiallyLoadedData = true;
 		}
 	},
@@ -107,54 +102,73 @@ var World = {
 	},
 
 	// request POI data
-	requestDataFromLocal: function (centerPointLatitude, centerPointLongitude) {
+	requestDataFromLocal: function (centerPointLatitude, centerPointLongitude, centerAltitude) {
 		
 		console.log('request data ...');
-		
-		Gal.loadData(function (err, data) {
-			if (!err) {
-          		this.loadPoisFromJsonData(data);
-          	};
-        });
 
-	},
-
-	load: function() {
-
-		console.log('load World: loading data');
-
-		navigator.geolocation.getCurrentPosition(this.onLocationUpdated, this.onLocationError);
-		
-		console.log('load World: step 1');
-		/* 
-	Set a custom function where location changes are forwarded to. There is also a possibility to set AR.context.onLocationChanged to null. In this case the function will not be called anymore and no further location updates will be received. 
-		*/
-		AR.context.onLocationChanged = this.locationChanged;
-
-		console.log('load World: step 2');
 		/*
-			To detect clicks where no drawable was hit set a custom function on AR.context.onScreenClick where the currently selected marker is deselected.
+		var point = {
+		  "type": "Feature",
+		  "properties": {
+		    "marker-color": "#0f0",
+		    "latitude": centerPointLatitude,
+		    "longitude": centerPointLongitude
+		    "altitude": centerAltitude
+		  },
+		  "geometry": {
+		    "type": "Point",
+		    "coordinates": [centerPointLongitude, centerPointLatitude]
+		  }
+		};
 		*/
-		AR.context.onScreenClick = this.onScreenClick;
-	},
-
-	onLocationUpdated: function(position) {
-		var latitude = position.coords.latitude;
-		var longitude = position.coords.longitude;
-		var altitude = position.coords.altitude;
 		
-		Gal.loadData(function (err, data) {
+		// var poiData = [];
+		
+		var options = {
+			geojson: false,
+			reset: false,
+			nearest: false,
+			latitude: centerPointLatitude,
+			longitude: centerPointLongitude,
+			geolocation: true
+		};
+
+		Gal.loadData(function (err, against) {
 			if (!err) {
-	      		World.loadPoisFromJsonData(data);
+				// var nearest = turf.nearest(point, against);
+				World.loadPoisFromJsonData(against);
 	      	};
-	    });
+	    }, options);
 
-		// inject POI data in JSON-format to JS
-	},
+	/*
+		var poisToCreate = 20;
+		var poiData = [];
 
-	onLocationError: function(error) {
-		console.log("Not able to fetch location.");
+		for (var i = 0; i < poisToCreate; i++) {
+			poiData.push({
+				"id": (i + 1),
+				"longitude": (centerPointLongitude + (Math.random() / 5 - 0.1)),
+				"latitude": (centerPointLatitude + (Math.random() / 5 - 0.1)),
+				"description": ("This is the description of POI#" + (i + 1)),
+				// use this value to ignore altitude information in general - marker will always be on user-level
+				"altitude": AR.CONST.UNKNOWN_ALTITUDE,
+				"name": ("POI#" + (i + 1))
+			});
+		};
+		World.loadPoisFromJsonData(poiData);
+	*/
 	}
-
 };
+
+console.log('load World: step 1');
+		/* 
+Set a custom function where location changes are forwarded to. There is also a possibility to set AR.context.onLocationChanged to null. In this case the function will not be called anymore and no further location updates will be received. 
+*/
+AR.context.onLocationChanged = World.locationChanged;
+
+console.log('load World: step 2');
+/*
+	To detect clicks where no drawable was hit set a custom function on AR.context.onScreenClick where the currently selected marker is deselected.
+*/
+AR.context.onScreenClick = World.onScreenClick;
 

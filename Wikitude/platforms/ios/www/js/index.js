@@ -43,37 +43,60 @@ var app = {
     },
     // deviceready Event Handler
     onDeviceReady: function() {
+        
         console.log('on device ready ...');
-        app.wikitudePlugin = cordova.require("com.wikitude.phonegap.WikitudePlugin.WikitudePlugin");
+
+        // Depending on the device, a few examples are:
+        //   - "Android"
+        //   - "BlackBerry 10"
+        //   - "iOS"
+        //   - "WinCE"
+        //   - "Tizen"
+        var devicePlatform = device.platform;
+
+        console.log('Device: ' + devicePlatform);
+
+        //if (devicePlatform == 'iOS' || devicePlatform == 'Android') {
+            app.wikitudePlugin = cordova.require("com.wikitude.phonegap.WikitudePlugin.WikitudePlugin");
+        //} else {
+        //    console.log('I can\'t start wikititude');
+        //    navigator.geolocation.getCurrentPosition(onLocationUpdated, onLocationError);
+        //};
     },
     // --- Wikitude Plugin ---
     // Use this method to load a specific ARchitect World from either the local file system or a remote server
     loadARchitectWorld: function() {
-        console.log('load architect world ...');
-        // check if the current device is able to launch ARchitect Worlds
-        app.wikitudePlugin.isDeviceSupported(function() {
-            app.wikitudePlugin.setOnUrlInvokeCallback(app.onUrlInvoke);
-            
-            // inject poi data using phonegap's GeoLocation API and inject data using World.loadPoisFromJsonData
-            //if ( options.requiredExtension === "ObtainPoiDataFromApplicationModel" ) {
-            //    navigator.geolocation.getCurrentPosition(onLocationUpdated, onLocationError);
-            //}
 
-            app.wikitudePlugin.loadARchitectWorld(function successFn(loadedURL) {
-                /* Respond to successful world loading if you need to */ 
-                console.log('loaded architect world ' + loadedURL);
-            }, function errorFn(error) {
-                alert('Loading AR web view failed: ' + error);
+        console.log('load architect world ...');
+
+        // if (app.wikitudePlugin != null && (devicePlatform == 'iOS' || devicePlatform == 'Android')) {
+            // check if the current device is able to launch ARchitect Worlds
+            app.wikitudePlugin.isDeviceSupported(function() {
+                app.wikitudePlugin.setOnUrlInvokeCallback(app.onUrlInvoke);
+                
+                // inject poi data using phonegap's GeoLocation API and inject data using World.loadPoisFromJsonData
+                navigator.geolocation.getCurrentPosition(onLocationUpdated, onLocationError);
+                
+                app.wikitudePlugin.loadARchitectWorld(function successFn(loadedURL) {
+                    /* Respond to successful world loading if you need to */ 
+                    console.log('loaded architect world ' + loadedURL);
+                }, function errorFn(error) {
+                    alert('Loading AR web view failed: ' + error);
+                },
+                app.path, 
+                app.requiredFeatures, 
+                app.startupConfiguration
+                );
+            }, function(errorMessage) {
+                alert(errorMessage);
             },
-            app.path, 
-            app.requiredFeatures, 
-            app.startupConfiguration
+            app.requiredFeatures
             );
-        }, function(errorMessage) {
-            alert(errorMessage);
-        },
-        app.requiredFeatures
-        );
+        //} else {
+        //    console.log('wikitude null');
+            // inject poi data using phonegap's GeoLocation API and inject data using World.loadPoisFromJsonData
+        //    navigator.geolocation.getCurrentPosition(onLocationUpdated, onLocationError);
+        //}
     },
     urlLauncher: function(url) {
 

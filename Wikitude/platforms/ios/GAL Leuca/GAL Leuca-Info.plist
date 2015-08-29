@@ -3,7 +3,7 @@
 <plist version="1.0">
   <dict>
     <key>CFBundleDevelopmentRegion</key>
-    <string>English</string>
+    <string>it_IT</string>
     <key>CFBundleDisplayName</key>
     <string>${PRODUCT_NAME}</string>
     <key>CFBundleExecutable</key>
@@ -56,18 +56,25 @@
     <string>${PRODUCT_NAME}</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.2.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
     <string>1.2.0</string>
-    <key>CFBundleShortVersionString</key>
-    <string>1.2.0</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string></string>
     <key>NSMainNibFile</key>
     <string></string>
     <key>NSMainNibFile~ipad</key>
     <string></string>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>fetch</string>
+      <string>location</string>
+    </array>
     <key>UILaunchImages</key>
     <array>
       <dict>
@@ -171,7 +178,5 @@
         <string>{768, 1024}</string>
       </dict>
     </array>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string></string>
   </dict>
 </plist>

@@ -14,6 +14,15 @@ var Gal = {
       return it;
     },
 
+    options: {
+      geojson: false,
+      reset: true,
+      nearest: false,
+      latitude: 0,
+      longitude: 0,
+      geolocation: true
+    },
+
     get_poiData: function () {
 
       var p = {
@@ -221,7 +230,28 @@ var Gal = {
 
       pois: [],
 
-      poi_latlng: function (done) {
+      getpoisData: function (item, content, lat, lng) {
+
+        // console.log(JSON.stringify(item));
+
+        var poiData = {
+            id: item.id,
+            content: content,
+            category: item.id,
+            longitudeReal: parseFloat(item.lon),
+            latitudeReal: parseFloat(item.lat),
+            altitude: 0,
+            description: item.address,
+            title: item.title,
+            longitude: parseFloat(lng + (Math.random() / 5 - 0.1)),
+            latitude: parseFloat(lat + (Math.random() / 5 - 0.1))
+        };
+
+        return poiData;
+
+      },
+
+      poi_latlng: function (done, options) {
         
         var pois = [];
 
@@ -230,20 +260,32 @@ var Gal = {
         async.each(self.routes, function (item, callback) {
           console.log('getting pois by ' + item._content);
           self.poi(item._content, null, function (err, data) {
-            self._poi_latlng(data, item._content, function (err) {
-              callback();
-            });
+            if (options.geojson) {
+              self._poi_latlng_geojson(data, item._content, function (err) {
+                callback();
+              }, options);
+            } else {
+              self._poi_latlng(data, item._content, function (err) {
+                callback();
+              }, options);
+            };
           });
 
         }, function (err) {
           console.log('*** total pois: ' + _.size(self.pois));
-
-          done(err, self.pois);
+          if (options.geojson) {
+            console.log('geojson data');
+            console.log(JSON.stringify(self.poiGEOJSON));
+            done(err, self.poiGEOJSON);
+          } else {
+            console.log('data');
+            done(err, self.pois);
+          };
         });
 
       },
 
-      _poi_latlng: function (data, content, done) {
+      _poi_latlng_geojson: function(data, content, done, options) {
 
         var self = this;
 
@@ -252,18 +294,39 @@ var Gal = {
           // console.log('-------------------');
           // console.log(JSON.stringify(item));
 
-          var poiData = {
-              id: item.id,
-              content: content,
-              category: item.id,
-              longitude: item.lon,
-              latitude: item.lat,
-              altitude: 0,
-              description: item.address,
-              title: item.title
+          var p = self.getpoisData(item, content, options.latitude, options.longitude);
+
+          var feature = { 
+            type: 'Feature',
+            geometry: {
+              type: 'Point', 
+              coordinates: [item.lon, item.lat]
+            },
+            properties: p
           };
 
-          self.pois.push(poiData);
+          self.poiGEOJSON.features.push(feature);
+
+          callback();
+
+        }, function (err) {
+          done(err)
+        });
+
+      },
+
+      _poi_latlng: function (data, content, done, options) {
+
+        var self = this;
+
+        async.each(data, function (item, callback) {
+
+          // console.log('-------------------');
+          // console.log(JSON.stringify(item));
+
+          var p = self.getpoisData(item, content, options.latitude, options.longitude);
+
+          self.pois.push(p);
 
           callback();
 
@@ -274,72 +337,57 @@ var Gal = {
       },
 
       poiData: null,
+      poiGEOJSON: { 
+        type: 'FeatureCollection',
+        features: []
+      },
 
       // leggo il punto di interesse più vicino in una direzione
-      poi_nearest: function (direction, done) {
+      poi_nearest: function (done, options) {
         
-        var nearest_pois = [];
         var self = this;
 
-        async.each(self.routes, function (item, callback) {
+        var point = {
+          "type": "Feature",
+          "properties": {
+            "marker-color": "#0f0",
+            "latitude": options.latitude,
+            "longitude": options.longitude,
+            "altitude": options.altitude
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [options.longitude, options.latitude]
+          }
+        };
 
-          var n = {
-            itinerario: item,
-            item: null,
-            onRoute: false,
-            direction: 0,
-            route: null
+        this.loadData(function (err, against) {
+          if (!err) {
+            var nearest = turf.nearest(point, against);
+            done (err, nearest);
           };
+        }, options);
 
-          self.poi(item._content, null, function (err, data) {
+      },
 
-            // console.log('first element: ' + JSON.stringify(data));
-            console.log('n element: ' + _.size(data));
+      poi_random: function (options) {
 
-            var p = _.sortBy(data, function (item) {
-              return Geolocation.distance(item.lat, item.lon);
-            });
+        var poisToCreate = 20;
+        var poiData = [];
 
-            // console.log(JSON.stringify(p[0]));
-
-            console.log('Coordinate POI: ' + p[0].lat + ',' + p[0].lon);
-
-            n.item = p[0];
-
-            // calcolo il percorso di routing
-            var location = Geolocation.get(function (position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            var url = $utility._getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
-
-            var options = {
-              method: 'GET',
-              url: url,
-              dataType: 'json'
-            };
-
-            _get(url, function (err, data) {
-              if (!err) {
-                  //console.log(JSON.stringify(data_route.route.legs.maneuvers));
-                  n.direction = data_route.route.legs[0].maneuvers[0].direction;
-                  n.onRoute = (n.direction = data_route.route.legs[0].maneuvers[0].direction);
-                  console.log('Same Route: ' + n.onRoute);
-                  nearest_pois.push(n);
-                  callback();
-                } else {
-                  console.log('Unable to get itinerario ' + name);
-                  callback(true);
-                }
-              });
-
-            }, function (err) {
-              callback(true);
-            });
+        for (var i = 0; i < poisToCreate; i++) {
+          poiData.push({
+            "id": (i + 1),
+            "longitude": (options.longitude + (Math.random() / 5 - 0.1)),
+            "latitude": (options.latitude + (Math.random() / 5 - 0.1)),
+            "description": ("This is the description of POI#" + (i + 1)),
+            // use this value to ignore altitude information in general - marker will always be on user-level
+            "altitude": AR.CONST.UNKNOWN_ALTITUDE,
+            "name": ("POI#" + (i + 1))
           });
+        };
 
-        }, function (err) {
-          done(err, nearest_pois, direction);
-        });
+        return poiData;
 
       },
 
@@ -418,32 +466,68 @@ var Gal = {
         });
       },
 
-      loadData: function (done) {
+      getDocName: function (geojson) {
+        var docname = '';
+
+        if (geojson && typeof geojson !== 'undefined') {
+          docname = 'poiGEOJSON';
+        } else {
+          docname = 'poiData';
+        };
+
+        return docname;
+      },
+
+      _loadData: function(db, docname, done, options) {
+
+        var self = this; 
+
+        pdb.get(db, docname, function (err, doc) {
+          if (!err) {
+            console.log('getting data by db');
+            done(err, doc.data);
+          } else {
+            console.log('getting data by url');
+            Gal.poi_latlng(function (err, data) {
+              self.saveData(data, function (err) {
+                console.log('saved data poiData');
+              }, options);
+              done(err, data);
+            }, options);
+          }
+        })
+
+      },
+
+      loadData: function (done, options) {
+        
         var self = this;
+        var docname = this.getDocName(options.geojson);
 
         Config.load(function (err, config) {
+          console.log('loading configuration...')
           console.log(JSON.stringify(config));
         });
 
         pdb.open(Config.data.DB.name, function (db_callback) {
-            self.db = db_callback;
-            pdb.get(self.db, 'poiData', function (err, doc) {
-              if (!err) {
-                done(err, doc.data);
-              } else {
-                Gal.poi_latlng(function (err, data) {
-                  self.saveData(data, function (err) {
-                    console.log('saved data poiData');
-                  });
-                  done(err, data);
-                });
-              }
-            })
+          
+          self.db = db_callback;
+
+          if (options.reset) {
+            console.log('reset ' + docname);
+            pdb.delete(self.db, docname, function (err, response) {
+              self._loadData(self.db, docname, done, options);
+            }); 
+          } else {
+            self._loadData(self.db, docname, done, options);
+          };
+
         });
       },
 
-      saveData: function (data, done) {
+      saveData: function (data, done, options) {
         var self = this;
+        var docname = this.getDocName(options.geojson);
 
         Config.load(function (err, config) {
           console.log(JSON.stringify(config));
@@ -454,7 +538,7 @@ var Gal = {
             
             var p = self.get_poiData();
 
-            p._id = 'poiData';
+            p._id = docname;
             p.data = data;
 
             pdb.put(self.db, p, function (err, result) {
@@ -466,6 +550,10 @@ var Gal = {
       },
 
       _content_URI: function (id, callback) {
+
+        Config.load(function (err, config) {
+          console.log(JSON.stringify(config));
+        });
 
         var url = Config.data.MAPPIAMO.content + id + Config.data.MAPPIAMO.jsonp;
         var self = this; 
@@ -492,7 +580,7 @@ var Gal = {
           }
         });
 
-      }
+      } 
   };
 
   function _get(url, done) {
