@@ -76,6 +76,8 @@
 		132CBC63F90F43828D264192 /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F119E78D5547C1A70F404D /* CDVAssetLibraryFilesystem.m */; };
 		FA638A8059524F18B9F7F374 /* CDVFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = C503825545F94B3BB0504BDD /* CDVFileTransfer.m */; };
 		3C668B3AA368481C918224FC /* CDVBackgroundGeoLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B2013299D7E4550983ADC26 /* CDVBackgroundGeoLocation.m */; };
+		D7DFDA8BCC4E4C5FAA5F1E63 /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0230F1A3EF2C49D7A64FF983 /* SQLitePlugin.m */; };
+		FA9976F3AFFE4973B4146B8A /* sqlite3.c in Resources */ = {isa = PBXBuildFile; fileRef = 9F6F5717070C4929B2AF0396 /* sqlite3.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -200,6 +202,10 @@
 		7E47B29897F94FF9828A7A81 /* CDVFileTransfer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVFileTransfer.h"; path = "org.apache.cordova.file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		9B2013299D7E4550983ADC26 /* CDVBackgroundGeoLocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVBackgroundGeoLocation.m"; path = "org.transistorsoft.cordova.background-geolocation/CDVBackgroundGeoLocation.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		03C8212DD0A14835BDD9B0EE /* CDVBackgroundGeoLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVBackgroundGeoLocation.h"; path = "org.transistorsoft.cordova.background-geolocation/CDVBackgroundGeoLocation.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		0230F1A3EF2C49D7A64FF983 /* SQLitePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "SQLitePlugin.m"; path = "io.litehelpers.cordova.sqlite/SQLitePlugin.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		9F6F5717070C4929B2AF0396 /* sqlite3.c */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = "sqlite3.c"; path = "io.litehelpers.cordova.sqlite/sqlite3.c"; sourceTree = "<group>"; fileEncoding = 4; };
+		7CE36BA8E87F40C1ADB10912 /* SQLitePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SQLitePlugin.h"; path = "io.litehelpers.cordova.sqlite/SQLitePlugin.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		5BDD9D932B7840849504C45C /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "sqlite3.h"; path = "io.litehelpers.cordova.sqlite/sqlite3.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,6 +382,10 @@
 				7E47B29897F94FF9828A7A81 /* CDVFileTransfer.h */,
 				9B2013299D7E4550983ADC26 /* CDVBackgroundGeoLocation.m */,
 				03C8212DD0A14835BDD9B0EE /* CDVBackgroundGeoLocation.h */,
+				0230F1A3EF2C49D7A64FF983 /* SQLitePlugin.m */,
+				9F6F5717070C4929B2AF0396 /* sqlite3.c */,
+				7CE36BA8E87F40C1ADB10912 /* SQLitePlugin.h */,
+				5BDD9D932B7840849504C45C /* sqlite3.h */,
 			);
 			name = Plugins;
 			path = "GAL Leuca/Plugins";
@@ -578,6 +588,8 @@
 				132CBC63F90F43828D264192 /* CDVAssetLibraryFilesystem.m in Sources */,
 				FA638A8059524F18B9F7F374 /* CDVFileTransfer.m in Sources */,
 				3C668B3AA368481C918224FC /* CDVBackgroundGeoLocation.m in Sources */,
+				D7DFDA8BCC4E4C5FAA5F1E63 /* SQLitePlugin.m in Sources */,
+				FA9976F3AFFE4973B4146B8A /* sqlite3.c in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

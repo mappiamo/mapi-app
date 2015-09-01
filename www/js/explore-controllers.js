@@ -20,6 +20,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading) {
 
   $scope.dataOk = false;
+  var reset = false;
   // var test = true;
 
   $scope.$on('$ionicView.beforeEnter', function() {
@@ -43,10 +44,8 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
         DataSync.download(function (err, data, pois) {
           console.log('saved ...');
           // save attachments
-          _downloadMedia(data, pois);
-        });
-
-        
+          // _downloadMedia(data, pois);
+        }, reset);
       } else {
         console.log('No. Aspetto un secondo momento.');
       }
@@ -97,13 +96,20 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
 
   function _saveMedia(media) {
 
-    console.log(JSON.stringify(media));
+    // console.log(JSON.stringify(media));
     var i = 0;
+
+    showSpinner(true);
+    console.log('--------------------------------');
 
     async.each(media, function (item, callback) {
 
       var url = item.url;
-      console.log('transfer file : ' + url);
+      // console.log('transfer file : ' + url);
+
+      console.log('item : ' + JSON.stringify(item));
+      console.log('transfer file : ' + url);      
+      console.log('--------------------------------');
 
       // if (test) {
 
@@ -114,25 +120,27 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
         oReq.onload = function (oEvent) {
           var arrayBuffer = oReq.response; // Note: not oReq.responseText
           
-          console.log(arrayBuffer);
+          // console.log(arrayBuffer);
 
           if (arrayBuffer) {
             var byteArray = new Uint8Array(arrayBuffer);
             for (var i = 0; i < byteArray.byteLength; i++) {
               // do something with each byte in the array
-              console.log((i / byteArray.byteLength) * 100, "Downloading " + item.media.title + ' ... ');
+              console.log((i / byteArray.byteLength) * 100, "Downloading " + item.title + ' ... ');
               showSpinner(true, parseInt((i / byteArray.byteLength) * 100) + ' %');
             };
           };
 
-          _saveImage(item._id, i, item.media.title, arrayBuffer);
+          _saveImage(item._id, i, item.title, arrayBuffer);
           i++;
           callback(false);
         };
 
         oReq.send(null);
+        showSpinner(false);
 
     }, function (err) {
+      showSpinner(false);
       console.log('download media done.')
     });
 

@@ -26,12 +26,24 @@ service.factory('pdb', function (pouchDB) {
 		// apre il database
 		open: function (name, callback) {
 			
-			var db = pouch(name);
+			var db = pouchDB(name);
 			
 			if (typeof callback === 'function') {
 				callback(db);
 			};
 
+		},
+
+		bulkDocs: function (db, data, done) {
+
+			db.bulkDocs(data).then(function (result) {
+			  // handle result
+			  console.log(JSON.stringify(result));
+			  done(false, result);
+			}).catch(function (err) {
+			  console.log(err);
+			  done(true, null);
+			});
 		},
 
 		// chiude il database
@@ -58,11 +70,11 @@ service.factory('pdb', function (pouchDB) {
 			pouchdb_json.get(db, data._id, function (err, doc) {
 				
 				if (!err) {
+					console.log('rev: ' + doc._rev);
 					data._rev = doc._rev;
+					console.log('saving _rev: ' + JSON.stringify(doc._rev));
 				};
 				
-				// console.log('saving _rev: ' + JSON.stringify(data));
-
 				var response = db.put(data);
 
 				console.log('response saving ' + JSON.stringify(response));
@@ -115,12 +127,10 @@ service.factory('pdb', function (pouchDB) {
 			console.log('getting doc by id: ' + id);
 
 			db.get(id).then(function (doc) {
-			  // handle doc
-			  	// console.log('doc founded ' + JSON.stringify(doc));
-				if (typeof callback === 'function') {
-					callback(false, doc)
-				}  
-			}).catch(function (err) {
+			  // put him back
+			  console.log('founded doc');
+			  callback(false, doc);
+			}, function (err) {
 			  	console.log('error to get: ' + err);
 			  	if (typeof callback === 'function') {
 			  		callback(true, null)
@@ -192,5 +202,7 @@ service.factory('pdb', function (pouchDB) {
 
 		}
 	};
+
+	return pouchdb_json;
 
 });

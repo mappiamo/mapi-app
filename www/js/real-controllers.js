@@ -12,11 +12,11 @@
 
 var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, $cordovaDeviceOrientation, $wikitude, Geolocation) {
+ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, $cordovaDeviceOrientation, Geolocation) {
 
 	$scope.$on('$ionicView.beforeEnter', function() {
 		console.log('calling wikitude ...');
-		$wikitude.start();
+		// $wikitude.start();
 	});
     
 });

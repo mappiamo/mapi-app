@@ -108,4 +108,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <feature name="SQLitePlugin">
+        <param name="ios-package" value="SQLitePlugin" />
+    </feature>
 </widget>

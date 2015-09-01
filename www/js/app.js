@@ -36,11 +36,11 @@ angular.module('gal', ['ionic',
                        'gal.sync',
                        'jquery.plugin.imagedata',
                        'jquery.geo',
-                       'wikitude.plugin',
-                       'ionic.cordova.plugin',
-                       'wikitude.directive'])
+                       //'wikitude.plugin',
+                       //'wikitude.directive',
+                       'ionic.cordova.plugin'])
 
-.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $wikitude) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
   
   $ionicPlatform.ready(function() {
 

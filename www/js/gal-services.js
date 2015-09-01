@@ -22,8 +22,9 @@ angular.module('gal.services', [])
     item: function () {
       
       var it = {
-        _content: '',
-        _category: '',
+        _id: '',
+        content: '',
+        category: '',
         name: '',
         data: {},
         _rev: '',
@@ -99,32 +100,32 @@ angular.module('gal.services', [])
     routes:[
       {
         title: 'Paduli',
-        _content: 539,
-        _categories: 37,
+        _content: '539',
+        _categories: '37',
         name: 'Paduli',
         image: 'img/itinerari/paduli.jpg',
         description: 'Un percorso che si snoda lungo sei comuni del basso Salento, partendo da Nociglia, il comune più a nord, per toccare Montesano Salentino, Miggiano, Taurisano, Ruffano e Specchia.'
       },
       {
         title: 'Fede',
-        _content: 538,
-        _categories: 11,
+        _content: '538',
+        _categories: '11',
         name: 'Fede',
         image: 'img/itinerari/fede.jpg',
         description: 'Un affascinante percorso costellato di chiese rurali, cripte, luoghi di ristoro, attraversando una campagna ricca di quelle testimonianze rurali tipiche del territorio salentino.'
       },
       {
         title: 'Naturalistico/Archeologico',
-        _content: 541,
-        _categories: 57,
+        _content: '541',
+        _categories: '57',
         name: 'Naturalistico\/archeologico',
         image: 'img/itinerari/natura.jpg',
         description: 'Un percorso che attraversa i comuni di Ugento, Salve, Morciano di Leuca, Presicce ed Acquarica del Capo, fino a raggiungere il famoso Parco Naturale Litorale di Ugento.'
       },
       {
         title: 'Falesie',
-        _content: 540,
-        _categories: 54,
+        _content: '540',
+        _categories: '54',
         name: 'Falesie',
         image: 'img/itinerari/falesie.jpg',
         description: 'Un percorso che si dispiega lungo la costa adriatica del Capo di Leuca, un paesaggio spettacolare dove il mare e la terra quasi si scontrano lungo la linea di costa, alta, rocciosa, costellata di grotte e insenature.'
@@ -344,12 +345,39 @@ angular.module('gal.services', [])
 
       },
 
-      // punti di interesse
       poi: function (id, idpoi, callback) {
-        
-        var it = this.getRoute(id);
 
-        var url = MAPPIAMO.poi + it._categories + MAPPIAMO.jsonp;
+        var self = this;
+
+        pdb.open(DB.name, function (db_callback) {
+            db = db_callback;
+            
+            pdb.get(db, id, function (err, data) {
+              
+              if (!err) {
+                console.log('getting data POI by Database ');
+                console.log('pois n.' + _.size(data));
+                console.log('pois : ' + JSON.stringify(data));
+                callback(err, data);
+              } else {
+                console.log('getting data POI by url')
+                self._poi_URI(id, idpoi, callback);
+              }
+
+            });
+        });
+
+      },
+
+      // punti di interesse
+      _poi_URI: function (id, idpoi, callback) {
+        
+        var self = this;
+        // var it = this.getRoute(id);
+        
+        //var dt = this.item();
+
+        var url = MAPPIAMO.poi + id + MAPPIAMO.jsonp;
 
         var options = {
           method: 'GET',
@@ -378,7 +406,7 @@ angular.module('gal.services', [])
                 
                 } else {
                   d = data;
-                  // console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
+                  console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
                 };
 
                 callback(false, d);
@@ -421,14 +449,19 @@ angular.module('gal.services', [])
           dataType: 'jsonp'
         };
 
-        var d = self.item();
+        // var d = self.item();
 
         $http(options)
           .success(function(data) {
-              d._content = id;
+              /*
+              d._id = id;
+              d.content = id;
               d.data = data;
+              d.name = data.name;
+              d.media = data.media;
+              */
               // console.log('success: ' + JSON.stringify(data));
-              callback(false, d, 0);
+              callback(false, data, 0);
           })
           .error(function(data, status, headers, config) {
               console.log('Unable to get itinerario ' + name);

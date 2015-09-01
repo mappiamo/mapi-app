@@ -41,86 +41,44 @@ angular.module('gal.sync', [])
 
 			async.each(Gal.routes, function (item, callback_child) {
 
-				var id = item._content.toString();
-
 				Gal.content(item._content, function (err, data) {
 
-					if (!err) {
+					// console.log('----------------------------------');
+					// console.log('Data ---> ' + JSON.stringify(data));
 
-						var m = _getmedia(_, item.media);
-						var d = Gal.item();
-
-						d._content = id;
-						d.name = data.name;
-						d.data = data;
-						d.media = data.media;
-
-						data_json.push(d);
-
-						pdb.put(db, d, function (err, data_put) {
-							callback_child(err);
-						});
-
-					} else {
-						callback_child();
-					}
+					data_json.push(data);
+					callback_child();
 				});
 
 			}, function (err) {
-				done(err, 'next');
-			});
-		},
-
-		_poi: function (pois, id, done) {
-
-			async.each(pois, function (item, callback) {
-
-				// console.log('------------')
-				// console.log('Poi:' + JSON.stringify(item));
-				
-				var m = _getmedia(_, item.media);
-				var d = Gal.item();
-
-				d._content = id;
-				d._category = item.id.toString();
-				d.name = item.name;
-				d.data = item;
-				d.media = item.media;
-
-				pois_json.push(d);
-				
-				pdb.put(db, d, function (err, data) {
-					callback(err);
+				pdb.bulkDocs(db, data_json, function (err, response) {
+					console.log(JSON.stringify(response) + ' - Error: ' + err);
+					done(err, 'next');
 				});
-
-			}, function (err) {
-				done(err);
 			});
-
 		},
 
 		_pois: function (done) {
 
+			var self = this;
+
 			async.each(Gal.routes, function (item, callback_child) {
-
-				Gal.poi(item._content, null, function (err, data) {
-					
+				Gal.poi(item._categories, null, function (err, data) {
 					if (!err) {
-
-						console.log('------------')
-						console.log('Pois n.' + _.size(data));
-
-						sync_json._poi(data, function (err) {
-							callback_child(err);
+						console.log('saving poi n:' + _.size(data));
+						pdb.bulkDocs(db, data, function (err, response) {
+							console.log(JSON.stringify(response) + ' - Error: ' + err);
+							callback_child();
 						});
-
 					} else {
 						callback_child();
 					}
 				});
 
 			}, function (err) {
+				console.log('saving poi done.');
 				done(err, 'done');
+				
 			});
 		},
 
@@ -150,27 +108,36 @@ angular.module('gal.sync', [])
 			});
 		},
 
-		download: function (done) {
+		download: function (done, reset) {
+
+			var self = this;
 
 			async.series([
 
 				// cancello il database
 				function (callback) {
-					pdb.close(DB.name, function (err) {
-						callback(err, 'next');
-					});
+					if (reset) {
+						pdb.close(DB.name, function (err) {
+							callback(err, 'next');
+						});
+					} else {
+						callback(false, 'next');
+					}
 				},
 				
-				// creo il database
+				// apro il database
 				function (callback) {
 					pdb.open(DB.name, function (db_callback) {
 						db = db_callback;
+						db.info().then(function (info) {
+						  console.log(info);
+						});
+						//console.log('database: ' + JSON.stringify(db));
 						callback(false, 'next');
 					});	
 				}, 
-
-				sync_json._content,
-				sync_json._pois
+				self._content,
+				self._pois
 			], function (err, result) {
 				console.log('done download');
 				console.log('data n.' + _.size(data_json));
