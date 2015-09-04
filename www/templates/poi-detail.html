@@ -16,11 +16,27 @@
           <p> {{ poi.meta[2].value }} </p>
         </div>
 
+        <div class="item item-text-wrap" ng-if="!isMedia" 
+            align="center">
+          <ion-spinner icon="lines"></ion-spinner>
+        </div>
+
+        <div class="item item-image" 
+             ng-repeat="media in medias"
+             ng-if="isMedia">
+          <img ng-src="{{ media.url }}"></img>
+        </div>
+        
         <div class="item item-body item-text-wrap">
-          <img class="full-image" src="{{ poi.media[1].url }}">
           <p>
             {{ poi.text }}
           </p>
+
+          <leaflet id="map_poi"
+                 geojson="geojson"
+                 canter="center"
+                 defaults="defaults">
+          </leaflet>
         </div>
 
         <div class="item tabs tabs-secondary tabs-icon-left">

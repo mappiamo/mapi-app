@@ -38,7 +38,9 @@ angular.module('gal', ['ionic',
                        'jquery.geo',
                        //'wikitude.plugin',
                        //'wikitude.directive',
-                       'ionic.cordova.plugin'])
+                       'ionic.cordova.plugin',
+                       'gal.images',
+                       'base64'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
   
@@ -96,8 +98,8 @@ angular.module('gal', ['ionic',
 
 .constant('MAPPIAMO', {
   jsonp: '&callback=JSON_CALLBACK',
-  content: 'http://web.galpuglia.info/index.php?module=api&task=content&object=',
-  poi: 'http://web.galpuglia.info/index.php?module=api&task=category&object='    
+  content: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=',
+  poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object='    
 })
 
 .constant('MAPQUEST', {
@@ -172,7 +174,7 @@ angular.module('gal', ['ionic',
 
     // dettaglio del percorso
     .state('tab.detail', {
-      url: '/explore/:id',
+      url: '/explore/:content/:category',
       views: {
         'tab-explore': {
           templateUrl: 'templates/explore-detail.html',
@@ -183,7 +185,7 @@ angular.module('gal', ['ionic',
 
     // lista dei punti di interesse
     .state('tab.pois', {
-      url: '/pois/:id',
+      url: '/pois/:content/:category',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-list.html',
@@ -205,7 +207,7 @@ angular.module('gal', ['ionic',
 
     // dettaglio del POI
     .state('tab.poi', {
-      url: '/poi/:id/:idpoi',
+      url: '/poi/:category/:idpoi/:lat/:lng',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-detail.html',

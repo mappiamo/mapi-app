@@ -23,12 +23,8 @@ angular.module('gal.services', [])
       
       var it = {
         _id: '',
-        content: '',
-        category: '',
-        name: '',
-        data: {},
         _rev: '',
-        media: []  
+        data: null 
       };
 
       return it;
@@ -226,6 +222,7 @@ angular.module('gal.services', [])
 
       pois: [],
 
+      // punti di interesse ordinate per coordinate più vicine
       poi_latlng: function (done) {
         
         var pois = [];
@@ -247,6 +244,7 @@ angular.module('gal.services', [])
 
       },
 
+      // punti di interesse ordinate per coordinate più vicine
       _poi_latlng: function (data, content, done) {
 
         var self = this;
@@ -286,57 +284,67 @@ angular.module('gal.services', [])
         async.each(self.routes, function (item, callback) {
 
           var n = {
-            itinerario: item,
+            content: item,
             item: null,
             onRoute: false,
             direction: 0,
             route: null
           };
 
-          gal_json.poi(item._content, null, function (err, data) {
+          gal_json.poi(item._categories, null, function (err, data) {
 
-            // console.log('first element: ' + JSON.stringify(data));
-            console.log('n element: ' + _.size(data));
+            var dt = data.data;
 
-            var p = _.sortBy(data, function (item) {
+            console.log('first element: ' + JSON.stringify(dt));
+            console.log('n element: ' + _.size(dt));
+
+            var p = _.sortBy(dt, function (item) {
+              console.log('distance by : ' + item.lat + ',' + item.lon);
               return Geolocation.distance(item.lat, item.lon);
             });
 
-            // console.log(JSON.stringify(p[0]));
+            console.log('sorted: ' + JSON.stringify(p));
 
-            console.log('Coordinate POI: ' + p[0].lat + ',' + p[0].lon);
+            if (_.size(p) > 0) {
 
-            n.item = p[0];
+              console.log('Coordinate POI: ' + p[0].lat + ',' + p[0].lon);
 
-            // calcolo il percorso di routing
-            var location = Geolocation.get(function (position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            var url = $utility._getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
+              n.item = p[0];
 
-            var options = {
-              method: 'GET',
-              url: url,
-              dataType: 'json'
-            };
+              // calcolo il percorso di routing
+              var location = Geolocation.get(function (position) {
+              var lat = position.coords.latitude;
+              var lng = position.coords.longitude;
 
-            $http.get(url)
-              .success(function(data_route) {
-                  //console.log(JSON.stringify(data_route.route.legs.maneuvers));
-                  n.direction = data_route.route.legs[0].maneuvers[0].direction;
-                  n.onRoute = (n.direction = data_route.route.legs[0].maneuvers[0].direction);
-                  console.log('Same Route: ' + n.onRoute);
-                  nearest_pois.push(n);
-                  callback();
-              })
-              .error(function(data_route, status, headers, config) {
-                  console.log('Unable to get itinerario ' + name);
-                  callback(true);
+              var url = $utility._getUrlRoute(lat, lng, p[0].lat, p[0].lon, MAPQUEST.key);
+
+              var options = {
+                method: 'GET',
+                url: url,
+                dataType: 'json'
+              };
+
+              $http.get(url)
+                .success(function(data_route) {
+                    //console.log(JSON.stringify(data_route.route.legs.maneuvers));
+                    n.direction = data_route.route.legs[0].maneuvers[0].direction;
+                    n.onRoute = (n.direction = data_route.route.legs[0].maneuvers[0].direction);
+                    console.log('Same Route: ' + n.onRoute);
+                    nearest_pois.push(n);
+                    callback();
+                })
+                .error(function(data_route, status, headers, config) {
+                    console.log('Unable to get itinerario ' + name);
+                    callback(true);
+                });
+
+              }, function (err) {
+                callback(true);
               });
-
-            }, function (err) {
-              callback(true);
-            });
+            } else {
+              console.log('non ho trovato POI.');
+              callback();
+            }
           });
 
         }, function (err) {
@@ -345,38 +353,38 @@ angular.module('gal.services', [])
 
       },
 
-      poi: function (id, idpoi, callback) {
+      // punti di interesse
+      poi: function (id, idpoi, callback, byUrl) {
 
         var self = this;
 
-        pdb.open(DB.name, function (db_callback) {
-            db = db_callback;
-            
-            pdb.get(db, id, function (err, data) {
+        if (byUrl) {
+          console.log('getting data POI by url')
+          self._poi_URI(id, idpoi, callback);
+        } else {
+          pdb.open(DB.name, function (db_callback) {
+              db = db_callback;
               
-              if (!err) {
-                console.log('getting data POI by Database ');
-                console.log('pois n.' + _.size(data));
-                console.log('pois : ' + JSON.stringify(data));
-                callback(err, data);
-              } else {
-                console.log('getting data POI by url')
-                self._poi_URI(id, idpoi, callback);
-              }
-
-            });
-        });
-
+              pdb.get(db, id + '_pois', function (err, data) {
+                if (!err) {
+                  console.log('getting data POI by Database ');
+                  console.log('pois n.' + _.size(data));
+                  console.log('pois : ' + JSON.stringify(data));
+                  callback(err, data);
+                } else {
+                  console.log('getting data POI by url')
+                  self._poi_URI(id, idpoi, callback);
+                };
+              });
+          });
+        };
       },
 
-      // punti di interesse
+      // punti di interesse da url
       _poi_URI: function (id, idpoi, callback) {
         
         var self = this;
-        // var it = this.getRoute(id);
         
-        //var dt = this.item();
-
         var url = MAPPIAMO.poi + id + MAPPIAMO.jsonp;
 
         var options = {
@@ -387,10 +395,11 @@ angular.module('gal.services', [])
 
         console.log('getting data by: ' + url);
 
+        var dt = self.item();
+        dt._id = id + '_pois';
+
         $http(options)
             .success(function(data) {
-                // console.log('success: ' + JSON.stringify(data[0]));
-                // done(data.name, data.weather[0].description);
                 
                 var d;
 
@@ -398,7 +407,6 @@ angular.module('gal.services', [])
                   console.log('filter poi by :' + idpoi);
 
                   d = _.filter(data, function (item) {
-                    // console.log(JSON.stringify(item));
                     return item.id == idpoi;
                   });
 
@@ -409,7 +417,12 @@ angular.module('gal.services', [])
                   console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
                 };
 
-                callback(false, d);
+                dt.data = d;
+                
+                self.decodeHTML(dt.data, function (err) {
+                  callback(false, dt);
+                });
+                
             })
             .error(function(data, status, headers, config) {
                 console.log('Unable to get itinerario ' + name);
@@ -417,23 +430,39 @@ angular.module('gal.services', [])
             });
       },
 
+      decodeHTML: function (data, done) {
+        
+        async.each(data, function (item, callback) {
+          item.text = S(S(item.text).stripTags().s).decodeHTMLEntities().s;
+          callback();
+        }, function (err) {
+          done(err);
+        });
+
+      },
+
       // itinerari
-      content: function (id, callback) {
+      content: function (id, callback, byUrl) {
 
         var self = this;
 
-        pdb.open(DB.name, function (db_callback) {
-            db = db_callback;
-            pdb.get(db, id, function (err, data) {
-              if (!err) {
-                console.log('getting data by Database ');
-                callback(err, data);
-              } else {
-                console.log('getting data by url')
-                self._content_URI(id, callback);
-              }
-            });
-        });
+        if (byUrl) {
+          console.log('getting data by url')
+          self._content_URI(id, callback);
+        } else {
+          pdb.open(DB.name, function (db_callback) {
+              db = db_callback;
+              pdb.get(db, id, function (err, data) {
+                if (!err) {
+                  console.log('getting data by Database ');
+                  callback(err, data);
+                } else {
+                  console.log('getting data by url')
+                  self._content_URI(id, callback);
+                }
+              });
+          });
+        };
       },
 
       _content_URI: function (id, callback) {
@@ -449,19 +478,13 @@ angular.module('gal.services', [])
           dataType: 'jsonp'
         };
 
-        // var d = self.item();
+        var dt = self.item();
 
         $http(options)
           .success(function(data) {
-              /*
-              d._id = id;
-              d.content = id;
-              d.data = data;
-              d.name = data.name;
-              d.media = data.media;
-              */
-              // console.log('success: ' + JSON.stringify(data));
-              callback(false, data, 0);
+            dt._id = id;
+            dt.data = data;
+            callback(false, dt, 0);
           })
           .error(function(data, status, headers, config) {
               console.log('Unable to get itinerario ' + name);
@@ -469,12 +492,7 @@ angular.module('gal.services', [])
         });
       },
 
-      /**
-       * @ngdoc function
-       * @name core.Services.Gal#method2
-       * @methodOf core.Services.Gal
-       * @return {boolean} Returns a boolean value
-       */
+      // condizioni meteo      
       weather: function(done) {
           
           var weather_json = [];

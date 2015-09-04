@@ -42,15 +42,12 @@ angular.module('gal.sync', [])
 			async.each(Gal.routes, function (item, callback_child) {
 
 				Gal.content(item._content, function (err, data) {
-
-					// console.log('----------------------------------');
-					// console.log('Data ---> ' + JSON.stringify(data));
-
 					data_json.push(data);
 					callback_child();
-				});
+				}, true);
 
 			}, function (err) {
+				// console.log(JSON.stringify(data_json));
 				pdb.bulkDocs(db, data_json, function (err, response) {
 					console.log(JSON.stringify(response) + ' - Error: ' + err);
 					done(err, 'next');
@@ -61,24 +58,25 @@ angular.module('gal.sync', [])
 		_pois: function (done) {
 
 			var self = this;
+			pois_json = [];
 
 			async.each(Gal.routes, function (item, callback_child) {
 				Gal.poi(item._categories, null, function (err, data) {
 					if (!err) {
 						console.log('saving poi n:' + _.size(data));
-						pdb.bulkDocs(db, data, function (err, response) {
-							console.log(JSON.stringify(response) + ' - Error: ' + err);
-							callback_child();
-						});
+						pois_json.push(data);
+						callback_child();
 					} else {
 						callback_child();
 					}
-				});
+				}, true);
 
 			}, function (err) {
 				console.log('saving poi done.');
-				done(err, 'done');
-				
+				pdb.bulkDocs(db, pois_json, function (err, response) {
+					console.log(JSON.stringify(response) + ' - Error: ' + err);
+					done(err, 'done');
+				});
 			});
 		},
 

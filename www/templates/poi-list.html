@@ -10,7 +10,7 @@
 </ion-header-bar>
   <ion-content class="has-header">
     <div class="list" ng-repeat="poi in pois">
-      <div class="item item-button-right fadeInUp">
+      <div class="item item-button-right item-text-wrap fadeInUp">
         {{ poi.title }}
         <h3>{{ poi.address }}</h3>
         <h4>{{ poi | distance_poi }}</h4>
@@ -18,6 +18,17 @@
         <button class="button button-positive" ng-click="viewRoute(id, poi.id, poi.lat, poi.lon)">
           <i class="icon ion-android-map"></i>
         </button>
+      </div>
+      <div class="item tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item" href="#/tab/poi/{{ category }}/{{poi.id}}/{{poi.lat}}/{{poi.lon}}">
+            <i class="icon ion-ios-information-outline"></i>
+            More Info
+          </a>
+          <a class="tab-item" href="#/tab/route/{{ id }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}">
+            <i class="icon ion-android-map"></i>
+            Indicazioni
+          </a>
+        </div>
       </div>
     </div>
   </ion-content>

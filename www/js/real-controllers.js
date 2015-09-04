@@ -24,7 +24,7 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 // Bussola
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal) {
 
-	var test = false;
+	var test = true;
 	var magnetic = 0;
 	var magneticHeading;
 	var trueHeading;
@@ -47,9 +47,10 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		$scope.modal.show();
 	};
 
-	$scope.viewRoute = function (id, idpoi, lat, lon) {
-		$scope.closeModal();
-		window.location.href = '#/tab/route/' + id + '/' + idpoi + '/' + lat + '/' + lon;
+	$scope.viewInfo = function (id, idpoi, lat, lon) {
+		// $scope.closeModal();
+		console.log('view info');
+		window.location.href = '#/tab/poi/' + id + '/' + idpoi + '/' + lat + '/' + lon;
 	};
 
 	$scope.closeModal = function() {
@@ -80,7 +81,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		
 		if (test) {
 			var m = Math.floor((Math.random() * 360) + 1);
-			_setMagnetic(90);
+			_setMagnetic(0);
 			// _setMagnetic(m);
 		} else {
 			_setMagnetic(0);
@@ -216,20 +217,19 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in questa direzione.';
 
-				console.log(JSON.stringify(s));
+				console.log('Item: --------> ' + JSON.stringify(s));
 
 				$scope.error = false;
 				
 				if (_.size(s) > 0) {
+					$scope.category = s[0].content._categories;
 					$scope.pois = s;
 					$scope.isPOI = true;
-					$scope.openModal();
 				} else {
 					// non sono stati trovati punti di interesse
 					$scope.isPOI = false;
 				};
 
-				// $scope.openModal();
 			} else {
 				$scope.isPOI = false;
 			};
@@ -250,7 +250,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$timeout(function() {
      	if (test) {
      		var m = Math.floor((Math.random() * 360) + 1);
-     		m = 90;
+     		m = 5;
      		_setMagnetic(m);
      	}
   	}, 1000);
