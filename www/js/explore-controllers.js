@@ -146,7 +146,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   $scope.share = function(title, start, end) {
 
-    var msg = title + ', ' + start + '-' + end + ' ' + MAPPIAMO.hashtag;
+    var msg = 'Itinerario: ' + title + ', ' + start + '-' + end + ' ' + MAPPIAMO.hashtag;
 
     console.log('Sharing: ' + msg);
 
@@ -428,7 +428,7 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
 
   $scope.share = function(poi) {
 
-    var location = 'http://www.openstreetmap.org/?mlat=' + poi.lat + '&mlon=' + poi.lon + '&zoom=12#map=12/40.1000/17.2000'
+    var location = 'http://www.openstreetmap.org/?mlat=' + poi.lat + '&mlon=' + poi.lon + '&zoom=12#map=12/' + poi.lat + '/' + poi.lon;
 
     var msg = poi.title + ', ' + poi.address + '-' + location + ' ' + MAPPIAMO.hashtag;
 
@@ -737,7 +737,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
   $scope.share = function(poi) {
 
-    var location = 'http://www.openstreetmap.org/?mlat=' + poi.lat + '&mlon=' + poi.lon + '&zoom=12#map=12/40.1000/17.2000'
+    var location = 'http://www.openstreetmap.org/?mlat=' + poi.lat + '&mlon=' + poi.lon + '&zoom=12#map=12/' + poi.lat + '/' + poi.lon;
 
     var msg = poi.title + ', ' + poi.address + '-' + location + ' ' + MAPPIAMO.hashtag;
 
@@ -812,7 +812,6 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
         console.log('sharing whatsApp. Error');
       });
   };
-
 
   console.log('Parameters: ' + $scope.content + ',' + $scope.category + ',' + idpoi);
   
