@@ -92,6 +92,7 @@
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
+    <allow-navigation href="blob:*" />
     <allow-navigation href="architect://*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -100,6 +101,8 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="architect://*" />
+    <allow-intent href="data:*" />
+    <allow-intent href="blob:*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
@@ -108,7 +111,8 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <feature name="SQLitePlugin">
-        <param name="ios-package" value="SQLitePlugin" />
+    <feature name="SocialSharing">
+        <param name="ios-package" value="SocialSharing" />
+        <param name="onload" value="true" />
     </feature>
 </widget>

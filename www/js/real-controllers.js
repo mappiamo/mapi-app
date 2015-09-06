@@ -24,7 +24,7 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 // Bussola
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal) {
 
-	var test = true;
+	var test = false;
 	var magnetic = 0;
 	var magneticHeading;
 	var trueHeading;
@@ -137,23 +137,8 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		console.log('error to orientation');
 	};
 	
-	/*
-	function _getOrientation() {
-    	console.log('start device orientation');
-    	$cordovaDeviceOrientation.getCurrentHeading().then(function(result) {
-	       var magneticHeading = result.magneticHeading;
-	       var trueHeading = result.trueHeading;
-	       var accuracy = result.headingAccuracy;
-	       var timeStamp = result.timestamp;
-	       $scope.magnetic = magneticHeading;
-	    }, function(err) {
-	      // An error occurred
-	      console.log('error to device orientation')
-	    });
-    };
-    */
-
-    var options = {
+	// Compass 
+	var options = {
       frequency: 3000,
       filter: true     // if frequency is set, filter is ignored
     }
@@ -179,7 +164,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     	magnetic = m;
     	$scope.magnetic = m;
     	$scope.transform = "rotate(" + m + "deg)";
-    	// $scope.npois = 'Trovati n.0 punti di interesse';
     };
 
     // Hold Compass
@@ -222,6 +206,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 				$scope.error = false;
 				
 				if (_.size(s) > 0) {
+					$scope.content = s[0].content._content;
 					$scope.category = s[0].content._categories;
 					$scope.pois = s;
 					$scope.isPOI = true;

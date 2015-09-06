@@ -1,24 +1,32 @@
 <ion-view view-title="{{ title }}" hide-nav-bar="true">
   <ion-header-bar align-title="left" class="bar-positive">
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore/{{ id }}"></a>
+    <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore/{{ content }}"></a>
   </div>
   <h1 class="title">{{ title }}</h1>
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{ id }}"></a>
+    <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{ content }}/{{ category }}"></a>
   </div>
 </ion-header-bar>
   <ion-content class="has-header">
-    <div class="list" ng-repeat="poi in pois">
-      <div class="item item-button-right fadeInUp">
-        {{ poi.title }}
-        <h3>{{ poi.address }}</h3>
-        <h4>{{ poi | distance_poi }}</h4>
-        <p>{{ poi.text }}</p>
-        <button class="button button-positive" ng-click="viewRoute(id, poi.id, poi.lat, poi.lon)">
-          <i class="icon ion-android-map"></i>
-        </button>
-      </div>
+
+    <div class="list card" 
+           ng-repeat="poi in pois">
+
+        <a class="item item-text-wrap" href="#/tab/poi/{{ content }}/{{ category }}/{{poi.id}}/{{poi.lat}}/{{poi.lon}}">
+          <h2 class="promo-heading">{{ poi.title }}</h2>
+          <h3>{{ poi.address }}</h3>
+          <h4>{{ poi | distance_poi }}</h4>
+          <p>{{ poi.text }}</p>
+        </a>
+
+        <div class="item tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item" href="#/tab/route/{{ content }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}">
+            <i class="icon ion-android-map"></i>
+            Indicazioni
+          </a>
+        </div>
     </div>
+      
   </ion-content>
 </ion-view>

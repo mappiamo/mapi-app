@@ -181,7 +181,7 @@ filters.filter('distance_poi', function(Geolocation) {
 		var d = Geolocation.distance(input.lat, input.lon) + ' Km';
 
 		// var distance = Geolocation.distance(Number(input.lat), Number(input.lng));
-		console.log('location ok -> ' + d);
+		//console.log('location ok -> ' + d);
 					
 		return d;
 		

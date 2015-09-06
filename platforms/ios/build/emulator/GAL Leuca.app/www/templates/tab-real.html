@@ -33,14 +33,15 @@
 	      	<i class="icon ion-android-warning" ng-if="error">{{ error_msg }}</i> 
 	      </p>
 
-	      	<div class="list list-inset" ng-repeat="poi in pois" ng-show="isPOI">
+	      	<div class="list list-inset" ng-repeat="poi in pois" 
+	      		 ng-show="isPOI">
 			    <div class="item item-button-right item-text-wrap">
 			      {{ poi.itinerario.title }}
 			      <h3>{{ poi.item.address }}</h3>
 			      <h4>{{ poi.item | distance_poi }}</h4>
 			      <p>{{ poi.item.text }}</p>
-			      <button class="button button-positive" ng-click="viewRoute(id, poi.item.id, poi.item.lat, poi.item.lon)">
-			        <i class="icon ion-android-map"></i>
+			      <button class="button button-positive" ng-click="viewInfo(category, poi.item.id, poi.item.lat, poi.item.lon)">
+			        <i class="icon ion-ios-information-outline"></i>
 			      </button>
 				</div>
 			</div>

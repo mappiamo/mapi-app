@@ -72,27 +72,36 @@ service.factory('GeoJSON', function (_, async, S) {
 
 			console.log('create geojson ...');
 
-			async.each(input, function (item, callback) {
+			async.each(input.data, function (item, callback) {
 		        
-		        var feature = { 
-		          type: "Feature", 
-		          properties: {
-		          	title: item.title,
-		          	address: item.address,
-		          	marker: item.meta[1].value
-		          }, 
-		          "geometry": { 
-		              type: "Point", 
-		              "coordinates": [ Number(item.lon), Number(item.lat) ] 
-		          }
-		        };
+				if (item.type == "place") {
 
-		        data_geojson.features.push(feature);
+					console.log(JSON.stringify(item));
+
+			        var feature = { 
+			          type: "Feature", 
+			          properties: {
+			          	id: item.id,
+			          	title: item.title,
+			          	address: item.address,
+			          	marker: item.meta[1].value,
+			          	lat: item.lat,
+			          	lon: item.lon
+			          }, 
+			          "geometry": { 
+			              type: "Point", 
+			              "coordinates": [ Number(item.lon), Number(item.lat) ] 
+			          }
+			        };
+
+			        data_geojson.features.push(feature);
+			    };
 		        
 		        callback();
 
 		    }, function (err) {
-		    	console.log('geojson created ' + _.size(data_geojson.features) + ' elements.')
+		    	console.log('geojson created ' + _.size(data_geojson.features) + ' elements.');
+		    	console.log(JSON.stringify(data_geojson));
 		        callback_service(err, data_geojson);
 		    });
 		}

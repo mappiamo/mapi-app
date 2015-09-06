@@ -1,0 +1,115 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"wp-package\" value=\"Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Accelerometer\"><param name=\"wp-package\" value=\"Accelerometer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"wp-package\" value=\"Compass\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"wp-package\" value=\"Notification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"wp-package\" value=\"SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Console\"><param name=\"wp-package\" value=\"DebugConsole\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"wp-package\" value=\"File\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileTransfer\"><param name=\"wp-package\" value=\"FileTransfer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SocialSharing\"><param name=\"wp-package\" value=\"SocialSharing\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "Properties/WMAppManifest.xml": {
+                "parents": {
+                    "/Deployment/App/Capabilities": [
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_IDENTITY_DEVICE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_SENSORS\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_LOCATION\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "com.wikitude.phonegap.WikitudePlugin": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "org.apache.cordova.file": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "org.apache.cordova.file-transfer": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "org.transistorsoft.cordova.background-geolocation": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "nl.x-services.plugins.socialsharing": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        }
+    },
+    "dependent_plugins": {}
+}

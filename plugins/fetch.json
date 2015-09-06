@@ -144,10 +144,10 @@
         "is_top_level": true,
         "variables": {}
     },
-    "io.litehelpers.cordova.sqlite": {
+    "nl.x-services.plugins.socialsharing": {
         "source": {
             "type": "git",
-            "url": "https://github.com/litehelpers/Cordova-sqlite-storage.git",
+            "url": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
             "subdir": "."
         },
         "is_top_level": true,

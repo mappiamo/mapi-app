@@ -202,6 +202,11 @@ p {
    height: 320px;
 }
 
+#map_poi {
+   width: 100%;
+   height: 320px;
+}
+
 .compass {
     background: url(../img/compass/compass_380.png) no-repeat center;
     width: 380px;

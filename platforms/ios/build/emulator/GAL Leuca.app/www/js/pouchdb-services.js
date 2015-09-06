@@ -34,6 +34,18 @@ service.factory('pdb', function (pouchDB) {
 
 		},
 
+		bulkDocs: function (db, data, done) {
+
+			db.bulkDocs(data).then(function (result) {
+			  // handle result
+			  console.log(JSON.stringify(result));
+			  done(false, result);
+			}).catch(function (err) {
+			  console.log(err);
+			  done(true, null);
+			});
+		},
+
 		// chiude il database
 		close: function (name, callback) {
 			
@@ -58,11 +70,11 @@ service.factory('pdb', function (pouchDB) {
 			pouchdb_json.get(db, data._id, function (err, doc) {
 				
 				if (!err) {
+					console.log('rev: ' + doc._rev);
 					data._rev = doc._rev;
+					console.log('saving _rev: ' + JSON.stringify(doc._rev));
 				};
 				
-				// console.log('saving _rev: ' + JSON.stringify(data));
-
 				var response = db.put(data);
 
 				console.log('response saving ' + JSON.stringify(response));
@@ -115,12 +127,10 @@ service.factory('pdb', function (pouchDB) {
 			console.log('getting doc by id: ' + id);
 
 			db.get(id).then(function (doc) {
-			  // handle doc
-			  	// console.log('doc founded ' + JSON.stringify(doc));
-				if (typeof callback === 'function') {
-					callback(false, doc)
-				}  
-			}).catch(function (err) {
+			  // put him back
+			  console.log('founded doc');
+			  callback(false, doc);
+			}, function (err) {
 			  	console.log('error to get: ' + err);
 			  	if (typeof callback === 'function') {
 			  		callback(true, null)
@@ -144,55 +154,55 @@ service.factory('pdb', function (pouchDB) {
 			  		}
 				}
 			});
+		},
+
+		_dataURItoBlob: function (dataURI, mime) {
+		    // convert base64 to raw binary data held in a string
+		    // doesn't handle URLEncoded DataURIs
+
+		    var byteString = atob(dataURI);
+
+		    // separate out the mime component
+
+
+		    // write the bytes of the string to an ArrayBuffer
+		    //var ab = new ArrayBuffer(byteString.length);
+		    var ia = new Uint8Array(byteString.length);
+		    for (var i = 0; i < byteString.length; i++) {
+		        ia[i] = byteString.charCodeAt(i);
+		    }
+
+		    // write the ArrayBuffer to a blob, and you're done
+		    var blob = new Blob([ia], { type: mime });
+
+		    return blob;
+		},
+
+		_getImageUrltoBlob: function (url, done) {
+
+			var blob;
+
+			// Simulate a call to Dropbox or other service that can
+			// return an image as an ArrayBuffer.
+			var xhr = new XMLHttpRequest();
+
+			// Use JSFiddle logo as a sample image to avoid complicating
+			// this example with cross-domain issues.
+			xhr.open( "GET", url, true );
+
+			// Ask for the result as an ArrayBuffer.
+			xhr.responseType = "arraybuffer";
+
+			xhr.onload = function( e ) {
+		    	// Obtain a blob: URL for the image data.
+		    	var arrayBufferView = new Uint8Array( this.response );
+		    	blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+		    	done(blob);
+		    };
+
 		}
 	};
 
 	return pouchdb_json;
 
 });
-
-function _dataURItoBlob(dataURI, mime) {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs
-
-    var byteString = atob(dataURI);
-
-    // separate out the mime component
-
-
-    // write the bytes of the string to an ArrayBuffer
-    //var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    // write the ArrayBuffer to a blob, and you're done
-    var blob = new Blob([ia], { type: mime });
-
-    return blob;
-};
-
-function _getImageUrltoBlob(url, done) {
-
-	var blob;
-
-	// Simulate a call to Dropbox or other service that can
-	// return an image as an ArrayBuffer.
-	var xhr = new XMLHttpRequest();
-
-	// Use JSFiddle logo as a sample image to avoid complicating
-	// this example with cross-domain issues.
-	xhr.open( "GET", url, true );
-
-	// Ask for the result as an ArrayBuffer.
-	xhr.responseType = "arraybuffer";
-
-	xhr.onload = function( e ) {
-    	// Obtain a blob: URL for the image data.
-    	var arrayBufferView = new Uint8Array( this.response );
-    	blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
-    	done(blob);
-    };
-
-};

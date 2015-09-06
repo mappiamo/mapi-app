@@ -1,0 +1,216 @@
+<ion-view view-title="Dashboard" hide-nav-bar="true">
+
+	<ion-header-bar align-title="left" class="bar-positive">
+		<h1 class="title"><a href="#/tab/home"><img src="img/logo/logo-gal_tra_small.png"></img></a></h1>
+		<div class="buttons">
+			<button class="button" ng-click="download()"><i class="icon ion-ios-cloud-download"></i></button>
+		</div>
+
+	</ion-header-bar>
+
+	<ion-content>
+
+  		<div ng-class="bg | background">
+  			<h1 class="promo-home promo-home-heading fadeInUp" ng-if="dataOk">
+  				{{ weather_near.item.name }}	
+  			</h1>
+  			
+  		</div>
+
+  		<h2 align="center" class="promo-home promo-home-subheading animated fadeInUp" ng-if="isLocated">
+  			<i class="icon ion-ios-location"></i> 
+  			{{ weather_near.location | distance }}
+  		</h2>
+
+  		<div class="list card">
+  		  <div class="item item-avatar">
+		  	<img ng-src="{{ weather_near.forecast[2].weather[0].icon | weather_img }}" />
+	       <h2>
+		   	<i class="icon icon-058"></i>
+		    	{{ weather_near.forecast[2].main.temp_min | number:0 }}-{{ weather_near.forecast[2].main.temp_max | number:0 }} C°
+		   </h2>
+		   <p>{{ weather_near.forecast[2].dt_txt | time_to }}</p>
+		  </div>
+
+		  <div class="item item-avatar">
+		  	<img ng-src="{{ weather_near.forecast[3].weather[0].icon | weather_img }}" />
+		       <h2>
+			   	<i class="icon icon-058"></i>
+			    	{{ weather_near.forecast[3].main.temp_min | number:0 }}-{{ weather_near.forecast[3].main.temp_max | number:0 }} C°
+			   </h2>
+			   <p>
+			   	{{ weather_near.forecast[3].dt_txt | time_to }}
+			   </p>
+		  </div>
+
+		  <div class="item item-avatar">
+		  	<img ng-src="{{ weather_near.forecast[4].weather[0].icon | weather_img }}" />
+		       <h2>
+			   	<i class="icon icon-058"></i>
+			    	{{ weather_near.forecast[4].main.temp_min | number:0 }}-{{ weather_near.forecast[4].main.temp_max | number:0 }} C°
+			   </h2>
+			   <p>
+			   	{{ weather_near.forecast[4].dt_txt | time_to }}
+			   </p>
+		  </div>
+
+		</div>
+
+		<div class="list card">
+		
+		  <div class="item item-avatar">
+		  	<img ng-src="{{ weather_near.forecast[2].wind | wind_img }}" />
+		       <h2>
+			   	{{ weather_near.forecast[2].wind.speed | number: 2 }} m/s
+			   </h2>
+			   <p>
+			   	{{ weather_near.forecast[2].dt_txt | time_to }}
+			   </p>
+		  </div>
+
+		  <div class="item item-avatar">
+		  	<img ng-src="{{ weather_near.forecast[3].wind | wind_img }}" />
+		       <h2>
+			   	{{ weather_near.forecast[3].wind.speed | number: 2 }} m/s
+			   </h2>
+			   <p>
+			   	{{ weather_near.forecast[3].dt_txt | time_to }}
+			   </p>
+		  </div>
+
+		  <div class="item item-avatar">
+		  	<img ng-src="{{ weather_near.forecast[4].wind | wind_img }}" />
+		       <h2>
+			   	{{ weather_near.forecast[4].wind.speed | number: 2 }} m/s
+			   </h2>
+			   <p>
+			   	{{ weather_near.forecast[4].dt_txt | time_to }}
+			   </p>
+		  </div>
+
+		</div>
+
+		<!--
+		<div class="home">
+		</div>
+
+		<div class="list" ng-repeat="weather in weathers">
+    		<a class="item item-avatar" href="#">
+    		  <img ng-src="{{ weather.forecast[1].weather[0].icon | weather_img }}" />
+    		  <h2 class="positive"><strong>{{ weather.item.name }}</strong></h2>
+
+    		  <p>
+    		  	<i class="icon ion-ios-location"></i> {{ weather.location | distance }}
+    		  </p>
+
+    		  <p>
+    		  	<div class="row" ng-repeat="forecast in weather.forecast | limitTo:4">
+				  <div class="col">
+				  	<i class="icon ion-ios-time-outline"></i> 
+			    	{{ forecast.dt_txt | time_to }}
+			      </div>
+				  <div class="col" align="center">
+				  	<img ng-src="{{ forecast.weather[0].icon | weather_img }}" width="24px" height="24px" />
+				  </i><p><span class="wind"> <i class="icon icon-058"></i>
+			    {{ forecast.main.temp_min | number:0 }}-{{ forecast.main.temp_max | number:0 }} C°</span></p></div>
+			      <div class="col" align="center"><img ng-src="{{ forecast.wind | wind_img }}" width="24px" height="24px" /><p>
+		    		<span class="wind">{{ forecast.wind.speed | number: 2 }} m/s</span></p></div>
+				</div>
+    		  </p>
+		    </a>
+		</div>
+		-->
+		<!--
+		<div class="home transparent">
+
+		<div class="list card">
+			<div class="item item-body">
+			        <p>
+				      	<div class="list list-inset" ng-repeat="weather in weathers" ng-if="dataOk">
+						    <div class="item">
+						      {{ weather.item.name }}
+						    </div>
+						</div>
+				    </p>
+			  	
+			</div>
+		</div>
+		-->
+	
+	<!--
+	<div id="home"></div>
+	-->
+	<!--
+		<div class="card" ng-repeat="weather in weathers" ng-if="dataOk">
+		
+		<div class="item item-divider item-positive home">
+		    	{{ weather.item.name }}
+		    	<span class="badge badge-energized">
+		    		{{ weather.location | distance }}
+		    	</span>
+		  	</div>
+
+		  	<div class="item item-text-wrap">
+			  	<div class="list" ng-repeat="forecast in weather.forecast | limitTo:3">
+				    <a class="item item-avatar" href="#">
+				      	<img ng-src="{{ forecast.weather[0].icon | weather_img }}">
+				      	<img ng-src="{{ forecast.wind | wind_img }}" width="48px" height="48px">
+				      	<span class="item-note">
+				      		<h3>
+			      			<i class="icon ion-ios-time-outline"> {{ forecast.dt_txt | forecast_date}}</i>
+			      			</h3>
+			      			<p>
+			      			<i class="icon icon-058"></i> {{ forecast.main.temp_min | number:0 }}-{{ forecast.main.temp_max | number:0 }} C°
+			      			</p>
+			      		</span>
+				    </a>
+				</div>
+		  </div>
+		</div>
+	-->
+
+
+	 <!--
+		{
+			"dt":1438635600,
+			"main":{
+				"temp":27.86,
+				"temp_min":27.86,
+				"temp_max":27.86,
+				"pressure":1023.17,
+				"sea_level":1027.25,
+				"grnd_level":1023.17,
+				"humidity":77,
+				"temp_kf":0
+			},
+			"weather":[
+				{
+					"id":800,
+					"main":"Clear",
+					"description":"sky is clear",
+					"icon":"01n"
+				}
+			],
+			"clouds":{
+				"all":0
+			},
+			"wind":{
+				"speed":4.52,
+				"deg":350.501
+			},
+			"sys":{
+				"pod":"n"
+			},
+			"dt_txt":"2015-08-03 21:00:00"
+		}
+
+	 -->
+
+	</ion-content>
+</ion-view>
+
+<!--
+<script src="lib/vegas/dist/vegas.min.js"></script>
+<script src="lib/bg-slider.js"></script>
+<script type="text/javascript" src="lib/parallax.min.js"></script>
+-->

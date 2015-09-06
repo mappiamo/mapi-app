@@ -33,24 +33,22 @@
 	      	<i class="icon ion-android-warning" ng-if="error">{{ error_msg }}</i> 
 	      </p>
 
-	      	<div class="list list-inset" ng-repeat="poi in pois" 
-	      		 ng-show="isPOI">
-			    <div class="item item-button-right item-text-wrap">
-			      {{ poi.itinerario.title }}
-			      <h3>{{ poi.item.address }}</h3>
-			      <h4>{{ poi.item | distance_poi }}</h4>
-			      <p>{{ poi.item.text }}</p>
-			      <button class="button button-positive" ng-click="viewInfo(category, poi.item.id, poi.item.lat, poi.item.lon)">
-			        <i class="icon ion-ios-information-outline"></i>
-			      </button>
-				</div>
-			</div>
-
+	      <div class="list card" 
+           ng-repeat="poi in pois">
+		    <a class="item item-text-wrap" href="#/tab/poi/{{ content }}/{{ category }}/{{poi.id}}/{{poi.lat}}/{{poi.lon}}">
+		          <h2 class="promo-heading">{{ poi.title }}</h2>
+		          <h3>{{ poi.address }}</h3>
+		          <h4>{{ poi | distance_poi }}</h4>
+		          <p>{{ poi.text }}</p>
+		        </a>
+		        <div class="item tabs tabs-secondary tabs-icon-left">
+		          <a class="tab-item" href="#/tab/route/{{ content }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}">
+		            <i class="icon ion-android-map"></i>
+		            Raggiungimi
+		          </a>
+		        </div>
+		   </div>
     	</a>
-
 	</div>
-
-	
-	
   </ion-content>
 </ion-view>

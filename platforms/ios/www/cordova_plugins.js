@@ -280,10 +280,10 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/io.litehelpers.cordova.sqlite/www/SQLitePlugin.js",
-        "id": "io.litehelpers.cordova.sqlite.SQLitePlugin",
+        "file": "plugins/nl.x-services.plugins.socialsharing/www/SocialSharing.js",
+        "id": "nl.x-services.plugins.socialsharing.SocialSharing",
         "clobbers": [
-            "SQLitePlugin"
+            "window.plugins.socialsharing"
         ]
     }
 ];
@@ -303,7 +303,7 @@ module.exports.metadata =
     "org.apache.cordova.file": "1.3.3",
     "org.apache.cordova.file-transfer": "0.5.0",
     "org.transistorsoft.cordova.background-geolocation": "0.2.0",
-    "io.litehelpers.cordova.sqlite": "0.7.10"
+    "nl.x-services.plugins.socialsharing": "4.3.19"
 }
 // BOTTOM OF METADATA
 });
