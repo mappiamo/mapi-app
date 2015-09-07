@@ -24,7 +24,7 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 // Bussola
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal) {
 
-	var test = true;
+	var test = false;
 	var magnetic = 0;
 	var magneticHeading;
 	var trueHeading;

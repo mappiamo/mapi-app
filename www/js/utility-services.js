@@ -40,11 +40,17 @@ app_storage.factory('$utility', function () {
   var utility_json = {
 
     _directions: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'],
+    _directions_extend: ['Nord', 'Nord-Est', 'Est', 'Sud-Est', 'Sud', 'Sud-Ovest', 'Ovest', 'Nord-Ovest'],
 
-    _getWindRose: function (degree) {
+    _getWindRose: function (degree, extend) {
           var d = _calcDegrees(degree);
           var index = Math.floor((d + 22) / 45);
-          var dir = utility_json.directions[index];
+          var dir;
+          if (extend) {
+            dir = utility_json._directions_extend[index];
+          } else {
+            dir = utility_json._directions[index];
+          };
 
           return dir;
     },

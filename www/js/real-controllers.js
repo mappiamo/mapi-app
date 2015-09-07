@@ -24,17 +24,35 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 // Bussola
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal) {
 
-	var test = true;
+	var test = {
+		state: false,
+		value: function (random) {
+			if (random) {
+				return Math.floor((Math.random() * 360) + 1);
+			} else {
+				return 1;
+			}
+		}
+	};
+
 	var magnetic = 0;
 	var magneticHeading;
 	var trueHeading;
 	var accuracy;
 	var timeStamp;
 	var watch;
-	
-	$scope.spinner = false;
-	$scope.dataOk = false;
-	$scope.isPOI = false;
+
+	var orientation = {
+		magneticHeading: 0,
+        trueHeading: false,
+        accuracy: 0,
+        timeStamp: null
+	};
+
+	var location = {
+		latitude: 0,
+		longitude: 0
+	};
 	
 	$ionicModal.fromTemplateUrl('templates/poi-list-modal.html', {
 	    scope: $scope,
@@ -76,18 +94,22 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$scope.$on('$ionicView.beforeEnter', function() {
 		// test = TEST.value;
 		
-		$scope.error = false;
-		$scope.isLocation = false;
+		$scope.isSearch = false;
+		$scope.isPOI = false;
+		$scope.isError = false;
 		
-		if (test) {
-			var m = Math.floor((Math.random() * 360) + 1);
-			_setMagnetic(0);
-			// _setMagnetic(m);
+		// var location = Geolocation.location();
+		// $scope.location = location;
+		// $scope.isLocation = true;
+		
+		if (test.state) {
+			var m = test.value(false);
+			_setMagnetic(m);
 		} else {
 			_setMagnetic(0);
 		};
 
-      	Geolocation.get(_onSuccess, _onError);
+      	// Geolocation.get(_onSuccess, _onError);
 
   	});
   	
@@ -107,22 +129,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
         $ionicLoading.hide();
       }
   	};
-
-	var orientation = {
-		magneticHeading: 0,
-        trueHeading: false,
-        accuracy: 0,
-        timeStamp: null
-	};
-
-	var location = {
-		latitude: 0,
-		longitude: 0
-	};
-
-	var location = Geolocation.location();
-	$scope.location = location;
-	$scope.isLocation = true;
 
 	function _onSuccess(result) {
 		console.log('success geolocation');
@@ -156,6 +162,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	        accuracy = result.headingAccuracy;
 	        timeStamp = result.timestamp;
 	        _setMagnetic(result.magneticHeading);
+	        Geolocation.get(_onSuccess, _onError);
 	    });
 	};
 
@@ -164,27 +171,35 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     	magnetic = m;
     	$scope.magnetic = m;
     	$scope.transform = "rotate(" + m + "deg)";
+
+    	if (test.state) {
+    		$scope.location = Geolocation.location();
+    		$scope.isLocation = true;
+    	}
+
     };
 
     // Hold Compass
     var el = angular.element('#compass');
     $ionicGesture.on('hold', function(e) {
-    	$scope.spinner = true;
-    	$scope.isPOI = false;
+    	$scope.isSearch = true;
+		$scope.isPOI = false;
+		$scope.isError = false;
        _getPois(magnetic);
     }, el);
 
     function _getPois(magnetic) {
 
     	var direction = $utility._getDirection(magnetic);
+    	
     	console.log('search pois in ' + direction);
 		
 		Gal.poi_nearest(direction, function (err, data, direction) {
 			
 			console.log('Direction to filter: ' + direction + ' POIs ' + _.size(data));
 			
-			$scope.spinner = false;
-
+			$scope.isSearch = false;
+		
 			if (_.size(data) > 0) {
 
 				//console.log(JSON.stringify(data[0].item));
@@ -201,9 +216,9 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in questa direzione.';
 
-				console.log('Item: --------> ' + JSON.stringify(s[0]));
+				// console.log('Item: --------> ' + JSON.stringify(s[0]));
 
-				$scope.error = false;
+				$scope.isError = false;
 				
 				if (_.size(s) > 0) {
 					$scope.content = s[0].content._content;
@@ -236,10 +251,9 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	});
 
 	$timeout(function() {
-     	if (test) {
-     		var m = Math.floor((Math.random() * 360) + 1);
-     		m = 5;
-     		_setMagnetic(m);
+     	if (test.state) {
+     		var m = test.value(false);
+			_setMagnetic(m);
      	}
   	}, 1000);
 });
