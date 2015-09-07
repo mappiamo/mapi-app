@@ -24,7 +24,7 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 // Bussola
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal) {
 
-	var test = false;
+	var test = true;
 	var magnetic = 0;
 	var magneticHeading;
 	var trueHeading;
@@ -137,23 +137,8 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		console.log('error to orientation');
 	};
 	
-	/*
-	function _getOrientation() {
-    	console.log('start device orientation');
-    	$cordovaDeviceOrientation.getCurrentHeading().then(function(result) {
-	       var magneticHeading = result.magneticHeading;
-	       var trueHeading = result.trueHeading;
-	       var accuracy = result.headingAccuracy;
-	       var timeStamp = result.timestamp;
-	       $scope.magnetic = magneticHeading;
-	    }, function(err) {
-	      // An error occurred
-	      console.log('error to device orientation')
-	    });
-    };
-    */
-
-    var options = {
+	// Compass 
+	var options = {
       frequency: 3000,
       filter: true     // if frequency is set, filter is ignored
     }
@@ -179,7 +164,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     	magnetic = m;
     	$scope.magnetic = m;
     	$scope.transform = "rotate(" + m + "deg)";
-    	// $scope.npois = 'Trovati n.0 punti di interesse';
     };
 
     // Hold Compass
@@ -197,19 +181,19 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		
 		Gal.poi_nearest(direction, function (err, data, direction) {
 			
-			// console.log('Direction to filter: ' + direction);
+			console.log('Direction to filter: ' + direction + ' POIs ' + _.size(data));
 			
 			$scope.spinner = false;
 
 			if (_.size(data) > 0) {
 
-				// console.log(JSON.stringify(data));
+				//console.log(JSON.stringify(data[0].item));
 
 				var d = _.sortBy(data, function (item) {
 					return Geolocation.distance(item.item.lat, item.item.lon);
 				});
 
-				// console.log('Direction: ' + direction + ' - ' + JSON.stringify(d));
+				//console.log('Direction: ' + direction + ' - ' + JSON.stringify(d[0].item));
 
 				var s = _.filter(d, function (item) {
 					return item.direction == direction;
@@ -217,12 +201,16 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in questa direzione.';
 
-				console.log('Item: --------> ' + JSON.stringify(s));
+				console.log('Item: --------> ' + JSON.stringify(s[0]));
 
 				$scope.error = false;
 				
 				if (_.size(s) > 0) {
+					$scope.content = s[0].content._content;
 					$scope.category = s[0].content._categories;
+
+					console.log('Content: ' + s[0].content._content);
+
 					$scope.pois = s;
 					$scope.isPOI = true;
 				} else {

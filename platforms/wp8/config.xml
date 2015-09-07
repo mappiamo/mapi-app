@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.galleuca" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.galleuca" version="1.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Device">
         <param name="wp-package" value="Device" />
     </feature>
@@ -24,6 +24,9 @@
     </feature>
     <feature name="FileTransfer">
         <param name="wp-package" value="FileTransfer" />
+    </feature>
+    <feature name="SocialSharing">
+        <param name="wp-package" value="SocialSharing" />
     </feature>
     <icon height="99" src="resources/wp8/icon/ApplicationIcon.png" width="99" />
     <icon height="159" src="resources/wp8/icon/Background.png" width="159" />
@@ -59,7 +62,4 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <feature name="SocialSharing">
-        <param name="wp-package" value="SocialSharing" />
-    </feature>
 </widget>

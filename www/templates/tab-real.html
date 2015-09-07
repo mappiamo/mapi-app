@@ -35,14 +35,14 @@
 
 	      <div class="list card" 
            ng-repeat="poi in pois">
-		    <a class="item item-text-wrap" href="#/tab/poi/{{ content }}/{{ category }}/{{poi.id}}/{{poi.lat}}/{{poi.lon}}">
-		          <h2 class="promo-heading">{{ poi.title }}</h2>
-		          <h3>{{ poi.address }}</h3>
-		          <h4>{{ poi | distance_poi }}</h4>
-		          <p>{{ poi.text }}</p>
+		    <a class="item item-text-wrap" href="#/tab/poi/{{ content }}/{{ category }}/{{ poi.item.id }}/{{ poi.item.lat }}/{{ poi.item.lon }}">
+		          <h2 class="promo-heading">{{ poi.item.title }}</h2>
+		          <h3>{{ poi.item.address }}</h3>
+		          <h4>{{ poi.item | distance_poi }}</h4>
+		          <p>{{ poi.item.text }}</p>
 		        </a>
 		        <div class="item tabs tabs-secondary tabs-icon-left">
-		          <a class="tab-item" href="#/tab/route/{{ content }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}">
+		          <a class="tab-item" href="#/tab/route/{{ content }}/{{ poi.item.id }}/{{ poi.item.lat }}/{{ poi.item.lon }}">
 		            <i class="icon ion-android-map"></i>
 		            Raggiungimi
 		          </a>

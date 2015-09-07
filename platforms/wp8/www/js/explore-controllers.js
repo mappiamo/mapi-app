@@ -113,7 +113,7 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO) {
 
   var content = $stateParams.content;
   $scope.content = content;
@@ -140,6 +140,85 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.$on('$ionicView.enter', function(e) {
     _refresh();
   });
+
+  // ------------------------------------
+  // Social sharing
+
+  $scope.share = function(title, start, end) {
+
+    var msg = 'Itinerario: ' + title + ', ' + start + '-' + end + ' ' + MAPPIAMO.hashtag;
+
+    console.log('Sharing: ' + msg);
+
+    // Show the action sheet
+    var hideSheet = $ionicActionSheet.show({
+      buttons: [
+        { text: 'Facebook' },
+        { text: 'Twitter' },
+        { text: 'WhatsApp' } 
+      ],
+      destructiveText: '',
+      titleText: 'Share',
+      cancelText: 'Cancel',
+      cancel: function() {
+          // add cancel code..
+      },
+      buttonClicked: function(index) {
+        if (index==0) {
+          share_Facebook(msg);
+        } else if (index==1) {
+          share_Twitter(msg);
+        } else if (index==2) {
+          share_whatsApp(msg);
+        }
+      }
+    });
+
+    // For example's sake, hide the sheet after two seconds
+    $timeout(function() {
+     hideSheet();
+    }, 2000);
+
+  };
+
+  function share_Twitter(message) {
+
+    $cordovaSocialSharing
+      .shareViaTwitter(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing twitter.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing twitter Error.');
+      });
+  }
+
+  function share_Facebook(message) {
+    
+    $cordovaSocialSharing
+      .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing facebook.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing facebook. Error');
+      });
+  };
+
+  function share_whatsApp(message) {
+    
+    $cordovaSocialSharing
+      .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing whatsApp.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing whatsApp. Error');
+      });
+  };
 
   function showSpinner (view, message) {
 
@@ -213,7 +292,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
         // console.log(JSON.stringify(dt));
 
-        data.text = S(S(dt.text).stripTags().s).decodeHTMLEntities().s;
+        dt.text = S(S(dt.text).stripTags().s).decodeHTMLEntities().s;
         
         if (typeof dt.meta[3] !== undefined) {
           dt.meta[3].value = S(S(dt.meta[3].value).stripTags().s).decodeHTMLEntities().s;
@@ -257,7 +336,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 // **
 // ** lista dei punti di interesse
 
-ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading) {
+ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading, $cordovaSocialSharing, $ionicActionSheet, $timeout, MAPPIAMO) {
   
   $scope.content = $stateParams.content;
   $scope.category = $stateParams.category;
@@ -271,8 +350,17 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
   console.log('Param category: ' + $scope.category);
 
   $scope.$on('$ionicView.enter', function(e) {
+    Geolocation.get(_onSuccess, _onError);
     _refresh();
   });
+
+  function _onSuccess(position) {
+    Geolocation.save(position);
+  };
+
+  function _onError(error) {
+    console.log('error to get location ...')
+  };
 
   $scope.viewRoute = function (id, idpoi, lat, lon) {
     window.location.href = '#/tab/route/' + id + '/' + idpoi + '/' + lat + '/' + lon;
@@ -309,31 +397,113 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
   };
 
   function _refresh() {
+
     Gal.poi($scope.category, null, function (err, data) {
-    // creo un file geojson con i dati 
-    // la lista dei luoghi di interesse ordinati per coordinate
-    // mappa da poter visualizzare
-    // filtro dei punti di interesse
-    if (!err) {
-      
-      // console.log(JSON.stringify(data.data));
+      // creo un file geojson con i dati 
+      // la lista dei luoghi di interesse ordinati per coordinate
+      // mappa da poter visualizzare
+      // filtro dei punti di interesse
+      if (!err) {
+        
+        // console.log(JSON.stringify(data.data));
 
-      var d_sorted = _.sortBy(data.data, function (item) {
-        return Geolocation.distance(item.lat, item.lon);
-      });
+        var d_sorted = _.sortBy(data.data, function (item) {
+          return Geolocation.distance(item.lat, item.lon);
+        });
 
-      if (_.size(d_sorted) == 0) {
-        $scope.pois = data.data;
-      } else {
-        $scope.pois = d_sorted;
-      };
+        if (_.size(d_sorted) == 0) {
+          $scope.pois = data.data;
+        } else {
+          $scope.pois = d_sorted;
+        };
 
-      $scope.dataOk = true;
-      showSpinner(false);
-    }
-  });
+        $scope.dataOk = true;
+        showSpinner(false);
+      }
+    });
   };
   
+  // ------------------------------------
+  // Social sharing
+
+  $scope.share = function(poi) {
+
+    var location = 'http://www.openstreetmap.org/?mlat=' + poi.lat + '&mlon=' + poi.lon + '&zoom=12#map=12/' + poi.lat + '/' + poi.lon;
+
+    var msg = poi.title + ', ' + poi.address + '-' + location + ' ' + MAPPIAMO.hashtag;
+
+    console.log('Sharing: ' + msg);
+
+    // Show the action sheet
+    var hideSheet = $ionicActionSheet.show({
+      buttons: [
+        { text: 'Facebook' },
+        { text: 'Twitter' },
+        { text: 'WhatsApp' } 
+      ],
+      destructiveText: '',
+      titleText: 'Share',
+      cancelText: 'Cancel',
+      cancel: function() {
+          // add cancel code..
+      },
+      buttonClicked: function(index) {
+        if (index==0) {
+          share_Facebook(msg);
+        } else if (index==1) {
+          share_Twitter(msg);
+        } else if (index==2) {
+          share_whatsApp(msg);
+        }
+      }
+    });
+
+    // For example's sake, hide the sheet after two seconds
+    $timeout(function() {
+     hideSheet();
+    }, 2000);
+
+  };
+
+  function share_Twitter(message) {
+
+    $cordovaSocialSharing
+      .shareViaTwitter(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing twitter.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing twitter Error.');
+      });
+  }
+
+  function share_Facebook(message) {
+    
+    $cordovaSocialSharing
+      .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing facebook.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing facebook. Error');
+      });
+  };
+
+  function share_whatsApp(message) {
+    
+    $cordovaSocialSharing
+      .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing whatsApp.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing whatsApp. Error');
+      });
+  };
+
 });
 
 // *****************************
@@ -341,12 +511,18 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
 // **
 // ** Mappa dei punti di interesse
 
-ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading) {
+ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async) {
 
   var marker;
   var layer_control;
-  var geojson;
+  // var geojson;
   var layer_geojson;
+  var name_map = 'map';
+
+  var geojson = { 
+    "type": "FeatureCollection",
+    "features": []
+  };
 
   var content = $stateParams.content;
   var category = $stateParams.category;
@@ -393,9 +569,17 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
     window.location.href = '#/tab/explore/{{route_name}}'
   };
 
+  angular.extend($scope, {
+      defaults: {
+        scrollWheelZoom: false
+      }
+  });
+
   Geolocation.get(_onSuccess, _onError);
 
   function _onSuccess(position) {
+
+    console.log('save position');
 
     Geolocation.save(position);
 
@@ -405,13 +589,10 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         zoom: 8
-      },
-        defaults: {
-            scrollWheelZoom: false
-        }
+      }
     });
-
-    leafletData.getMap('map').then(function(map) {
+   
+    leafletData.getMap().then(function(map) {
 
       var ll = L.latLng(position.coords.latitude, position.coords.longitude);
 
@@ -421,13 +602,16 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
           smallIcon: true,
           opacity: 0.2
         });
+
+        marker.bindPopup('La tua posizione')
+
         marker.addTo(map);
 
         map.setView([location.latitude, location.longitude], 9);
 
         map.invalidateSize();
     });
-
+    
   };
 
   function _onError(error) {
@@ -435,51 +619,138 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   };
 
   function _refresh() {
+
+    showSpinner(true);
+
+    geojson.features = [];
+
     Gal.poi(category, null, function (err, data) {
-      if (!err) {
-        // $scope.routes = data;
-        // console.log(JSON.stringify(data));
-        GeoJSON.create(data, function (err, data_geojson) {
-          geojson = data_geojson;
-          // console.log(JSON.stringify(data_geojson));
-          _geojson();
-          $scope.dataOk = true;
-          showSpinner(false);
+
+      async.each(data.data, function (item, callback_child) {
+        
+        var geometry = $geo.parse(item.route);
+
+        var feature = {
+          "type": "Feature",
+          "geometry": geometry,
+          "properties": {
+            id: item.id,
+            title: item.title,
+            address: item.address,
+            marker: item.meta[1].value,
+            lat: item.lat,
+            lon: item.lon
+          }
+        };
+
+        geojson.features.push(feature);
+        callback_child();
+
+      }, function (err) {
+        // _geojson(geojson);
+
+        angular.extend($scope, {
+            geojson: {
+                data: geojson,
+                style:
+                function (feature) {
+                  return {
+
+                  };
+                },
+                pointToLayer: function(feature, latlng) {
+                    var markerIcon = L.icon({
+                      iconUrl: 'img/markers/' + feature.properties.marker,
+                      // shadowUrl: 'leaf-shadow.png',
+
+                      iconSize:     [32, 37], // size of the icon
+                      // shadowSize:   [50, 64], // size of the shadow
+                      iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                      // shadowAnchor: [4, 62],  // the same for the shadow
+                      popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                    });
+
+                    var descr = '<h3><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h3><br />' +
+                                '<p>' + feature.properties.address + '</p>';
+
+                    // map.setView(latlng, 8);
+                    _setView(latlng);
+
+                    return L.marker(latlng, {
+                      icon: markerIcon
+                    }).bindPopup(descr);
+                },
+                onEachFeature: function (feature, layer) {
+                    // map.fitBounds(layer.getBounds());
+                    // _setBounds();
+                } 
+            }
         });
-      }
+
+        showSpinner(false);
+      });
     });
+    
   };
 
-  function _geojson() {
+  function _setView(latlng) {
 
-      leafletData.getMap('map').then(function(map) {
+    leafletData.getMap().then(function (map) {
+      map.setView(latlng, 6);
+    });
+
+  };
+
+  function _setBounds(layer) {
+
+    leafletData.getMap().then(function (map) {
+      map.fitBounds(layer.getBounds());
+    });
+
+  };
+
+  function _geojson(geojson) {
+
+      // console.log(JSON.stringify(geojson));
+      console.log('init geoJson start ...');
+
+      leafletData.getMap(name_map).then(function(map) {
+
+        console.log('init geoJson ...');
+
+        if (layer_geojson) {
+          map.removeLayer(layer_geojson);
+        }
 
         layer_geojson = L.geoJson(geojson, {
 
           onEachFeature: function (feature, layer) {
-            // map.fitBounds(layer.getBounds());
+              map.fitBounds(layer.getBounds());
           },
 
           pointToLayer: function ( feature, latlng ) {
 
-            var options_icon = { 
-              icon: 'info-circle', 
-              prefix: 'fa', 
-              markerColor: 'blue', 
-              iconColor: '#ffffff'
-            };
+              var markerIcon = L.icon({
+                iconUrl: 'img/markers/' + feature.properties.marker,
+                // shadowUrl: 'leaf-shadow.png',
 
-            var icon = L.AwesomeMarkers.icon(options_icon);
+                iconSize:     [32, 37], // size of the icon
+                // shadowSize:   [50, 64], // size of the shadow
+                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                // shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+              });
 
-            var descr = '<h3><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h3><br />' +
-                        '<p>' + feature.properties.address + '</p>';
+              var descr = '<h3><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h3><br />' +
+                          '<p>' + feature.properties.address + '</p>';
 
-            map.setView(latlng, 8);
+              map.setView(latlng, 8);
 
-            return L.marker(latlng, {
-              icon: icon
-            }).bindPopup(descr);
-          }
+              return L.marker(latlng, {
+                icon: markerIcon
+              }).bindPopup(descr);
+
+            }
         });
                                        
         layer_geojson.addTo(map);
@@ -492,7 +763,9 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
   function _initMap () {
 
-    leafletData.getMap('map').then(function(map) {
+    console.log('init map');
+
+    leafletData.getMap(name_map).then(function(map) {
 
       var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
@@ -539,7 +812,10 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
       
       map.invalidateSize();
 
+      showSpinner(false);
+
     });
+
   };
 
 });
@@ -549,9 +825,11 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 // **
 // ** dettaglio del punto di interesse
 
-ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData) {
+ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO) {
 
+  var content = $stateParams.content;
   $scope.content = $stateParams.content;
+  var category = $stateParams.category;
   $scope.category = $stateParams.category;
 
   var idpoi = $stateParams.idpoi;
@@ -561,7 +839,86 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
   var layer_geojson;
   var geojson;
 
-  // $scope.id = $stateParams.category;
+  // ------------------------------------
+  // Social sharing
+
+  $scope.share = function(poi) {
+
+    var location = 'http://www.openstreetmap.org/?mlat=' + poi.lat + '&mlon=' + poi.lon + '&zoom=12#map=12/' + poi.lat + '/' + poi.lon;
+
+    var msg = poi.title + ', ' + poi.address + '-' + location + ' ' + MAPPIAMO.hashtag;
+
+    console.log('Sharing: ' + msg);
+
+    // Show the action sheet
+    var hideSheet = $ionicActionSheet.show({
+      buttons: [
+        { text: 'Facebook' },
+        { text: 'Twitter' },
+        { text: 'WhatsApp' } 
+      ],
+      destructiveText: '',
+      titleText: 'Share',
+      cancelText: 'Cancel',
+      cancel: function() {
+          // add cancel code..
+      },
+      buttonClicked: function(index) {
+        if (index==0) {
+          share_Facebook(msg);
+        } else if (index==1) {
+          share_Twitter(msg);
+        } else if (index==2) {
+          share_whatsApp(msg);
+        }
+      }
+    });
+
+    // For example's sake, hide the sheet after two seconds
+    $timeout(function() {
+     hideSheet();
+    }, 2000);
+
+  };
+
+  function share_Twitter(message) {
+
+    $cordovaSocialSharing
+      .shareViaTwitter(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing twitter.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing twitter Error.');
+      });
+  }
+
+  function share_Facebook(message) {
+    
+    $cordovaSocialSharing
+      .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing facebook.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing facebook. Error');
+      });
+  };
+
+  function share_whatsApp(message) {
+    
+    $cordovaSocialSharing
+      .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)
+      .then(function(result) {
+        // Success!
+        console.log('sharing whatsApp.');
+      }, function(err) {
+        // An error occurred. Show a message to the user
+        console.log('sharing whatsApp. Error');
+      });
+  };
 
   console.log('Parameters: ' + $scope.content + ',' + $scope.category + ',' + idpoi);
   
@@ -572,6 +929,16 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
   $scope.goBack = function (id) {
     window.location.href = '#/tab/explore/' + id;
+  };
+
+  Geolocation.get(_onSuccess, _onError);
+  
+  function _onSuccess(position) {
+    Geolocation.save(position);
+  };
+
+  function _onError(error) {
+    console.log('error to get location ...')
   };
 
   function showSpinner (view, message) {
@@ -632,7 +999,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
         console.log('init map');
 
-        _geojson(dt[0].route);
+        _geojson(dt[0].route, dt[0]);
 
         // ----------------------------
         console.log('adding media... ' + _.size(dt[0].media));
@@ -646,7 +1013,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
     });
   };
 
-  function _geojson(route) {
+  function _geojson(route, poi) {
 
       console.log('route: ' + JSON.stringify(route));
       var geometry = $geo.parse(route);
@@ -654,91 +1021,55 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
       var geojson = {
         "type": "Feature",
         "geometry": geometry,
-        "properties": {}
+        "properties": {
+          title: poi.title,
+          address: poi.address,
+          marker: poi.meta[1].value,
+          lat: poi.lat,
+          lon: poi.lon
+        }
       };
-
-      console.log('geojson: ' + JSON.stringify(geojson));
-
-      angular.extend($scope, {
-          geojson: {
-              data: geojson
-              
-          }
-      });
 
       leafletData.getMap('map_poi').then(function(map) {
         var latlng = L.latLng(lat, lng);
-        map.setView(latlng);
-        map.setZoom(10);
-      });
-      
-
-      /*
-      leafletData.getMap('map').then(function(map) {
-
-        if (layer_geojson) {
-          map.removeLayer(layer_geojson);
-        };
 
         layer_geojson = L.geoJson(geojson, {
+
           onEachFeature: function (feature, layer) {
-            map.fitBounds(layer.getBounds());
+            // map.fitBounds(layer.getBounds());
+          },
+
+          pointToLayer: function ( feature, latlng ) {
+
+            // console.log(JSON.stringify(feature.properties))
+
+            var markerIcon = L.icon({
+              iconUrl: 'img/markers/' + feature.properties.marker,
+              // shadowUrl: 'leaf-shadow.png',
+
+              iconSize:     [32, 37], // size of the icon
+              // shadowSize:   [50, 64], // size of the shadow
+              iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+              // shadowAnchor: [4, 62],  // the same for the shadow
+              popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
+
+            map.setView(latlng, 8);
+
+            return L.marker(latlng, {
+              icon: markerIcon
+            });
           }
         });
-
+  
         layer_geojson.addTo(map);
-
+        map.setView(latlng);
+        map.setZoom(10);
         map.invalidateSize();
-    });
-*/
+      });
 
   };
 
 });
-
-/*
-
-{
-  "id":12,
-  "type":"place",
-  "name":"serra-dei-peccatori",
-  "title":"Serra dei Peccatori",
-  "text":"<p>Nell'area a nord-Est del comune di Specchia, Serra Magnone denomina il tratto di serra che pi&ugrave; a sud prende il nome di Serra dei Peccatori e Serra dei Cianci, rispettivamente nel territorio di Specchia ed Alessano. La serra, quasi completamente coltivata ad ulivi ed organizzata in terrazzamenti su muretti a secco di contenimento, accoglie sulla cresta la Masseria del Monte, insediamento rurale con cappella dedicata a S.Antonio, risalente al XVII secolo, come riportato nell'incisione&nbsp; 'HOC VILLA FUNDITUS CONSTRUCTA/ ET DOTATA FUIT TEMPORE GUARDIA/.ATUS ....BONAVENTURA .../ A.D. 1604'.</p> \n<p>L'area &egrave; gi&agrave; fruibile ma &egrave; in programma un ulteriore intervento.</p> \n<p>Alle pendici della Serra, vicino al cimitero di Specchia, si erge la &quot;Collina degli inquietanti&quot;, opera a cielo aperto di Mario Branca, Marius in arte, costituita&nbsp;da particolari architetture rupestri dallo stile arcaico come la cappella di pietre a secco di Nostra Signora dell'Emigrante, cui si aggiungono ceramiche e assemblaggi in ferro.&nbsp;</p>",
-  "address":"Area a Nord-Est di Specchia, Specchia",
-  "lat":39.9453333358,
-  "lon":18.2855000029,
-  "route":"POINT(18.285500002856 39.945333335808)",
-  "license":1,
-  "created":"2015-05-15 20:20:38",
-  "modified":"2015-07-07 19:52:20",
-  "createdby":null,
-  "modifiedby":null,
-  "hits":0,
-  "translation":false,
-  "enabled":true,
-  "meta":[
-    {"name":"tipo_itine","value":"Fede"},
-    {"name":"icon-file","value":"paesaggio-e-natura.png"},
-    {"name":"categoria","value":"Paesaggio e Natura"},
-    {"name":"tipologia","value":"Serra"},
-    {"name":"proprieta","value":"Demaniale"},
-    {"name":"accessibilita","value":"Accessibile"},
-    {"name":"y","value":"4426860.199"},
-    {"name":"x","value":"780700.1"},
-    {"name":"notizie_storiche","value":"<p>Sul pendio della Serra dei Peccatori &egrave; possibile notare alcuni tratti di strada romana lastricata lungo la strada per Cardigliano. Due tratti, corrispondenti alla strada vicinale Cervi (250 m circa) e a via delle Tabacchine, sono la testimonianz"},
-    {"name":"altri_oggetti_interesse","value":"84"},
-    {"name":"num_gps","value":"41"}
-    ],
-  "media":[
-    {"title":"Serra dei Peccatori","url":"http://blobs.galpuglia.info/lx/z2/vm/blob-lxz2vmxw61lwxx2n4dtpx4dc8.data","default":null},
-    {"title":"Serra dei Peccatori","url":"http://blobs.galpuglia.info/ky/b2/zz/blob-kyb2zzwuy8ij0u3zmneomsmo0.data","default":null},
-    {"title":"Serra dei Peccatori","url":"http://blobs.galpuglia.info/ao/n1/m7/blob-aon1m7fssr5f8pimvmkoh1h2o.data","default":null},
-    {"title":"Serra dei Peccatori","url":"http://blobs.galpuglia.info/0n/3c/zn/blob-0n3cznj4v4649253afuyyi8b7.data","default":null},
-    {"title":"Serra dei Peccatori","url":"http://blobs.galpuglia.info/ta/ao/e6/blob-taaoe6arqmfperjl4w9naoyyh.data","default":null},
-    {"title":"Serra dei Peccatori","url":"http://blobs.galpuglia.info/qh/6r/mi/blob-qh6rmi9yubdfhjdf4cxpa2ovs.data","default":null},
-    {"title":"Serra dei Peccatori","url":"http://blobs.galpuglia.info/7s/3i/t3/blob-7s3it3jpw1vtd4afnvr26fcts.data","default":null}]}
-
-
-*/
 
 

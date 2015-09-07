@@ -58,6 +58,7 @@ angular.module('gal', ['ionic',
       StatusBar.styleLightContent();
     };
 
+    /*
     var options = {
       desiredAccuracy: 1000,
       stopOnTerminate: true
@@ -72,7 +73,8 @@ angular.module('gal', ['ionic',
         function (location) { // notify callback
           console.log(location);
           Geolocation.save(location);
-        });
+    });
+    */
   });
 
 })
@@ -99,7 +101,10 @@ angular.module('gal', ['ionic',
 .constant('MAPPIAMO', {
   jsonp: '&callback=JSON_CALLBACK',
   content: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=',
-  poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object='    
+  poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=',
+  web: 'http://itinerari.galcapodileuca.it',
+  img: 'img/logo/logo-gal.jpg',
+  hashtag: '#galleuca'
 })
 
 .constant('MAPQUEST', {
