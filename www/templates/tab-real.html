@@ -1,6 +1,62 @@
 <ion-view view-title="Navigatore">
   <ion-content class="has-header">
 
+  <div class="list">
+    <a class="item item-thumbnail-left item-text-wrap" href="#">
+      <img align="center" src="img/compass/compass_380.png"
+				id="compass" 
+				width="100%"
+				height="100%" 
+				on-hold="getPois()"
+				ng-style="
+				 {
+			 	'transform': transform, 
+				'-webkit-transform': transform, 
+				'-ms-transform': transform,
+				'-o-transform': transform, 
+				'transform': transform
+			}" />
+      <h2 class="promo-text" ng-if="isLocation" align="center">
+	  			<i class="icon ion-ios-location"></i> {{ location.latitude | number: 4 }}, {{ location.longitude | number: 4 }}
+	  		</h2>
+	  	<button class="button button-full button-positive" ng-click="search()">
+  			Cerca verso <strong>{{ magnetic | magnetic_ext }}</strong>
+		</button>
+		<p ng-show="isSearch" align="center">
+				<ion-spinner icon="lines"></ion-spinner>
+			</p>
+		<!--
+      <p class="positive" align="center">Premi sulla bussola per cercare i punti di interesse in questa direzione</p>
+
+
+    		<p ng-show="isSearch" align="center">
+				<ion-spinner icon="lines"></ion-spinner>
+				Ricerca punti di interesse nella direzione <strong>{{ magnetic | magnetic_ext }}</strong>
+			</p>
+
+
+			<p ng-show="isPOI" class="assertive" align="center">
+				{{ npois }} <br />
+				<i class="icon ion-ios-arrow-thin-down"></i>Scorri verso il basso
+			</p>
+			-->
+
+			<p class="assertive" align="center" ng-show="isError">
+				<i class="icon ion-android-warning">
+					{{ error_msg }}
+				</i> 
+			</p>
+    </a>
+    <div data-tap-disabled="true" ng-show="isCompass">
+		<leaflet id="map_compass"
+	           	 geojson="geojson"
+	           	 center="center"
+	             defaults="defaults">
+	  	</leaflet>
+  	</div>
+</div>
+	
+	<!--
 	<div class="list card">
   		<div class="item item-text-wrap">
    			
@@ -9,6 +65,23 @@
 	  		</h2>
 
     		<p class="positive" align="center">Premi sulla bussola per cercare i punti di interesse in questa direzione</p>
+
+    		<p ng-show="isSearch" align="center">
+				<ion-spinner icon="lines"></ion-spinner>
+				Ricerca punti di interesse nella direzione <strong>{{ magnetic | magnetic_ext }}</strong>
+			</p>
+
+			<p ng-show="isPOI" class="assertive" align="center">
+				{{ npois }} <br />
+				<i class="icon ion-ios-arrow-thin-down"></i>Scorri verso il basso
+			</p>
+
+			<p class="assertive" align="center" ng-show="isError">
+				<i class="icon ion-android-warning">
+					{{ error_msg }}
+				</i> 
+			</p>
+
   		</div>
 
   		<div class="item item-image">
@@ -26,27 +99,15 @@
 				'transform': transform
 			}" />
   		</div>
-
-		<a class="item item-icon-left item-text-wrap assertive" href="#">
-			
-			<p ng-show="isSearch" align="center">
-				<ion-spinner icon="lines"></ion-spinner>
-				Ricerca punti di interesse nella direzione <strong>{{ magnetic | magnetic_ext }}</strong>
-			</p>
-
-			<p ng-show="isPOI" class="assertive" align="center">
-				{{ npois }} <br />
-				<i class="icon ion-ios-arrow-thin-down"></i>Scorri verso il basso
-			</p>
-
-			<p class="assertive" align="center" ng-show="isError">
-				<i class="icon ion-android-warning">
-					{{ error_msg }}
-				</i> 
-			</p>
-		</a>
-		
 	</div>
+
+	<div data-tap-disabled="true" ng-show="isCompass">
+		<leaflet id="map_compass"
+	           	 geojson="geojson"
+	           	 center="center"
+	             defaults="defaults">
+	  	</leaflet>
+  	</div>
 
 	<div class="list card" ng-repeat="poi in pois">
     	<a class="item item-text-wrap" href="#/tab/poi/{{ content }}/{{ category }}/{{ poi.item.id }}/{{ poi.item.lat }}/{{ poi.item.lon }}">
@@ -62,7 +123,7 @@
           </a>
         </div>
    </div>
-
+	-->
    <!--
   	<div class="list">
     	<a class="item" href="#">

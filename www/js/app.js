@@ -16,7 +16,8 @@ angular.module('gal', ['ionic',
                        'ngCordova', 
                        'gal.home.controllers', 
                        'gal.real.controllers', 
-                       'gal.explore.controllers', 
+                       'gal.explore.controllers',
+                       'gal.pois.controllers', 
                        'gal.services', 
                        'gal.filters', 
                        'gal.weather.services', 
@@ -222,7 +223,7 @@ angular.module('gal', ['ionic',
     })
 
     .state('tab.route', {
-      url: '/route/:id/:idpoi/:lat/:lng',
+      url: '/route/:content/:category/:idpoi/:lat/:lng',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-route.html',

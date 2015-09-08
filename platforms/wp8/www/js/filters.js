@@ -14,23 +14,47 @@ var filters = angular.module('gal.filters', []);
 
 filters.filter("stars", ['$sce', function($sce) {
 
-		return function(input){
+	return function(input){
 
-			console.log(input);
+		console.log(input);
 
-			var h = '';
+		var h = '';
 
-			for (var i = 1; i <= input; i++) {
-				h += '<i class="icon ion-ios-star"></i>';
-			};
+		for (var i = 1; i <= input; i++) {
+			h += '<i class="icon ion-ios-star"></i>';
+		};
 
-			var r = $sce.trustAsHtml(h);
+		var r = $sce.trustAsHtml(h);
 
-			console.log(r);
+		console.log(r);
 
-    		return r;
-  		}
+		return r;
+	}
 }]);
+
+filters.filter("magnetic", function ($utility) {
+
+	return function (input) {
+
+		var d = $utility._getWindRose(input);
+		console.log('Direzione: ' + d); 
+		return d;
+
+	};
+
+});
+
+filters.filter("magnetic_ext", function ($utility) {
+
+	return function (input) {
+
+		var d = $utility._getWindRose(input,true);
+		console.log('Direzione: ' + d); 
+		return d;
+
+	};
+
+});
 
 filters.filter("background", function () {
 	return function (input) {

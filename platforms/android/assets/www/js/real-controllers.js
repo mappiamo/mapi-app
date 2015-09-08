@@ -24,17 +24,35 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 // Bussola
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal) {
 
-	var test = false;
+	var test = {
+		state: false,
+		value: function (random) {
+			if (random) {
+				return Math.floor((Math.random() * 360) + 1);
+			} else {
+				return 1;
+			}
+		}
+	};
+
 	var magnetic = 0;
 	var magneticHeading;
 	var trueHeading;
 	var accuracy;
 	var timeStamp;
 	var watch;
-	
-	$scope.spinner = false;
-	$scope.dataOk = false;
-	$scope.isPOI = false;
+
+	var orientation = {
+		magneticHeading: 0,
+        trueHeading: false,
+        accuracy: 0,
+        timeStamp: null
+	};
+
+	var location = {
+		latitude: 0,
+		longitude: 0
+	};
 	
 	$ionicModal.fromTemplateUrl('templates/poi-list-modal.html', {
 	    scope: $scope,
@@ -50,6 +68,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$scope.viewInfo = function (id, idpoi, lat, lon) {
 		// $scope.closeModal();
 		console.log('view info');
+		_stopWatch();
 		window.location.href = '#/tab/poi/' + id + '/' + idpoi + '/' + lat + '/' + lon;
 	};
 
@@ -76,13 +95,13 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$scope.$on('$ionicView.beforeEnter', function() {
 		// test = TEST.value;
 		
-		$scope.error = false;
-		$scope.isLocation = false;
+		$scope.isSearch = false;
+		$scope.isPOI = false;
+		$scope.isError = false;
 		
-		if (test) {
-			var m = Math.floor((Math.random() * 360) + 1);
-			_setMagnetic(0);
-			// _setMagnetic(m);
+		if (test.state) {
+			var m = test.value(true);
+			_setMagnetic(m);
 		} else {
 			_setMagnetic(0);
 		};
@@ -108,22 +127,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
       }
   	};
 
-	var orientation = {
-		magneticHeading: 0,
-        trueHeading: false,
-        accuracy: 0,
-        timeStamp: null
-	};
-
-	var location = {
-		latitude: 0,
-		longitude: 0
-	};
-
-	var location = Geolocation.location();
-	$scope.location = location;
-	$scope.isLocation = true;
-
 	function _onSuccess(result) {
 		console.log('success geolocation');
 		location.latitude = result.coords.latitude;
@@ -143,7 +146,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
       filter: true     // if frequency is set, filter is ignored
     }
 
-    if (!test) {
+    if (!test.state) {
 	    watch = $cordovaDeviceOrientation.watchHeading(options).then(
 	      null,
 	      function(error) {
@@ -164,27 +167,35 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     	magnetic = m;
     	$scope.magnetic = m;
     	$scope.transform = "rotate(" + m + "deg)";
+
+    	if (test.state) {
+    		$scope.location = Geolocation.location();
+    		$scope.isLocation = true;
+    	}
+
     };
 
     // Hold Compass
     var el = angular.element('#compass');
     $ionicGesture.on('hold', function(e) {
-    	$scope.spinner = true;
-    	$scope.isPOI = false;
+    	$scope.isSearch = true;
+		$scope.isPOI = false;
+		$scope.isError = false;
        _getPois(magnetic);
     }, el);
 
     function _getPois(magnetic) {
 
     	var direction = $utility._getDirection(magnetic);
+    	
     	console.log('search pois in ' + direction);
 		
 		Gal.poi_nearest(direction, function (err, data, direction) {
 			
 			console.log('Direction to filter: ' + direction + ' POIs ' + _.size(data));
 			
-			$scope.spinner = false;
-
+			$scope.isSearch = false;
+		
 			if (_.size(data) > 0) {
 
 				//console.log(JSON.stringify(data[0].item));
@@ -199,11 +210,11 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 					return item.direction == direction;
 				});
 
-				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in questa direzione.';
+				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in direzione ' + $utility._getWindRose(magnetic, true);
 
-				console.log('Item: --------> ' + JSON.stringify(s[0]));
+				// console.log('Item: --------> ' + JSON.stringify(s[0]));
 
-				$scope.error = false;
+				$scope.isError = false;
 				
 				if (_.size(s) > 0) {
 					$scope.content = s[0].content._content;
@@ -216,6 +227,9 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 				} else {
 					// non sono stati trovati punti di interesse
 					$scope.isPOI = false;
+					$scope.isError = true;
+					$scope.error_msg = 'Non ho trovato nessun Punto di interesse in direzione ' + $utility._getWindRose(magnetic, true);
+					$scope.isError = true;
 				};
 
 			} else {
@@ -224,7 +238,10 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		});
 	};
 
-	$scope.$on('$ionicView.leave', function() {
+	function _stopWatch() {
+
+		watch.clearWatch();
+		
 		$cordovaDeviceOrientation.clearWatch(watch)
 	      .then(function(result) {
 	        // Success!
@@ -232,14 +249,17 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	      }, function(err) {
 	        // An error occurred
 	        console.log('errot to stop watching Device Orientation');
-	      });
+	      });	
+	};
+
+	$scope.$on('$ionicView.leave', function() {
+		_stopWatch();
 	});
 
 	$timeout(function() {
-     	if (test) {
-     		var m = Math.floor((Math.random() * 360) + 1);
-     		m = 5;
-     		_setMagnetic(m);
+     	if (test.state) {
+     		var m = test.value(false);
+			_setMagnetic(m);
      	}
   	}, 1000);
 });

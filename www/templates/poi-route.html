@@ -1,10 +1,10 @@
 <ion-view view-title="{{ title }}" hide-nav-bar="true" cache-view="false"> 
   
-  <ion-header-bar align-title="left" class="bar-positive">
+  <ion-header-bar align-title="left" class="bar-dark">
     <div class="buttons">
-      <a class="button button-icon icon ion-android-compass" href="#/tab/explore/{{ id }}"></a>
+      <a class="button button-icon icon ion-android-compass" href="#/tab/poi/{{ route_data.content }}/{{ route_data.category }}/{{ route_data.idpoi }}/{{ route_data.lat }}/{{ route_data.lng }}"></a>
     </div>
-    <h1 class="title">{{ title }}</h1>
+    <h1 class="title">{{ route_data.title }}</h1>
     
   </ion-header-bar>
 

@@ -295,19 +295,19 @@ angular.module('gal.services', [])
 
             var dt = data.data;
 
-            console.log('first element: ' + JSON.stringify(dt));
+            // console.log('first element: ' + JSON.stringify(dt));
             console.log('n element: ' + _.size(dt));
 
             var p = _.sortBy(dt, function (item) {
-              console.log('distance by : ' + item.lat + ',' + item.lon);
+              // console.log('distance by : ' + item.lat + ',' + item.lon);
               return Geolocation.distance(item.lat, item.lon);
             });
 
-            console.log('sorted: ' + JSON.stringify(p));
+            // console.log('sorted: ' + JSON.stringify(p));
 
             if (_.size(p) > 0) {
 
-              console.log('Coordinate POI: ' + p[0].lat + ',' + p[0].lon);
+              // console.log('Coordinate POI: ' + p[0].lat + ',' + p[0].lon);
 
               n.item = p[0];
 

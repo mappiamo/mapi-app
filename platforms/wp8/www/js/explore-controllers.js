@@ -1042,9 +1042,11 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
           pointToLayer: function ( feature, latlng ) {
 
             // console.log(JSON.stringify(feature.properties))
+            var icon_url = 'img/markers/' + feature.properties.marker;
+            console.log('Icon: ' + icon_url);
 
             var markerIcon = L.icon({
-              iconUrl: 'img/markers/' + feature.properties.marker,
+              iconUrl: icon_url,
               // shadowUrl: 'leaf-shadow.png',
 
               iconSize:     [32, 37], // size of the icon
