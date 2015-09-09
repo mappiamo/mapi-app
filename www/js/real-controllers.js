@@ -190,19 +190,21 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     };
 
     $scope.search = function () {
+    	_search();	
+    };
+
+    function _search() {
+    	$scope.magnetic_search = magnetic;
     	$scope.isSearch = true;
 		$scope.isPOI = false;
 		$scope.isError = false;
-       _getPois(magnetic);	
+       _getPois(magnetic);
     };
 
     // Hold Compass
     var el = angular.element('#compass');
     $ionicGesture.on('hold', function(e) {
-    	$scope.isSearch = true;
-		$scope.isPOI = false;
-		$scope.isError = false;
-       _getPois(magnetic);
+    	_search();
     }, el);
 
 

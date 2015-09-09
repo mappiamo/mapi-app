@@ -1,9 +1,12 @@
 <ion-view view-title="{{ title }}" hide-nav-bar="true">
-  <ion-header-bar align-title="left" class="bar-calm">
-  <div class="buttons">
+  <ion-header-bar align-title="left" class="bar-positive">
+  
+  <div class="button-bar">
     <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{ content }}/{{ category }}"></a>
+    <a class="button button-icon icon ion-share" ng-click="share(explore.title, explore.meta[4].value, explore.meta[5].value)"></a>
+    
   </div>
-  <h1 class="title">{{ explore.title }}</h1>
+
 </ion-header-bar>
   <ion-content class="has-header">
 
@@ -69,19 +72,6 @@
           <p>
             {{ explore.text }}
           </p>
-        </div>
-
-        <div class="item tabs tabs-secondary tabs-icon-left">
-          <!--
-          <a class="tab-item" href="#/tab/pois/{{ content }}/{{ category }}">
-            <i class="icon ion-ios-location"></i>
-            Punti di Interesse
-          </a>
-          -->
-          <a class="tab-item" href="#" ng-click="share(explore.title, explore.meta[4].value, explore.meta[5].value)">
-            <i class="icon ion-share"></i>
-            Share
-          </a>
         </div>
 
       </div>

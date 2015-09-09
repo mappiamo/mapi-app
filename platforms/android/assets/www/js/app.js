@@ -18,6 +18,7 @@ angular.module('gal', ['ionic',
                        'gal.real.controllers', 
                        'gal.explore.controllers',
                        'gal.pois.controllers', 
+                       'gal.filters.services',
                        'gal.services', 
                        'gal.filters', 
                        'gal.weather.services', 
@@ -92,7 +93,7 @@ angular.module('gal', ['ionic',
 
 .constant('TEST', {
   url: 'test/data.json',  
-  value: true
+  value: false
 })
 
 .constant('DB', {
@@ -228,16 +229,6 @@ angular.module('gal', ['ionic',
         'tab-explore': {
           templateUrl: 'templates/poi-route.html',
           controller: 'RealMapCtrl'
-        }
-      }
-    })
-
-    .state('tab.search', {
-      url: '/search',
-      views: {
-        'tab-search': {
-          templateUrl: 'templates/tab-search.html',
-          controller: 'SearchCtrl'
         }
       }
     });

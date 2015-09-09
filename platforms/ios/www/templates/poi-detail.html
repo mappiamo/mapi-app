@@ -1,9 +1,12 @@
 <ion-view view-title="{{ title }}" hide-nav-bar="true">
-  <ion-header-bar align-title="left" class="bar-energized">
-  <div class="buttons">
+  <ion-header-bar align-title="left" class="bar-positive">
+  
+  <div class="button-bar">
     <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{ content }}/{{ category }}"></a>
+    <a class="button button-icon icon ion-android-map" href="#/tab/route/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}"></a>
+    <a class="button button-icon icon ion-share" ng-click="share(poi)" href="#"></a>
   </div>
-  <h1 class="title">{{ poi.title }}</h1>
+
 </ion-header-bar>
   <ion-content class="has-header">
       
@@ -39,12 +42,8 @@
           </leaflet>
         </div>
 
+        <!--
         <div class="item tabs tabs-secondary tabs-icon-left">
-          <a class="tab-item" href="#/tab/route/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}">
-            <i class="icon ion-android-map"></i>
-            Raggiungimi
-          </a>
-          <!--
           <a class="tab-item" href="#" ng-click="getPhotos()">
             <i class="icon ion-ios-camera"></i>
             Foto
@@ -57,12 +56,9 @@
             <i class="icon ion-ios-loop-strong"></i>
             360°
           </a>
-          -->
-          <a class="tab-item" href="#" ng-click="share(poi)">
-            <i class="icon ion-share"></i>
-            Share
-          </a>
+          
         </div>
+        -->
         
       </div>
 

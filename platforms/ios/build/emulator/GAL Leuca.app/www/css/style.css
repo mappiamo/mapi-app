@@ -181,7 +181,6 @@ p {
   line-height:23px;
 }
 
-
 #home {
 	width: 100%;
 	height: 100%;
@@ -205,7 +204,7 @@ p {
 #map_compass {
    width: 100%;
    height: 1024px;
-};
+}
 
 #map_poi {
    width: 100%;

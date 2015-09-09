@@ -21,6 +21,7 @@ var ctrls = angular.module('gal.pois.controllers', ['leaflet-directive']);
 ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading, $cordovaSocialSharing, $ionicActionSheet, $timeout, MAPPIAMO) {
   
   $scope.content = $stateParams.content;
+
   $scope.category = $stateParams.category;
 
   var it = Gal.getRoute($scope.content);
@@ -89,12 +90,12 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
         
         // console.log(JSON.stringify(data.data));
 
-        var d_sorted = _.sortBy(data.data, function (item) {
+        var d_sorted = _.sortBy(data.filtered, function (item) {
           return Geolocation.distance(item.lat, item.lon);
         });
 
         if (_.size(d_sorted) == 0) {
-          $scope.pois = data.data;
+          $scope.pois = data.filtered;
         } else {
           $scope.pois = d_sorted;
         };
@@ -194,26 +195,69 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
 // **
 // ** Mappa dei punti di interesse
 
-ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async) {
+ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async, $ionicModal, $filters) {
 
   var marker;
   var layer_control;
-  // var geojson;
   var layer_geojson;
   var name_map = 'map';
-
   var geojson;
+  var filters;
 
   var content = $stateParams.content;
   var category = $stateParams.category;
   var it = Gal.getRoute(content);
 
+  console.log(JSON.stringify(it));
+
+  $scope.isMap = false;
   $scope.title = it.title;
   $scope.content = content;
   $scope.category = category;
   $scope.dataOk = false;
   
   console.log('Param Map: ' + content);
+
+  // ************************************************
+  // Selezione filtri
+  // ------------------------------------------------
+
+  $ionicModal.fromTemplateUrl('templates/filters-modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.openFilters = function() {
+    $scope.modal.show();
+  };
+
+  $scope.closeFilters = function() {
+    // refresh dei dati
+    $filters.save($scope.filters, function (err, response) {
+      console.log(JSON.stringify(response));
+      _refresh();  
+    });
+    $scope.modal.hide();
+  };
+
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
+
+  // ************************************************
 
   function showSpinner (view, message) {
 
@@ -238,7 +282,12 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   });
 
   $scope.$on('$ionicView.enter', function(e) {
-    _refresh();
+    $filters.get(function (err, filters) {
+      console.log('Filters: ----------------')
+      // console.log(JSON.stringify(filters));
+      $scope.filters = filters;
+      _refresh();
+    });
   });
 
   $scope.goBack = function () {
@@ -285,7 +334,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
           opacity: 0.2
         });
 
-        marker.bindPopup('La tua posizione')
+        marker.bindPopup('La tua posizione');
 
         marker.addTo(map);
 
@@ -302,11 +351,23 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
   function _refresh() {
 
+    console.log('refresh ...');
+    $scope.isMap = false;
+
     showSpinner(true);
 
-    // geojson.features = [];
+    var options = {
+      all: false, 
+      category: category, 
+      content: content, 
+      poi: null, 
+      // filters: $scope.filters,
+      nearest: false
+    };
 
     GeoJSON.pois(function (err, data) {
+
+      console.log('drawing map...')
       
       angular.extend($scope, {
             geojson: {
@@ -346,73 +407,22 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
         });
 
         showSpinner(false);
+        $scope.isMap = true;
 
-    }, false, category, content);
+    }, options);
 
   };
 
   function _setBounds(bounds) {
 
     leafletData.getMap('map').then(function(map) {
-      console.log('set zoom');
-      console.log(map._layers);
+      // console.log('set zoom');
+      // console.log(map._layers);
       map.fitBounds(bounds);
       map.invalidateSize();
       map.setZoom(12);
     });
   }
-
-  function _geojson(geojson) {
-
-      // console.log(JSON.stringify(geojson));
-      console.log('init geoJson start ...');
-
-      leafletData.getMap(name_map).then(function(map) {
-
-        console.log('init geoJson ...');
-
-        if (layer_geojson) {
-          map.removeLayer(layer_geojson);
-        }
-
-        layer_geojson = L.geoJson(geojson, {
-
-          onEachFeature: function (feature, layer) {
-              map.fitBounds(layer.getBounds());
-          },
-
-          pointToLayer: function ( feature, latlng ) {
-
-              var markerIcon = L.icon({
-                iconUrl: 'img/markers/' + feature.properties.marker,
-                // shadowUrl: 'leaf-shadow.png',
-
-                iconSize:     [32, 37], // size of the icon
-                // shadowSize:   [50, 64], // size of the shadow
-                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                // shadowAnchor: [4, 62],  // the same for the shadow
-                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-              });
-
-              var descr = '<h3><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h3><br />' +
-                          '<p>' + feature.properties.address + '</p>';
-
-              map.setView(latlng, 8);
-
-              return L.marker(latlng, {
-                icon: markerIcon
-              }).bindPopup(descr);
-
-            }
-        });
-                                       
-        layer_geojson.addTo(map);
-
-        map.invalidateSize();
-
-    });
-
-  };
 
   function _initMap () {
 
@@ -453,6 +463,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
       var wind = L.OWM.wind(options_weather_layer);
 
       var baseMaps = { "OSM Standard": osm };
+      
       var overlayMaps = { 
         "Clouds": clouds, 
         "Precipitazioni": precipitation,
@@ -461,6 +472,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
         "vento": wind,
         "Cities": city 
       };
+
       layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
       
       map.invalidateSize();
@@ -672,102 +684,55 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
   function _geojson() {
 
-      GeoJSON.pois (function (err, data) {
+    var options = {
+      all: false, 
+      category: category, 
+      content: content, 
+      poi: idpoi, 
+      nearest: false
+    };
 
-        angular.extend($scope, {
-            geojson: {
-                data: data,
-                style: 
-                function (feature) {
-                    return {
-                      color: feature.properties.color
-                    };
-                },
-                pointToLayer: function(feature, latlng) {
-                  var icon_url = 'img/markers/' + feature.properties.marker;
-                  console.log('Icon: ' + icon_url);
+    GeoJSON.pois (function (err, data) {
+      console.log('send geojson to map...');
+      angular.extend($scope, {
+          geojson: {
+              data: data,
+              style: 
+              function (feature) {
+                  return {
+                    color: feature.properties.color
+                  };
+              },
+              pointToLayer: function(feature, latlng) {
+                var icon_url = 'img/markers/' + feature.properties.marker;
+                console.log('Icon: ' + icon_url);
 
-                  var markerIcon = L.icon({
-                    iconUrl: icon_url,
-                    // shadowUrl: 'leaf-shadow.png',
+                var markerIcon = L.icon({
+                  iconUrl: icon_url,
+                  // shadowUrl: 'leaf-shadow.png',
 
-                    iconSize:     [32, 37], // size of the icon
-                    // shadowSize:   [50, 64], // size of the shadow
-                    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                    // shadowAnchor: [4, 62],  // the same for the shadow
-                    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-                  });
+                  iconSize:     [32, 37], // size of the icon
+                  // shadowSize:   [50, 64], // size of the shadow
+                  iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                  // shadowAnchor: [4, 62],  // the same for the shadow
+                  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                });
 
-                  _setView(latlng)
+                _setView(latlng)
 
-                  return L.marker(latlng, {
-                    icon: markerIcon
-                  }); 
-                    
-                },
-                onEachFeature: function (feature, layer) {
-                    // 
-                } 
-            }
-        });
-
-      }, false, category, content, idpoi);
-
-      // console.log('route: ' + JSON.stringify(route));
-      // var geometry = $geo.parse(route);
-      /*
-      var geojson = {
-        "type": "Feature",
-        "geometry": geometry,
-        "properties": {
-          title: poi.title,
-          address: poi.address,
-          marker: poi.meta[1].value,
-          lat: poi.lat,
-          lon: poi.lon
-        }
-      };
-
-      leafletData.getMap('map_poi').then(function(map) {
-        var latlng = L.latLng(lat, lng);
-
-        layer_geojson = L.geoJson(geojson, {
-
-          onEachFeature: function (feature, layer) {
-            // map.fitBounds(layer.getBounds());
-          },
-
-          pointToLayer: function ( feature, latlng ) {
-
-            // console.log(JSON.stringify(feature.properties))
-            var icon_url = 'img/markers/' + feature.properties.marker;
-            console.log('Icon: ' + icon_url);
-
-            var markerIcon = L.icon({
-              iconUrl: icon_url,
-              // shadowUrl: 'leaf-shadow.png',
-
-              iconSize:     [32, 37], // size of the icon
-              // shadowSize:   [50, 64], // size of the shadow
-              iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-              // shadowAnchor: [4, 62],  // the same for the shadow
-              popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-            });
-
-            map.setView(latlng, 8);
-
-            return L.marker(latlng, {
-              icon: markerIcon
-            });
+                return L.marker(latlng, {
+                  icon: markerIcon
+                }); 
+                  
+              },
+              onEachFeature: function (feature, layer) {
+                  // 
+              } 
           }
-        });
-  
-        layer_geojson.addTo(map);
-        map.setView(latlng);
-        map.setZoom(10);
-        map.invalidateSize();
       });
-      */
+
+    }, options);
+
   };
 
   function _setView(latlng) {

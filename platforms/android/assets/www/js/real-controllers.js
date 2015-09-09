@@ -25,12 +25,12 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal, GeoJSON, leafletData) {
 
 	var test = {
-		state: true,
+		state: TEST.value,
 		value: function (random) {
 			if (random) {
 				return Math.floor((Math.random() * 360) + 1);
 			} else {
-				return 1;
+				return 1; // Direzione Nord
 			}
 		}
 	};
@@ -190,19 +190,21 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     };
 
     $scope.search = function () {
+    	_search();	
+    };
+
+    function _search() {
+    	$scope.magnetic_search = magnetic;
     	$scope.isSearch = true;
 		$scope.isPOI = false;
 		$scope.isError = false;
-       _getPois(magnetic);	
+       _getPois(magnetic);
     };
 
     // Hold Compass
     var el = angular.element('#compass');
     $ionicGesture.on('hold', function(e) {
-    	$scope.isSearch = true;
-		$scope.isPOI = false;
-		$scope.isError = false;
-       _getPois(magnetic);
+    	_search();
     }, el);
 
 
