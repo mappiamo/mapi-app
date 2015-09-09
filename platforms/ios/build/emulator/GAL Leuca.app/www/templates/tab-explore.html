@@ -12,18 +12,26 @@
       <div class="list card" 
            collection-repeat="route in routes">
 
-        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/explore/{{route._content}}/{{route._categories}}">
+        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/map/{{route._content}}/{{route._categories}}">
           <img src="{{route.image}}">
-          <h2 class="promo-heading">{{route.title}}</h2>
+          <h2 class="promo-heading">{{ route.title }}</h2>
+          <!--
           <p>{{route.description}}</p>
+          -->
         </a>
 
+        <!--
+          
         <div class="item tabs tabs-secondary tabs-icon-left">
+
           <a class="tab-item" href="#/tab/pois/{{ route._content }}/{{route._categories}}">
             <i class="icon ion-ios-location"></i>
             Punti di Interesse
           </a>
+          
         </div>
+        -->
+
       </div>
         
   </ion-content>

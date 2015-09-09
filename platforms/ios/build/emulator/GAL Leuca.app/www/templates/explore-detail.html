@@ -1,7 +1,7 @@
 <ion-view view-title="{{ title }}" hide-nav-bar="true">
-  <ion-header-bar align-title="left" class="bar-positive">
+  <ion-header-bar align-title="left" class="bar-calm">
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-navigate-outline" href="#/tab/explore"> Itinerari</a>
+    <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{ content }}/{{ category }}"></a>
   </div>
   <h1 class="title">{{ explore.title }}</h1>
 </ion-header-bar>
@@ -12,7 +12,8 @@
         <div class="item item-text-wrap">
           <h1 class="main-heading"> {{ explore.title }}</h1>
           <div ng-bind-html="explore.meta[12].value | stars"></div>
-          <h3 class="sub-heading"> Tempo di percorrenza <strong>{{ explore.meta[1].value }}</strong></h3>
+          <h3 class="sub-heading"> Tempo di percorrenza <strong>{{ explore.meta[1].value }}</strong>
+          </h3>
           
         </div>
 
@@ -71,10 +72,12 @@
         </div>
 
         <div class="item tabs tabs-secondary tabs-icon-left">
+          <!--
           <a class="tab-item" href="#/tab/pois/{{ content }}/{{ category }}">
             <i class="icon ion-ios-location"></i>
             Punti di Interesse
           </a>
+          -->
           <a class="tab-item" href="#" ng-click="share(explore.title, explore.meta[4].value, explore.meta[5].value)">
             <i class="icon ion-share"></i>
             Share

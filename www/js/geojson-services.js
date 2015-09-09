@@ -18,7 +18,7 @@
 
 var service = angular.module('gal.geojson', []);
 
-service.factory('GeoJSON', function (_, async, S, Gal, $geo) {
+service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 	var geojson_json = {
 
@@ -153,34 +153,48 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo) {
 
 			// console.log('Data to convert: ' + JSON.stringify(data));
 
-			this._pois_geojson(data, null, null, function (err) {
+			var options = {
+				all: true,  // tutti i POI
+		      	category: null, 
+		      	content: null, 
+		      	poi: null, 
+		      	filters: null,
+		      	nearest: true
+			};
+
+			this._pois_geojson(data, options, function (err) {
 				done(err, self.geojson_data);
-			}, true);
+			});
 		},
 
-		_pois_geojson: function (data, content, category, done, nearest) {
+		_pois_geojson: function (data, options, done) {
 
 			var self = this;
 			var co;
 			var ca;
 
+			console.log('start convert n.' + _.size(data));
+
 			async.each(data, function (item, callback) {
+
+				var isOk = true;
+
 				var it;
 
-				if (nearest) {
-					console.log(JSON.stringify(item));
+				if (options.nearest) {
+					// console.log(JSON.stringify(item));
 					it = item.item;
 					co = item.content._content;
 					ca = item.content._categories;
 				} else {
 					it = item;	
-					co = content;
-					ca = category;
+					co = options.content;
+					ca = options.category;
 				};
 
 				console.log('content-category: ' + co + ',' + ca);
-		        
-		        var geometry = $geo.parse(it.route);
+				
+				var geometry = $geo.parse(it.route);
 
 		        var feature = {
 		          "type": "Feature",
@@ -207,6 +221,7 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo) {
 		        };
 
 		        self.geojson_data.features.push(feature);
+			
 		        callback();
 
 		      }, function (err) {
@@ -218,48 +233,67 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo) {
 		      });
 		},
 
-		_pois: function (category, content, idpoi, done) {
+		_pois: function (category, options, done) {
 
 			var self = this;
 
-			console.log('search pois by ' + category + ' and ' + idpoi );
+			console.log('search pois by ' + category + ' and ' + options.poi );
 
-			Gal.poi(category, idpoi, function (err, data) {
+			Gal.poi(category, options.poi, function (err, data) {
 
-				console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
+
+				console.log('loaded pois. Start convert to geojson ... n.' + _.size(data));
 
 				var d;
 
 				if (typeof data.data === 'undefined') {
+					console.log('***> send data to geojson')
 					d = data;
 				} else {
-					d = data.data;
+					//d = data.data;
+					console.log('*** send data filtered to geojson filtered ... n.' + _.size(data.filtered));
+					d = data.filtered;
 				};
 
-				self._pois_geojson(d, content, category, done);
+				self._pois_geojson(d, options, done, false);
 		  	});
 
 		},
 
 		// crea il file geojson con tutti i punti di interesse per una categoria
-		pois: function (done, all, category, content, idpoi) {
+		pois: function (done, options) {
 
 			var self = this;
 
-			if (!all) {
+			/*
+
+				options
+				--------
+
+				all: false,  // tutti i POI
+		      	category: category, 
+		      	content: content, 
+		      	poi: null, 
+		      	
+			*/
+
+			if (!options.all) {
 				this.geojson_data.features = [];
-				self._pois(category, content, idpoi, function (err) {
+				self._pois(options.category, options, function (err) {
 					if (typeof done === 'function') {
+						// console.log('*** GeoJSON: ' + JSON.stringify(self.geojson_data));
 						done(err, self.geojson_data);
 					};
 				});
 			} else {
 				async.each(Gal.routes, function (item, callback) {
-					self._pois(item._categories, content, null, function (err) {
+					self._pois(item._categories, options, function (err) {
 						callback();
 					});
 				}, function (err) {
 					if (typeof done === 'function') {
+						console.log('*** GeoJSON All Pois: ' + JSON.stringify(self.geojson_data));
 						done(err, self.geojson_data);
 					}
 				});

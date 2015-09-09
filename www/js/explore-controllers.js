@@ -330,16 +330,6 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         $scope.explore = dt;
         $scope.dataOk = true;
 
-        // percorso dell'itinerario
-        // var geometry = $geo.parse(dt.route);
-        /*
-        geojson = {
-          "type": "Feature",
-          "geometry": geometry,
-          "properties": {}
-        };
-        */
-
         _geojson();
 
         // ----------------------------

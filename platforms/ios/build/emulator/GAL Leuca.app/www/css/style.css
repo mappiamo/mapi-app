@@ -86,7 +86,7 @@ p {
 .promo-heading {
   font-family:"NexaBold";
   text-transform: uppercase;
-  font-size: 48px;
+  font-size: 55px;
   line-height: 55px;
   color: #121212;
   padding-bottom: 15px;
@@ -201,6 +201,11 @@ p {
    width: 100%;
    height: 320px;
 }
+
+#map_compass {
+   width: 100%;
+   height: 1024px;
+};
 
 #map_poi {
    width: 100%;

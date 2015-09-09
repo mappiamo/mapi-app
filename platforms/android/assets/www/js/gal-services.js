@@ -380,7 +380,7 @@ angular.module('gal.services', [])
                       return item.id == idpoi;
                     });
 
-                    console.log('trovato -> ' + JSON.stringify(d));
+                    // console.log('trovato -> ' + JSON.stringify(d));
                   
                   } else {
                     d = data;
