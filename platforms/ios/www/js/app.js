@@ -85,7 +85,7 @@ angular.module('gal', ['ionic',
     //};
 
     if (window.ProgressIndicator) {
-      $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronia dei Dati", "Attendere qualche istante per sincronizzare i dati dal Server")
+      $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
     };
 
     DataSync.download(function (err, data, pois) {
@@ -93,9 +93,6 @@ angular.module('gal', ['ionic',
           if (window.ProgressIndicator) {
             $cordovaProgress.hide();
           };
-          //if (window.plugins.spinnerDialog) {
-          //  $cordovaSpinnerDialog.hide();
-          //};
     }, true);
 
   });

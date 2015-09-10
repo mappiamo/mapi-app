@@ -111,7 +111,7 @@ angular.module('gal', ['ionic',
 
 .constant('TEST', {
   url: 'test/data.json',  
-  value: true
+  value: false
 })
 
 .constant('DB', {

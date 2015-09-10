@@ -117,11 +117,13 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 			_setMagnetic(0);
 		};
 
-  	});
+		Geolocation.get(_onSuccess, _onError);
 
-  	if (!test.state) {
-		_startWatch();    
-	};
+		if (!test.state) {
+			_startWatch();    
+		};
+
+  	});
 
   	function _initMap () {
 
@@ -203,6 +205,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		$scope.isLocation = true;
 		Geolocation.save(result);
 
+		/*
 		angular.extend($scope, {
 	      center: {
 	        lat: result.coords.latitude,
@@ -230,6 +233,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	        map.invalidateSize();
 	    });
+		*/
 	};  
 
 	function _onError(err) {
@@ -326,11 +330,11 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 					console.log('Content: ' + s[0].content._content);
 
+					$scope.openMap();
+
 					_geojson(s);
 
 					_stopWatch();
-
-					$scope.openMap();
 
 				} else {
 					// non sono stati trovati punti di interesse
@@ -351,6 +355,8 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		// Geolocation.get(_onSuccess, _onError);
 
 		GeoJSON.poi_nearest(pois, function (err, data) {
+
+			console.log('GeoJSON: ' + JSON.stringify(data));
 
 			angular.extend($scope, {
 	            geojson: {

@@ -11,13 +11,14 @@ angular.module('gal.filters.services', [])
         var meta = poi.meta;
         var ret = false;
 
-        console.log('--------------------------------------');
-         // console.log('Item: ' + JSON.stringify(meta));
+        // console.log('--------------------------------------');
+        // console.log('Item: ' + JSON.stringify(meta));
         
         // categorie
         var cat_item = _.find(meta, function (item) {
           return item.name == 'categoria'
         });
+        
         if (typeof cat_item !== 'undefined') { 
           var cat = _.find(filters.categories, function(item){ 
             return (item.name == cat_item.value) && item.value;
