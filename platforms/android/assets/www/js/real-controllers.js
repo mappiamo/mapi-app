@@ -55,25 +55,36 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		longitude: 0
 	};
 
-	$ionicModal.fromTemplateUrl('templates/poi-list-modal.html', {
+	$scope.$on('$ionicView.beforeLeave', function() {
+		console.log('view before leave');
+		$scope.closeMap();
+	});
+
+	$scope.$on('$ionicView.leave', function() {
+		console.log('view leave');
+		_stopWatch();
+	});
+
+	$ionicModal.fromTemplateUrl('templates/real-map.html', {
 	    scope: $scope,
 	    animation: 'slide-in-up'
 	  }).then(function(modal) {
 	    $scope.modal = modal;
 	});
 	 
-	$scope.openModal = function() {
+	$scope.openMap = function() {
 		$scope.modal.show();
 	};
 
+	/*
 	$scope.viewInfo = function (id, idpoi, lat, lon) {
-		// $scope.closeModal();
 		console.log('view info');
 		_stopWatch();
 		window.location.href = '#/tab/poi/' + id + '/' + idpoi + '/' + lat + '/' + lon;
 	};
+	*/
 
-	$scope.closeModal = function() {
+	$scope.closeMap = function() {
 		$scope.isPOI = false;
 		$scope.modal.hide();
 	};
@@ -97,7 +108,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		// test = TEST.value;
 		
 		$scope.isSearch = false;
-		$scope.isPOI = false;
 		$scope.isError = false;
 		
 		if (test.state) {
@@ -117,7 +127,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	    console.log('init map');
 
-	    leafletData.getMap('map_explore').then(function(map) {
+	    leafletData.getMap('map_compass').then(function(map) {
 
 	      var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	      var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
@@ -200,6 +210,26 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	        zoom: 8
 	      }
 	    });
+
+	    leafletData.getMap('map_compass').then(function(map) {
+
+	      var ll = L.latLng(result.coords.latitude, result.coords.longitude);
+
+	        marker = L.userMarker(ll, {
+	          pulsing: true, 
+	          accuracy: 100, 
+	          smallIcon: true,
+	          opacity: 0.2
+	        });
+
+	        marker.bindPopup('La tua posizione');
+
+	        marker.addTo(map);
+
+	        map.setView([result.coords.latitude, result.coords.longitude], 9);
+
+	        map.invalidateSize();
+	    });
 	};  
 
 	function _onError(err) {
@@ -248,7 +278,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     function _search() {
     	$scope.magnetic_search = magnetic;
     	$scope.isSearch = true;
-		$scope.isPOI = false;
 		$scope.isError = false;
        _getPois(magnetic);
     };
@@ -259,10 +288,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     	_search();
     }, el);
 
-
     function _getPois(magnetic) {
-
-    	$scope.isCompass = false;
 
     	var direction = $utility._getDirection(magnetic);
     	
@@ -302,12 +328,10 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 					_geojson(s);
 
-					//$scope.pois = s;
-					$scope.isPOI = true;
+					$scope.openMap();
+
 				} else {
 					// non sono stati trovati punti di interesse
-					$scope.isPOI = false;
-					$scope.isError = true;
 					$scope.error_msg = 'Non ho trovato nessun Punto di interesse in direzione ' + $utility._getWindRose(magnetic, true);
 					$scope.isError = true;
 				};
@@ -318,9 +342,11 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		});
 	};
 
-	function _geojson(pois) {
+	$timeout(function() {
+    	$scope.closeMap(); //close the popup after 3 seconds for some reason
+  	}, 6000);
 
-		$scope.isCompass = false;
+	function _geojson(pois) {
 
 		GeoJSON.poi_nearest(pois, function (err, data) {
 
@@ -352,9 +378,9 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	                  console.log(JSON.stringify(feature.properties));
 
-	                  var descr = '<h3><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h3><br />' +
-                                '<p>' + feature.properties.address + '</p>';
-
+	                  var descr = '<h4><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
+                                  '<p>' + feature.properties.address + '</p>';
+                                  
 	                    return L.marker(latlng, {
 	                      icon: markerIcon
 	                    }).bindPopup(descr);
@@ -366,42 +392,46 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	            }
         	});
 
-			$scope.isCompass = true;
-
 		});
 
 	};
 
+	$scope.goPOI = function () {
+		$scope.closeModal();
+	};
+
 	function _setView(latlng) {
-	    leafletData.getMap('map_compass').then(function(map) {
+		leafletData.getMap('map_compass').then(function(map) {
 	      map.setView(latlng, 9);
 	    });
   	};	
 
 	function _stopWatch() {
 
-		watch.clearWatch();
-		
-		$cordovaDeviceOrientation.clearWatch(watch)
-	      .then(function(result) {
-	        // Success!
-	        console.log('stop watching Device Orientation');
-	      }, function(err) {
-	        // An error occurred
-	        console.log('errot to stop watching Device Orientation');
-	      });	
+		if (test.state) {
+			watch.clearWatch();
+			$cordovaDeviceOrientation.clearWatch(watch)
+		      .then(function(result) {
+		        // Success!
+		        console.log('stop watching Device Orientation');
+		      }, function(err) {
+		        // An error occurred
+		        console.log('errot to stop watching Device Orientation');
+		      });
+		};
+			
 	};
 
-	$scope.$on('$ionicView.leave', function() {
-		_stopWatch();
-	});
-
 	$timeout(function() {
+     	
      	if (test.state) {
      		var m = test.value(false);
 			_setMagnetic(m);
-     	}
-  	}, 1000);
+     	};
+
+     	$scope.closeMap();
+
+  	}, 6000);
 });
 
 ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest, MapBox) {

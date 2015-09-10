@@ -1,0 +1,19 @@
+<ion-modal-view>
+<ion-header-bar align-title="left" class="bar-positive">
+		<h1 class="title">Mappa del navigatore</h1>
+		<div class="buttons">
+			<button class="button" ng-click="closeMap()">Chiudi</button>
+		</div>
+    </ion-header-bar>
+	<ion-content>
+
+    	<div data-tap-disabled="true">
+				<leaflet id="map_compass"
+			       	 geojson="geojson"
+			       	 center="center"
+			         defaults="defaults">
+				</leaflet>	
+			</div>
+      
+    </ion-content>
+  </ion-modal-view>
