@@ -44,7 +44,7 @@ angular.module('gal', ['ionic',
                        'gal.images',
                        'base64'])
 
-.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaSpinnerDialog) {
   
   $ionicPlatform.ready(function() {
 
@@ -77,6 +77,20 @@ angular.module('gal', ['ionic',
           Geolocation.save(location);
     });
     */
+
+    // -------------------------------
+    // sincronia dei dati
+    if (window.cordova.plugins.spinnerDialog) {
+      $cordovaSpinnerDialog.show("Sincronia dei Dati","Attendere qualche istante per sincronizzare i dati dal Server", true);
+    };
+  
+    DataSync.download(function (err, data, pois) {
+          console.log('syncronizing ...');
+          if (window.cordova.plugins.spinnerDialog) {
+            $cordovaSpinnerDialog.hide();
+          };
+    }, true);
+
   });
 
 })

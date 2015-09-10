@@ -263,4 +263,7 @@
     <ItemGroup>
         <Compile Include="Plugins\nl.x-services.plugins.socialsharing\SocialSharing.cs" />
     </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\hu.dpal.phonegap.plugins.SpinnerDialog\SpinnerDialog.cs" />
+    </ItemGroup>
 </Project>

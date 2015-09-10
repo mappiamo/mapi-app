@@ -84,7 +84,7 @@ angular.module('gal.sync', [])
 				}, true);
 
 			}, function (err) {
-				console.log('saving poi done.');
+				console.log('saving poi ... n.' + _.size(pois_json));
 				pdb.bulkDocs(db, pois_json, function (err, response) {
 					console.log(JSON.stringify(response) + ' - Error: ' + err);
 					done(err, 'done');

@@ -43,6 +43,10 @@
                         {
                             "xml": "<feature name=\"SocialSharing\"><param name=\"wp-package\" value=\"SocialSharing\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SpinnerDialog\"><param name=\"wp-package\" value=\"SpinnerDialog\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -108,6 +112,12 @@
             "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
         },
         "nl.x-services.plugins.socialsharing": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "hu.dpal.phonegap.plugins.SpinnerDialog": {
+            "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
+        },
+        "org.pbernasconi.progressindicator": {
             "PACKAGE_NAME": "{c8fa34c0-53a8-11e5-995d-63b38dba3186}"
         }
     },

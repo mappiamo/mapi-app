@@ -59,6 +59,14 @@
                         {
                             "xml": "<feature name=\"SocialSharing\"><param name=\"ios-package\" value=\"SocialSharing\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SpinnerDialog\"><param name=\"ios-package\" value=\"CDVSpinnerDialog\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"ProgressIndicator\"><param name=\"ios-package\" value=\"ProgressIndicator\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -268,6 +276,12 @@
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "nl.x-services.plugins.socialsharing": {
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
+        },
+        "hu.dpal.phonegap.plugins.SpinnerDialog": {
+            "PACKAGE_NAME": "com.ionicframework.galleuca"
+        },
+        "org.pbernasconi.progressindicator": {
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         }
     },

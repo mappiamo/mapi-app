@@ -62,4 +62,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <feature name="SpinnerDialog">
+        <param name="wp-package" value="SpinnerDialog" />
+    </feature>
 </widget>

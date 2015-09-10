@@ -20,9 +20,8 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading) {
 
   $scope.dataOk = false;
-  var reset = true;
-  // var test = true;
-
+  var reset = false;
+  
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
   });

@@ -79,6 +79,10 @@
 		3B502DAC9EAB4F80A7EDD9FE /* SocialSharing.m in Sources */ = {isa = PBXBuildFile; fileRef = C941F139FA4C4CE798D6FD24 /* SocialSharing.m */; };
 		4C4819E22D164D449194E6D9 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F2DC8F6C2A2448DA3319853 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5AEE41594D034BEF9815B197 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D6D66FEB1544AD5A9814755 /* MessageUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		11C40823C3E64FF4A52D6717 /* CDVSpinnerDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2F2CEA1FEC4C2CB922B16E /* CDVSpinnerDialog.m */; };
+		0A833E41422C499FAB343A2C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 41EF2966C9C74243B9D78CD8 /* MBProgressHUD.m */; };
+		B73FE598EB9E499A96DDC70C /* ProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = D70F9671D0694D9F8ED013C3 /* ProgressIndicator.m */; };
+		E8C9E738A837459C8CCDF9BC /* ProgressIndicator.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9889113D7129498DB96BEFCE /* ProgressIndicator.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -205,6 +209,13 @@
 		BE6BC601BD0C4694BC401246 /* SocialSharing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SocialSharing.h"; path = "nl.x-services.plugins.socialsharing/SocialSharing.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		4F2DC8F6C2A2448DA3319853 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Social.framework"; path = "System/Library/Frameworks/Social.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 		5D6D66FEB1544AD5A9814755 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "MessageUI.framework"; path = "System/Library/Frameworks/MessageUI.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		AC2F2CEA1FEC4C2CB922B16E /* CDVSpinnerDialog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVSpinnerDialog.m"; path = "hu.dpal.phonegap.plugins.SpinnerDialog/CDVSpinnerDialog.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		C7605CB93D8347068FDEC5B6 /* CDVSpinnerDialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVSpinnerDialog.h"; path = "hu.dpal.phonegap.plugins.SpinnerDialog/CDVSpinnerDialog.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		41EF2966C9C74243B9D78CD8 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "MBProgressHUD.m"; path = "org.pbernasconi.progressindicator/MBProgressHUD.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		D70F9671D0694D9F8ED013C3 /* ProgressIndicator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "ProgressIndicator.m"; path = "org.pbernasconi.progressindicator/ProgressIndicator.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		F20E971CEE2147A8AD22523F /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MBProgressHUD.h"; path = "org.pbernasconi.progressindicator/MBProgressHUD.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		19AE8622CDA545BE992D648E /* ProgressIndicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ProgressIndicator.h"; path = "org.pbernasconi.progressindicator/ProgressIndicator.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		9889113D7129498DB96BEFCE /* ProgressIndicator.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "ProgressIndicator.bundle"; path = "ProgressIndicator.bundle"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,6 +310,7 @@
 				308D05311370CCF300D202BF /* splash */,
 				8D1107310486CEB800E47090 /* GAL Leuca-Info.plist */,
 				C08EABC2C7C04EF78ED07419 /* CDVNotification.bundle */,
+				9889113D7129498DB96BEFCE /* ProgressIndicator.bundle */,
 			);
 			name = Resources;
 			path = "GAL Leuca/Resources";
@@ -387,6 +399,12 @@
 				03C8212DD0A14835BDD9B0EE /* CDVBackgroundGeoLocation.h */,
 				C941F139FA4C4CE798D6FD24 /* SocialSharing.m */,
 				BE6BC601BD0C4694BC401246 /* SocialSharing.h */,
+				AC2F2CEA1FEC4C2CB922B16E /* CDVSpinnerDialog.m */,
+				C7605CB93D8347068FDEC5B6 /* CDVSpinnerDialog.h */,
+				41EF2966C9C74243B9D78CD8 /* MBProgressHUD.m */,
+				D70F9671D0694D9F8ED013C3 /* ProgressIndicator.m */,
+				F20E971CEE2147A8AD22523F /* MBProgressHUD.h */,
+				19AE8622CDA545BE992D648E /* ProgressIndicator.h */,
 			);
 			name = Plugins;
 			path = "GAL Leuca/Plugins";
@@ -546,6 +564,7 @@
 				7E7966E51810823500FA85AD /* icon-76@2x.png in Resources */,
 				30FC414916E50CA1004E6F35 /* icon-72@2x.png in Resources */,
 				EF79268D84554484A1B118D9 /* CDVNotification.bundle in Resources */,
+				E8C9E738A837459C8CCDF9BC /* ProgressIndicator.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -595,6 +614,9 @@
 				FA638A8059524F18B9F7F374 /* CDVFileTransfer.m in Sources */,
 				3C668B3AA368481C918224FC /* CDVBackgroundGeoLocation.m in Sources */,
 				3B502DAC9EAB4F80A7EDD9FE /* SocialSharing.m in Sources */,
+				11C40823C3E64FF4A52D6717 /* CDVSpinnerDialog.m in Sources */,
+				0A833E41422C499FAB343A2C /* MBProgressHUD.m in Sources */,
+				B73FE598EB9E499A96DDC70C /* ProgressIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -285,6 +285,13 @@ module.exports = [
         "clobbers": [
             "window.plugins.socialsharing"
         ]
+    },
+    {
+        "file": "plugins/hu.dpal.phonegap.plugins.SpinnerDialog/www/spinner.js",
+        "id": "hu.dpal.phonegap.plugins.SpinnerDialog.SpinnerDialog",
+        "merges": [
+            "window.plugins.spinnerDialog"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -303,7 +310,8 @@ module.exports.metadata =
     "org.apache.cordova.file": "1.3.3",
     "org.apache.cordova.file-transfer": "0.5.0",
     "org.transistorsoft.cordova.background-geolocation": "0.2.0",
-    "nl.x-services.plugins.socialsharing": "4.3.19"
+    "nl.x-services.plugins.socialsharing": "4.3.19",
+    "hu.dpal.phonegap.plugins.SpinnerDialog": "1.3.1"
 }
 // BOTTOM OF METADATA
 });

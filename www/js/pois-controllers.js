@@ -398,9 +398,11 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
                     }).bindPopup(descr);
                 },
                 onEachFeature: function (feature, layer) {
-                    if (feature.properties.type === 'route') {
-                      _setBounds(layer.getBounds());
-                    } 
+                  console.log('type: ' + feature.properties.type);
+                    if (feature.properties.type == 'route') {
+                      console.log('set bounds');
+                      _setBounds(layer);
+                    };
                 } 
               
             }
@@ -413,16 +415,12 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
   };
 
-  function _setBounds(bounds) {
-
+  function _setBounds(layer) {
     leafletData.getMap('map').then(function(map) {
-      // console.log('set zoom');
-      // console.log(map._layers);
-      map.fitBounds(bounds);
-      map.invalidateSize();
+      map.fitBounds(layer.getBounds());
       map.setZoom(12);
     });
-  }
+  };
 
   function _initMap () {
 
@@ -498,6 +496,8 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
   $scope.content = $stateParams.content;
   var category = $stateParams.category;
   $scope.category = $stateParams.category;
+
+  var layer_control;
 
   var idpoi = $stateParams.idpoi;
   var lat = $stateParams.lat;
@@ -610,6 +610,55 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
     console.log('error to get location ...')
   };
 
+  function _initMap () {
+
+    console.log('init map');
+
+    leafletData.getMap('map_poi').then(function(map) {
+
+      var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
+      var osm = new L.TileLayer(osmUrl, {
+        maxZoom: 18, 
+        attribution: osmAttribution
+      }).addTo(map);
+
+      if (layer_control) {
+        layer_control.removeFrom(map);
+      };
+                   
+      var options_weather_layer = {
+        showLegend: false, 
+        opacity: 0.2 
+      };
+
+      var clouds = L.OWM.clouds(options_weather_layer);
+      var city = L.OWM.current({intervall: 15, lang: 'it'});
+      var precipitation = L.OWM.precipitation(options_weather_layer);
+      var rain = L.OWM.rain(options_weather_layer);
+      var snow = L.OWM.snow(options_weather_layer);
+      var temp = L.OWM.temperature(options_weather_layer);
+      var wind = L.OWM.wind(options_weather_layer);
+
+      var baseMaps = { "OSM Standard": osm };
+      
+      var overlayMaps = { 
+        "Clouds": clouds, 
+        "Precipitazioni": precipitation,
+        "Neve": snow,
+        "Temperature": temp,
+        "vento": wind,
+        "Cities": city 
+      };
+
+      layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
+      
+      map.invalidateSize();
+
+    });
+
+  };
+
   function showSpinner (view, message) {
 
       var msg = '<ion-spinner icon="lines"></ion-spinner>';
@@ -629,6 +678,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
+      _initMap();
   });
 
   $scope.$on('$ionicView.enter', function(e) {
@@ -646,7 +696,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
       defaults: {
         scrollWheelZoom: false
       }
-    });
+  });
 
   function _refresh() {
 
@@ -718,7 +768,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
                   popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                 });
 
-                _setView(latlng)
+                _setView(latlng);
 
                 return L.marker(latlng, {
                   icon: markerIcon
@@ -727,13 +777,13 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
               },
               onEachFeature: function (feature, layer) {
                   // 
-              } 
+              }
           }
       });
 
     }, options);
 
-  };
+  };  
 
   function _setView(latlng) {
     leafletData.getMap('map_poi').then(function(map) {

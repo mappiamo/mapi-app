@@ -20,9 +20,8 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading) {
 
   $scope.dataOk = false;
-  var reset = true;
-  // var test = true;
-
+  var reset = false;
+  
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
   });
@@ -122,9 +121,8 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   var it = Gal.getRoute(content);
 
-  var geojson;
-  var layer_geojson;
   var color;
+  var layer_control;
 
   $scope.isMedia = false;
   $scope.dataOk = false;
@@ -135,11 +133,61 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
       Geolocation.get(_onSuccess, _onError);
+      _initMap();
   });
 
   $scope.$on('$ionicView.enter', function(e) {
     _refresh();
   });
+
+  function _initMap () {
+
+    console.log('init map');
+
+    leafletData.getMap('map_explore').then(function(map) {
+
+      var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      var osmAttribution = 'Map data © OpenStreetMap contributors, CC-BY-SA';
+      var osm = new L.TileLayer(osmUrl, {
+        maxZoom: 18, 
+        attribution: osmAttribution
+      }).addTo(map);
+
+      if (layer_control) {
+        layer_control.removeFrom(map);
+      };
+                   
+      var options_weather_layer = {
+        showLegend: false, 
+        opacity: 0.2 
+      };
+
+      var clouds = L.OWM.clouds(options_weather_layer);
+      var city = L.OWM.current({intervall: 15, lang: 'it'});
+      var precipitation = L.OWM.precipitation(options_weather_layer);
+      var rain = L.OWM.rain(options_weather_layer);
+      var snow = L.OWM.snow(options_weather_layer);
+      var temp = L.OWM.temperature(options_weather_layer);
+      var wind = L.OWM.wind(options_weather_layer);
+
+      var baseMaps = { "OSM Standard": osm };
+      
+      var overlayMaps = { 
+        "Clouds": clouds, 
+        "Precipitazioni": precipitation,
+        "Neve": snow,
+        "Temperature": temp,
+        "vento": wind,
+        "Cities": city 
+      };
+
+      layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
+      
+      map.invalidateSize();
+
+    });
+
+  };
 
   // ------------------------------------
   // Social sharing
