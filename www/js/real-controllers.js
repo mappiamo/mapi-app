@@ -58,11 +58,11 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$scope.$on('$ionicView.beforeLeave', function() {
 		console.log('view before leave');
 		$scope.closeMap();
+		_stopWatch();
 	});
 
 	$scope.$on('$ionicView.leave', function() {
 		console.log('view leave');
-		_stopWatch();
 	});
 
 	$ionicModal.fromTemplateUrl('templates/real-map.html', {
@@ -117,11 +117,11 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 			_setMagnetic(0);
 		};
 
-      	Geolocation.get(_onSuccess, _onError);
-
-      	_initMap();
-
   	});
+
+  	if (!test.state) {
+		_startWatch();    
+	};
 
   	function _initMap () {
 
@@ -236,14 +236,14 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		console.log('error to orientation');
 	};
 	
-	// Compass 
-	var options = {
-      frequency: 3000,
-      filter: true     // if frequency is set, filter is ignored
-    }
+	function _startWatch() {
+		// Compass 
+		var options = {
+	      frequency: 3000,
+	      filter: true     // if frequency is set, filter is ignored
+	    };
 
-    if (!test.state) {
-	    watch = $cordovaDeviceOrientation.watchHeading(options).then(
+    	watch = $cordovaDeviceOrientation.watchHeading(options).then(
 	      null,
 	      function(error) {
 	        // An error occurred
@@ -256,7 +256,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	        timeStamp = result.timestamp;
 	        _setMagnetic(result.magneticHeading);
 	    });
-	};
+    };
 
     function _setMagnetic(m) {
     	console.log('Magnetic Heading: ' + m);
@@ -328,6 +328,8 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 					_geojson(s);
 
+					_stopWatch();
+
 					$scope.openMap();
 
 				} else {
@@ -342,11 +344,11 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		});
 	};
 
-	$timeout(function() {
-    	$scope.closeMap(); //close the popup after 3 seconds for some reason
-  	}, 6000);
-
 	function _geojson(pois) {
+
+		_initMap();
+
+		// Geolocation.get(_onSuccess, _onError);
 
 		GeoJSON.poi_nearest(pois, function (err, data) {
 
@@ -408,18 +410,18 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	function _stopWatch() {
 
-		if (test.state) {
-			watch.clearWatch();
+		if (!test.state) {
+			// watch.clearWatch();
 			$cordovaDeviceOrientation.clearWatch(watch)
 		      .then(function(result) {
 		        // Success!
 		        console.log('stop watching Device Orientation');
 		      }, function(err) {
 		        // An error occurred
-		        console.log('errot to stop watching Device Orientation');
+		        console.log('error to stop watching Device Orientation');
 		      });
 		};
-			
+
 	};
 
 	$timeout(function() {
@@ -567,7 +569,7 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletDa
 
 	function _geojson(geojson) {
 
-		var bounds = [];
+	var bounds = [];
 
       leafletData.getMap('map_route').then(function(map) {
 
