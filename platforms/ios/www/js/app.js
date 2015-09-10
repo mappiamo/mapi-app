@@ -44,7 +44,7 @@ angular.module('gal', ['ionic',
                        'gal.images',
                        'base64'])
 
-.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaSpinnerDialog) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync) {
   
   $ionicPlatform.ready(function() {
 
@@ -80,15 +80,22 @@ angular.module('gal', ['ionic',
 
     // -------------------------------
     // sincronia dei dati
-    if (window.cordova.plugins.spinnerDialog) {
-      $cordovaSpinnerDialog.show("Sincronia dei Dati","Attendere qualche istante per sincronizzare i dati dal Server", true);
+    //if (window.plugins.spinnerDialog) {
+    //  $cordovaSpinnerDialog.show("Sincronia dei Dati","Attendere qualche istante per sincronizzare i dati dal Server", true);
+    //};
+
+    if (window.ProgressIndicator) {
+      $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronia dei Dati", "Attendere qualche istante per sincronizzare i dati dal Server")
     };
-  
+
     DataSync.download(function (err, data, pois) {
-          console.log('syncronizing ...');
-          if (window.cordova.plugins.spinnerDialog) {
-            $cordovaSpinnerDialog.hide();
+          console.log('syncronizing ok ...');
+          if (window.ProgressIndicator) {
+            $cordovaProgress.hide();
           };
+          //if (window.plugins.spinnerDialog) {
+          //  $cordovaSpinnerDialog.hide();
+          //};
     }, true);
 
   });
@@ -107,7 +114,7 @@ angular.module('gal', ['ionic',
 
 .constant('TEST', {
   url: 'test/data.json',  
-  value: false
+  value: true
 })
 
 .constant('DB', {
@@ -117,6 +124,7 @@ angular.module('gal', ['ionic',
 .constant('MAPPIAMO', {
   jsonp: '&callback=JSON_CALLBACK',
   content: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=',
+  contentWeb: 'http://itinerari.galcapodileuca.it/index.php?module=content&object=',
   poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=',
   web: 'http://itinerari.galcapodileuca.it',
   img: 'img/logo/logo-gal.jpg',

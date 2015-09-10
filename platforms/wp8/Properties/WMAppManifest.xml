@@ -4,7 +4,7 @@
     <Languages xmlns="">
         <Language code="en-US" />
     </Languages>
-    <App Author="Mappiamo" BitsPerPixel="32" Description="Applicazione del GAL Capo S.Maria di Leuca" Genre="apps.normal" ProductID="{c8fa34c0-53a8-11e5-995d-63b38dba3186}" Publisher="Mappiamo" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="GAL Leuca" Version="1.2.1" xmlns="">
+    <App Author="Mappiamo" BitsPerPixel="32" Description="Applicazione del GAL Capo S.Maria di Leuca" Genre="apps.normal" ProductID="{927311e0-57b5-11e5-864d-7bea3ac5c929}" Publisher="Mappiamo" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="GAL Leuca" Version="1.3.1" xmlns="">
         <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
         <Capabilities>
             <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />

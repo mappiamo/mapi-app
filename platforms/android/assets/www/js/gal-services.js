@@ -246,7 +246,7 @@ angular.module('gal.services', [])
       var self = this; 
 
       if (idpoi != null) {
-        console.log('filter poi by :' + idpoi);
+        console.log('search POI by :' + idpoi);
 
         var d = _.filter(data.data, function (item) {
           return item.id == idpoi;
@@ -254,12 +254,14 @@ angular.module('gal.services', [])
 
         // console.log('trovato -> ' + JSON.stringify(d));
         done(false, d);
+
       } else {
         console.log('trovati n.' + _.size(data) + ' poi per l\'itinerario ' + name);
         self._setFilters(data, function (err, data) {
           console.log('data filtered Ok.')
           done(err, data);
         });
+
       };
 
     },
@@ -287,34 +289,16 @@ angular.module('gal.services', [])
               
               // var d;
 
-              self._send_pois(idpoi, data, function (err, response) {
-                self.decodeHTML(response.data, function (err) {
-                  self.setFilters(response, function (err, data) {
+              dt.data = data;
+
+              self._send_pois(idpoi, dt, function (err, response) {
+                self.decodeHTML(response, function (err, response2) {
+                  self._setFilters(response2, function (err, response3) {
                     console.log('data filtered Ok.')
-                    callback(err, data);
+                    callback(err, response3);
                   });
                 });
-                
               });
-
-              /*
-              if (idpoi != null) {
-                console.log('filter poi by :' + idpoi);
-
-                d = _.filter(data, function (item) {
-                  return item.id == idpoi;
-                });
-
-                console.log('trovato -> ' + JSON.stringify(d));
-              
-              } else {
-                d = data;
-                console.log('trovati n.' + _.size(d) + ' poi per l\'itinerario ' + name);
-              };
-
-              dt.data = d;
-              */
-              
               
           })
           .error(function(data, status, headers, config) {
@@ -368,11 +352,11 @@ angular.module('gal.services', [])
 
     decodeHTML: function (data, done) {
       
-      async.each(data, function (item, callback) {
+      async.each(data.data, function (item, callback) {
         item.text = S(S(item.text).stripTags().s).decodeHTMLEntities().s;
         callback();
       }, function (err) {
-        done(err);
+        done(err, data);
       });
 
     },

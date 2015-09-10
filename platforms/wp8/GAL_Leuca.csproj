@@ -252,6 +252,12 @@
         <Compile Include="Plugins\cordova-plugin-splashscreen\ResolutionHelper.cs" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Plugins\hu.dpal.phonegap.plugins.SpinnerDialog\SpinnerDialog.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\nl.x-services.plugins.socialsharing\SocialSharing.cs" />
+    </ItemGroup>
+    <ItemGroup>
         <Compile Include="Plugins\org.apache.cordova.console\DebugConsole.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -259,11 +265,5 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Plugins\org.apache.cordova.file-transfer\FileTransfer.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\nl.x-services.plugins.socialsharing\SocialSharing.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\hu.dpal.phonegap.plugins.SpinnerDialog\SpinnerDialog.cs" />
     </ItemGroup>
 </Project>

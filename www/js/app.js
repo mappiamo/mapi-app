@@ -114,7 +114,7 @@ angular.module('gal', ['ionic',
 
 .constant('TEST', {
   url: 'test/data.json',  
-  value: false
+  value: true
 })
 
 .constant('DB', {
@@ -124,6 +124,7 @@ angular.module('gal', ['ionic',
 .constant('MAPPIAMO', {
   jsonp: '&callback=JSON_CALLBACK',
   content: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=',
+  contentWeb: 'http://itinerari.galcapodileuca.it/index.php?module=content&object=',
   poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=',
   web: 'http://itinerari.galcapodileuca.it',
   img: 'img/logo/logo-gal.jpg',

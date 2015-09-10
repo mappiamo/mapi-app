@@ -16,7 +16,9 @@ angular.module('gal', ['ionic',
                        'ngCordova', 
                        'gal.home.controllers', 
                        'gal.real.controllers', 
-                       'gal.explore.controllers', 
+                       'gal.explore.controllers',
+                       'gal.pois.controllers', 
+                       'gal.filters.services',
                        'gal.services', 
                        'gal.filters', 
                        'gal.weather.services', 
@@ -42,7 +44,7 @@ angular.module('gal', ['ionic',
                        'gal.images',
                        'base64'])
 
-.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync) {
   
   $ionicPlatform.ready(function() {
 
@@ -75,6 +77,27 @@ angular.module('gal', ['ionic',
           Geolocation.save(location);
     });
     */
+
+    // -------------------------------
+    // sincronia dei dati
+    //if (window.plugins.spinnerDialog) {
+    //  $cordovaSpinnerDialog.show("Sincronia dei Dati","Attendere qualche istante per sincronizzare i dati dal Server", true);
+    //};
+
+    if (window.ProgressIndicator) {
+      $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronia dei Dati", "Attendere qualche istante per sincronizzare i dati dal Server")
+    };
+
+    DataSync.download(function (err, data, pois) {
+          console.log('syncronizing ok ...');
+          if (window.ProgressIndicator) {
+            $cordovaProgress.hide();
+          };
+          //if (window.plugins.spinnerDialog) {
+          //  $cordovaSpinnerDialog.hide();
+          //};
+    }, true);
+
   });
 
 })
@@ -101,6 +124,7 @@ angular.module('gal', ['ionic',
 .constant('MAPPIAMO', {
   jsonp: '&callback=JSON_CALLBACK',
   content: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=',
+  contentWeb: 'http://itinerari.galcapodileuca.it/index.php?module=content&object=',
   poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=',
   web: 'http://itinerari.galcapodileuca.it',
   img: 'img/logo/logo-gal.jpg',
@@ -222,21 +246,11 @@ angular.module('gal', ['ionic',
     })
 
     .state('tab.route', {
-      url: '/route/:id/:idpoi/:lat/:lng',
+      url: '/route/:content/:category/:idpoi/:lat/:lng',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-route.html',
           controller: 'RealMapCtrl'
-        }
-      }
-    })
-
-    .state('tab.search', {
-      url: '/search',
-      views: {
-        'tab-search': {
-          templateUrl: 'templates/tab-search.html',
-          controller: 'SearchCtrl'
         }
       }
     });

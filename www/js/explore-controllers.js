@@ -194,7 +194,8 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   $scope.share = function(title, start, end) {
 
-    var msg = 'Itinerario: ' + title + ', ' + start + '-' + end + ' ' + MAPPIAMO.hashtag;
+    var msg = 'Itinerario: ' + title + ' ' + MAPPIAMO.hashtag + 
+              ' ' + MAPPIAMO.contentWeb + content;
 
     console.log('Sharing: ' + msg);
 
