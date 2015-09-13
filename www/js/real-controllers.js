@@ -16,7 +16,8 @@ ctrls.controller('RealCameraCtrl', function ($scope, Gal, $cordovaDeviceMotion, 
 
 	$scope.$on('$ionicView.beforeEnter', function() {
 		console.log('calling wikitude ...');
-		// $wikitude.start();
+		$wikitude.start();
+		$wikitude.startWorld();
 	});
     
 });

@@ -16,50 +16,42 @@ angular.module('wikitude.plugin', [])
 .factory("$AR", function () {
 	return {
 		get: function () {
-			return AR;
+			return window.AR;
+		},
+		constant: function () {
+			return window.AR.CONST
 		},
 		imageResource: function (image) {
-			return new AR.ImageResource(image);
+			return new window.AR.ImageResource(image);
 		},
 		context: function () {
-			return AR.context
+			return window.AR.context
+		},
+		geoLocation: function (lat, lng, alt) {
+			return new window.AR.GeoLocation(lat, lng, alt);
+		},
+		imageDrawable: function (marker, num, options) {
+			return new window.AR.ImageDrawable(marker, num, options);	
+		},
+		label: function (title, num, options) {
+			return new window.AR.Label(title, num, options);
+		},
+		geoObject: function (marker, options) {
+			return new window.AR.GeoObject(marker, options);
+		},
+		propertyAnimation: function (marker, text, object, num, type) {
+			return new window.AR.PropertyAnimation(marker, text, object, num, type);
+		},
+		animationGroup: function (constant, array) {
+			return new window.AR.AnimationGroup(constant, array)
+		},
+		logger: function (log) {
+			return window.AR.logger.debug(log);
 		}
 	};
 })
 
-.factory("$wikitudeMarkerJS", function () {
-	return {
-		m: null,
-		create: function (poi) {
-			var m = new Marker(poi);
-			return m;
-		},
-		get: function () {
-			return m;
-		}
-	}
-})
-
-/*
-.factory("$wikitudeWorldJS", function () {
-	return {
-		w: null,
-		get: function () {
-			console.log('getting world');
-			var w = window.World;
-			return w;
-		},
-		initialize: function (onLocationChanged, onScreenClick) {
-			console.log('initializing world');
-			var w = this.get();
-			w.initialize(onLocationChanged, onScreenClick);
-		}
-	}
-})
-*/
-
-/*
-.factory("$wikitudeMarker", function (S) {
+.factory("$wikitudeMarker", function (S, $AR) {
 	
 	var Marker = {
 		
@@ -74,8 +66,10 @@ angular.module('wikitude.plugin', [])
     	markerObject: null,
     	kMarker_AnimationDuration_ChangeDrawable: 500,
 		kMarker_AnimationDuration_Resize: 1000,
+		markerDrawable_idle: null,
+		markerDrawable_selected: null,
 		
-		initialize: function (poiData, marker_idle, marker_directionIndicator, onclick) {
+		initialize: function (poiData) {
 
 			var self = this;
 
@@ -85,18 +79,17 @@ angular.module('wikitude.plugin', [])
     		this.animationGroup_selected = null;
 
     		// create the AR.GeoLocation from the poi data
-		    var markerLocation = new AR.GeoLocation(poiData.latitude, poiData.longitude, poiData.altitude);
+		    var markerLocation = $AR.geoLocation(poiData.latitude, poiData.longitude, poiData.altitude);
 
 		    // create an AR.ImageDrawable for the marker in idle state
-		    this.markerDrawable_idle = new AR.ImageDrawable(marker_idle, 2.5, {
+		    this.markerDrawable_idle = $AR.imageDrawable(marker_idle, 2.5, {
 		        zOrder: 0,
 		        opacity: 1.0,
-		    
 		        onClick: self.getOnClickTrigger(this, onclick)
 		    });
 
 		    // create an AR.ImageDrawable for the marker in selected state
-		    this.markerDrawable_selected = new AR.ImageDrawable(marker, 2.5, {
+		    this.markerDrawable_selected = $AR.imageDrawable(marker, 2.5, {
 		        zOrder: 0,
 		        opacity: 0.0,
 		        onClick: null
@@ -105,19 +98,19 @@ angular.module('wikitude.plugin', [])
 		    var title = S(poiData.title).truncate(10).s
 
 		    // create an AR.Label for the marker's title 
-		    this.titleLabel = new AR.Label(title, 1, {
+		    this.titleLabel = $AR.label(title, 1, {
 		        zOrder: 1,
 		        offsetY: 0.55,
 		        style: {
 		            textColor: '#FFFFFF',
-		            fontStyle: AR.CONST.FONT_STYLE.BOLD
+		            fontStyle: $AR.constant().FONT_STYLE.BOLD
 		        }
 		    });
 
 		    var sdescr = S(poiData.description).truncate(15).s; 
 
 		    // create an AR.Label for the marker's description
-		    this.descriptionLabel = new AR.Label(sdescr, 0.8, {
+		    this.descriptionLabel = $AR.label(sdescr, 0.8, {
 		        zOrder: 1,
 		        offsetY: -0.55,
 		        style: {
@@ -125,12 +118,12 @@ angular.module('wikitude.plugin', [])
 		        }
 		    });
 
-		    this.directionIndicatorDrawable = new AR.ImageDrawable(marker_directionIndicator, 0.1, {
+		    this.directionIndicatorDrawable = $AR.imageDrawable(marker_directionIndicator, 0.1, {
 		        enabled: false,
-		        verticalAnchor: AR.CONST.VERTICAL_ANCHOR.TOP
+		        verticalAnchor: $AR.constant().VERTICAL_ANCHOR.TOP
 		    });
 
-		    this.markerObject = new AR.GeoObject(markerLocation, {
+		    this.markerObject = $AR.geoObject(markerLocation, {
 		        drawables: {
 		            cam: [self.markerDrawable_idle, self.markerDrawable_selected, self.titleLabel, self.descriptionLabel],
 		            indicator: self.directionIndicatorDrawable
@@ -154,7 +147,7 @@ angular.module('wikitude.plugin', [])
                 	}
             	}
         	} else {
-            	AR.logger.debug('a animation is already running');
+            	$AR.logger('a animation is already running');
         	};
 		},
 
@@ -166,28 +159,28 @@ angular.module('wikitude.plugin', [])
 		    if (marker.animationGroup_selected === null) {
 
 		        // create AR.PropertyAnimation that animates the opacity to 0.0 in order to hide the idle-state-drawable
-		        var hideIdleDrawableAnimation = new AR.PropertyAnimation(marker.markerDrawable_idle, "opacity", null, 0.0, kMarker_AnimationDuration_ChangeDrawable);
+		        var hideIdleDrawableAnimation = $AR.propertyAnimation(marker.markerDrawable_idle, "opacity", null, 0.0, kMarker_AnimationDuration_ChangeDrawable);
 		        // create AR.PropertyAnimation that animates the opacity to 1.0 in order to show the selected-state-drawable
-		        var showSelectedDrawableAnimation = new AR.PropertyAnimation(marker.markerDrawable_selected, "opacity", null, 1.0, kMarker_AnimationDuration_ChangeDrawable);
+		        var showSelectedDrawableAnimation = $AR.propertyAnimation(marker.markerDrawable_selected, "opacity", null, 1.0, kMarker_AnimationDuration_ChangeDrawable);
 
 		        // create AR.PropertyAnimation that animates the scaling of the idle-state-drawable to 1.2
-		        var idleDrawableResizeAnimation = new AR.PropertyAnimation(marker.markerDrawable_idle, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var idleDrawableResizeAnimation = $AR.propertyAnimation(marker.markerDrawable_idle, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 		        // create AR.PropertyAnimation that animates the scaling of the selected-state-drawable to 1.2
-		        var selectedDrawableResizeAnimation = new AR.PropertyAnimation(marker.markerDrawable_selected, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var selectedDrawableResizeAnimation = $AR.propertyAnimation(marker.markerDrawable_selected, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 		        // create AR.PropertyAnimation that animates the scaling of the title label to 1.2
-		        var titleLabelResizeAnimation = new AR.PropertyAnimation(marker.titleLabel, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var titleLabelResizeAnimation = $AR.propertyAnimation(marker.titleLabel, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 		        // create AR.PropertyAnimation that animates the scaling of the description label to 1.2
-		        var descriptionLabelResizeAnimation = new AR.PropertyAnimation(marker.descriptionLabel, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var descriptionLabelResizeAnimation = $AR.propertyAnimation(marker.descriptionLabel, 'scaling', null, 1.2, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 
-		        marker.animationGroup_selected = new AR.AnimationGroup(AR.CONST.ANIMATION_GROUP_TYPE.PARALLEL, [hideIdleDrawableAnimation, showSelectedDrawableAnimation, idleDrawableResizeAnimation, selectedDrawableResizeAnimation, titleLabelResizeAnimation, descriptionLabelResizeAnimation]);
+		        marker.animationGroup_selected = $AR.animationGroup(AR.CONST.ANIMATION_GROUP_TYPE.PARALLEL, [hideIdleDrawableAnimation, showSelectedDrawableAnimation, idleDrawableResizeAnimation, selectedDrawableResizeAnimation, titleLabelResizeAnimation, descriptionLabelResizeAnimation]);
 		    }
 
 		    // removes function that is set on the onClick trigger of the idle-state marker
@@ -208,27 +201,27 @@ angular.module('wikitude.plugin', [])
 		    if (marker.animationGroup_idle === null) {
 
 		        // create AR.PropertyAnimation that animates the opacity to 1.0 in order to show the idle-state-drawable
-		        var showIdleDrawableAnimation = new AR.PropertyAnimation(marker.markerDrawable_idle, "opacity", null, 1.0, kMarker_AnimationDuration_ChangeDrawable);
+		        var showIdleDrawableAnimation = $AR.propertyAnimation(marker.markerDrawable_idle, "opacity", null, 1.0, kMarker_AnimationDuration_ChangeDrawable);
 		        // create AR.PropertyAnimation that animates the opacity to 0.0 in order to hide the selected-state-drawable
-		        var hideSelectedDrawableAnimation = new AR.PropertyAnimation(marker.markerDrawable_selected, "opacity", null, 0, kMarker_AnimationDuration_ChangeDrawable);
+		        var hideSelectedDrawableAnimation = $AR.propertyAnimation(marker.markerDrawable_selected, "opacity", null, 0, kMarker_AnimationDuration_ChangeDrawable);
 		        // create AR.PropertyAnimation that animates the scaling of the idle-state-drawable to 1.0
-		        var idleDrawableResizeAnimation = new AR.PropertyAnimation(marker.markerDrawable_idle, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var idleDrawableResizeAnimation = $AR.propertyAnimation(marker.markerDrawable_idle, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 		        // create AR.PropertyAnimation that animates the scaling of the selected-state-drawable to 1.0
-		        var selectedDrawableResizeAnimation = new AR.PropertyAnimation(marker.markerDrawable_selected, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var selectedDrawableResizeAnimation = $AR.propertyAnimation(marker.markerDrawable_selected, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 		        // create AR.PropertyAnimation that animates the scaling of the title label to 1.0
-		        var titleLabelResizeAnimation = new AR.PropertyAnimation(marker.titleLabel, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var titleLabelResizeAnimation = $AR.propertyAnimation(marker.titleLabel, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 		        // create AR.PropertyAnimation that animates the scaling of the description label to 1.0
-		        var descriptionLabelResizeAnimation = new AR.PropertyAnimation(marker.descriptionLabel, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
+		        var descriptionLabelResizeAnimation = $AR.propertyAnimation(marker.descriptionLabel, 'scaling', null, 1.0, kMarker_AnimationDuration_Resize, new AR.EasingCurve(AR.CONST.EASING_CURVE_TYPE.EASE_OUT_ELASTIC, {
 		            amplitude: 2.0
 		        }));
 
-		        marker.animationGroup_idle = new AR.AnimationGroup(AR.CONST.ANIMATION_GROUP_TYPE.PARALLEL, [showIdleDrawableAnimation, hideSelectedDrawableAnimation, idleDrawableResizeAnimation, selectedDrawableResizeAnimation, titleLabelResizeAnimation, descriptionLabelResizeAnimation]);
+		        marker.animationGroup_idle = $AR.animationGroup(AR.CONST.ANIMATION_GROUP_TYPE.PARALLEL, [showIdleDrawableAnimation, hideSelectedDrawableAnimation, idleDrawableResizeAnimation, selectedDrawableResizeAnimation, titleLabelResizeAnimation, descriptionLabelResizeAnimation]);
 		    }
 
 		    // sets the click trigger function for the idle state marker
@@ -258,13 +251,11 @@ angular.module('wikitude.plugin', [])
 
 	return Marker;
 })
-*/
 
-/*
 .factory("$wikitudeWorld", function ($wikitudeMarker, Gal, _) {
 
 	// implementation of AR-Experience (aka "World")
-	var World_json = {
+	var World = {
 		// you may request new data from server periodically, however: in this sample data is only requested once
 		isRequestingData: false,
 
@@ -312,7 +303,7 @@ angular.module('wikitude.plugin', [])
 				};
 
 				console.log('load World ... add marker ');
-				World.markerList.push(new $wikitudeMarker(singlePoi));
+				World.markerList.push($wikitudeMarker.initialize(singlePoi));
 			}
 
 			var msg = currentPlaceNr + ' places loaded';
@@ -360,6 +351,24 @@ angular.module('wikitude.plugin', [])
 		// request POI data
 		request: function (centerPointLatitude, centerPointLongitude) {
 			
+			var poisToCreate = 20;
+			var poiData = [];
+
+			for (var i = 0; i < poisToCreate; i++) {
+				poiData.push({
+					"id": (i + 1),
+					"longitude": (centerPointLongitude + (Math.random() / 5 - 0.1)),
+					"latitude": (centerPointLatitude + (Math.random() / 5 - 0.1)),
+					"description": ("This is the description of POI#" + (i + 1)),
+					// use this value to ignore altitude information in general - marker will always be on user-level
+					"altitude": 0,
+					"name": ("POI#" + (i + 1))
+				});
+			};
+
+			World.load(poiData);
+
+			/*
 			Gal.poi_latlng(function (err, data) {
 				var poiData = _.find(data, function (item) {
 					return item.latitude == centerPointLatitude &&
@@ -368,26 +377,26 @@ angular.module('wikitude.plugin', [])
 				console.log('founded n.' + _.size(poiData) + ' by ' + centerPointLatitude + ',' + centerPointLongitude);
 				World.load(poiData);	
 			});
+			*/
 		},
 
 		initialize: function () {
 			console.log('initialize World: onLocationChanged');
 			
-			AR.context.onLocationChanged = World._locationChanged;
+			$AR.context().onLocationChanged = World._locationChanged;
 
 			console.log('initialize World: onScreenClick');
 			
-			AR.context.onScreenClick = World.onScreenClick;
+			$AR.context().onScreenClick = World.onScreenClick;
 			
 			console.log('initialize World Ok.');
 		}
 
 	};
 
-	return World_json;
+	return World;
 
 })
-*/
 
 .factory("$wikitude", function ($ionicPlatform, $wikitudeMarkerJS, Geolocation, Gal, async, $AR) {
 		
@@ -504,10 +513,7 @@ angular.module('wikitude.plugin', [])
     		var self = this;
 
     		if (this.initiallyLoadedData) {
-				/* 
-					requestDataFromLocal with the geo information as parameters (latitude, longitude) creates different poi data to a random location in the user's vicinity.
-				*/
-
+				
 				Gal.poi_latlng(function (err, pois_data) {
 					console.log('get data POIs Ok.');
 					
@@ -520,36 +526,11 @@ angular.module('wikitude.plugin', [])
 
 				});
 
-				// $wikitudeWorldJS.requestDataFromLocal(lat, lon);
 				this.initiallyLoadedData = true;
 			};
 
     	},
-    	/*
-    	onSuccessLocation: function (result) {
-			
-			console.log('success geolocation');
-			
-			wikitude.location.latitude = result.coords.latitude;
-			wikitude.location.longitude = result.coords.longitude;
-			
-			Geolocation.save(result);
-
-			console.log('--- init world AR --- ');
-			$wikitudeWorld.initialize();
-			
-			Gal.poi_latlng(function (err, pois_data) {
-				console.log('get data POIs Ok.');
-				$wikitudeWorld.load(pois_data, function (message) {
-					console.log(message);
-				})
-			});
-		},  
-
-		onErrorLocation: function(err) {
-			console.log('error to orientation');
-		},
-		*/
+    	
 		onUrlInvoke: function (url) {
 			console.log('Wikitude AR => PhoneGap ' + url);
     	}
