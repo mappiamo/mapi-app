@@ -127,15 +127,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.wikitude.phonegap.WikitudePlugin": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Wikitude/wikitude-cordova-plugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "org.apache.cordova.console": {
         "source": {
             "type": "registry",
@@ -167,6 +158,58 @@
             "type": "git",
             "url": "https://github.com/pbernasconi/cordova-progressIndicator.git",
             "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.wikitude.phonegap.WikitudePlugin": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Wikitude/wikitude-cordova-plugin.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-appavailability": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ohh2ahh/AppAvailability.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.lampa.startapp": {
+        "source": {
+            "type": "registry",
+            "id": "com.lampa.startapp"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.device": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.device"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-customurlscheme": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-customurlscheme"
+        },
+        "is_top_level": true,
+        "variables": {
+            "URL_SCHEME": "galleuca"
+        }
+    },
+    "org.apache.cordova.network-information": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.network-information"
         },
         "is_top_level": true,
         "variables": {}

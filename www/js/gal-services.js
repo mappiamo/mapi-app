@@ -31,13 +31,18 @@ angular.module('gal.services', [])
       return it;
     },
 
+    events: [],
+
     // itinerari
     routes:[
       {
         title: 'Paduli',
         _content: '539',
         _categories: '37',
+        _content_en: '543',
+        _categories_en: '85',
         name: 'Paduli',
+        style: '{ background-color: #00CCCC }',
         image: 'img/itinerari/paduli.jpg',
         description: 'Un percorso che si snoda lungo sei comuni del basso Salento, partendo da Nociglia, il comune più a nord, per toccare Montesano Salentino, Miggiano, Taurisano, Ruffano e Specchia.'
       },
@@ -45,6 +50,9 @@ angular.module('gal.services', [])
         title: 'Fede',
         _content: '538',
         _categories: '11',
+        _content_en: '542',
+        _categories_en: '62',
+        style: '{ background-color: #FF00FF }',
         name: 'Fede',
         image: 'img/itinerari/fede.jpg',
         description: 'Un affascinante percorso costellato di chiese rurali, cripte, luoghi di ristoro, attraversando una campagna ricca di quelle testimonianze rurali tipiche del territorio salentino.'
@@ -53,6 +61,9 @@ angular.module('gal.services', [])
         title: 'Naturalistico/Archeologico',
         _content: '541',
         _categories: '57',
+        _content_en: '545',
+        _categories_en: '103',
+        style: '{ background-color: #68B42E }',
         name: 'Naturalistico\/archeologico',
         image: 'img/itinerari/natura.jpg',
         description: 'Un percorso che attraversa i comuni di Ugento, Salve, Morciano di Leuca, Presicce ed Acquarica del Capo, fino a raggiungere il famoso Parco Naturale Litorale di Ugento.'
@@ -61,6 +72,9 @@ angular.module('gal.services', [])
         title: 'Falesie',
         _content: '540',
         _categories: '54',
+        _content_en: '544',
+        _categories_en: '99',
+        style: '{ background-color: #CC9999 }',
         name: 'Falesie',
         image: 'img/itinerari/falesie.jpg',
         description: 'Un percorso che si dispiega lungo la costa adriatica del Capo di Leuca, un paesaggio spettacolare dove il mare e la terra quasi si scontrano lungo la linea di costa, alta, rocciosa, costellata di grotte e insenature.'
@@ -317,7 +331,7 @@ angular.module('gal.services', [])
         function (callback) {
           $filters.get(function (err, f) {
             console.log('Filters on StartUp: ----------------')
-            console.log(JSON.stringify(f));
+            // console.log(JSON.stringify(f));
             filters = f;
             callback();
           });

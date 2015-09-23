@@ -47,6 +47,10 @@
                         {
                             "xml": "<feature name=\"FileTransfer\"><param name=\"wp-package\" value=\"FileTransfer\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"wp-package\" value=\"NetworkStatus\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -65,6 +69,10 @@
                         {
                             "xml": "<Capability Name=\"ID_CAP_LOCATION\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_NETWORKING\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -73,9 +81,6 @@
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
-        },
-        "com.wikitude.phonegap.WikitudePlugin": {
             "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
         },
         "cordova-plugin-device": {
@@ -118,6 +123,22 @@
             "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
         },
         "org.transistorsoft.cordova.background-geolocation": {
+            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
+        },
+        "com.wikitude.phonegap.WikitudePlugin": {
+            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
+        },
+        "cordova-plugin-appavailability": {
+            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
+        },
+        "com.lampa.startapp": {
+            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
+        },
+        "cordova-plugin-customurlscheme": {
+            "URL_SCHEME": "galleuca",
+            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
+        },
+        "org.apache.cordova.network-information": {
             "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
         }
     },

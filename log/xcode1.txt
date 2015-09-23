@@ -1,0 +1,123 @@
+2015-09-14 17:42:01.226 GAL Leuca[3698:273774] Apache Cordova native platform version 3.9.1 is starting.
+2015-09-14 17:42:01.230 GAL Leuca[3698:273774] Multi-tasking -> Device: YES, App: YES
+2015-09-14 17:42:01.245 GAL Leuca[3698:273774] Unlimited access to network resources
+2015-09-14 17:42:01.628 GAL Leuca[3698:273774] [CDVTimer][keyboard] 0.491977ms
+2015-09-14 17:42:01.902 GAL Leuca[3698:273774] [CDVTimer][splashscreen] 272.678971ms
+2015-09-14 17:42:01.993 GAL Leuca[3698:273774] [CDVTimer][socialsharing] 90.806961ms
+2015-09-14 17:42:02.104 GAL Leuca[3698:273774] [CDVTimer][file] 109.294951ms
+2015-09-14 17:42:02.104 GAL Leuca[3698:273774] [CDVTimer][TotalPluginStartup] 476.740003ms
+2015-09-14 17:42:02.463 GAL Leuca[3698:273774] Resetting plugins due to page load.
+2015-09-14 17:42:09.222 GAL Leuca[3698:273774] THREAD WARNING: ['Device'] took '28.261963' ms. Plugin should use a background thread.
+2015-09-14 17:42:09.445 GAL Leuca[3698:273774] Finished load of: file:///private/var/mobile/Containers/Bundle/Application/564D9A1C-72C2-42CB-BD12-9E30505DACE4/GAL%20Leuca.app/www/index.html#/tab/explore
+2015-09-14 17:42:09.529 GAL Leuca[3698:273774] THREAD WARNING: ['File'] took '23.044922' ms. Plugin should use a background thread.
+2015-09-14 17:42:09.712 GAL Leuca[3698:273774] deviceready has not fired after 5 seconds.
+2015-09-14 17:42:09.713 GAL Leuca[3698:273774] Channel not fired: onFileSystemPathsReady
+2015-09-14 17:42:09.723 GAL Leuca[3698:273774] starting wikitude ....
+2015-09-14 17:42:09.724 GAL Leuca[3698:273774] wikitude initializing...
+2015-09-14 17:42:09.725 GAL Leuca[3698:273774] platform ready...
+2015-09-14 17:42:10.158 GAL Leuca[3698:273774] THREAD WARNING: ['WikitudePlugin'] took '432.419922' ms. Plugin should use a background thread.
+2015-09-14 17:42:10.229 GAL Leuca[3698:273774] THREAD WARNING: ['ProgressIndicator'] took '68.539062' ms. Plugin should use a background thread.
+2015-09-14 17:42:10.401 GAL Leuca[3698:273774] wikitude device supported checking ...
+2015-09-14 17:42:10.429 GAL Leuca[3698:273774] THREAD WARNING: ['WikitudePlugin'] took '27.072266' ms. Plugin should use a background thread.
+2015-09-14 17:42:11.819 GAL Leuca[3698:273774] THREAD WARNING: ['WikitudePlugin'] took '1385.664795' ms. Plugin should use a background thread.
+2015-09-14 17:42:11.829 GAL Leuca[3698:273774] wikitude device supported check OK.
+2015-09-14 17:42:11.830 GAL Leuca[3698:273774] wikitude start ...
+2015-09-14 17:42:11.831 GAL Leuca[3698:273774] getting data by url
+2015-09-14 17:42:11.832 GAL Leuca[3698:273774] getting data by http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=539&callback=JSON_CALLBACK
+2015-09-14 17:42:11.833 GAL Leuca[3698:273774] getting data by url
+2015-09-14 17:42:11.834 GAL Leuca[3698:273774] getting data by http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=538&callback=JSON_CALLBACK
+2015-09-14 17:42:11.835 GAL Leuca[3698:273774] getting data by url
+2015-09-14 17:42:11.836 GAL Leuca[3698:273774] getting data by http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=541&callback=JSON_CALLBACK
+2015-09-14 17:42:12.051 GAL Leuca[3698:273774] 
+
+2015-09-14 17:42:12.053 GAL Leuca[3698:273774]  
+2015-09-14 17:42:12.060 GAL Leuca[3698:273774] ----------------- Wikitude SDK REQUIREMENT NOT FULFILLED -----------------
+2015-09-14 17:42:12.062 GAL Leuca[3698:273774] CoreLocation Authorization Status is not determined - All ARchitect World load requests are on hold!
+2015-09-14 17:42:12.063 GAL Leuca[3698:273774] This problem occurs because you've called the method 'loadArchitecteWorldFromURL:withRequiredFeatures:' with a feature that contains Geo Requirements.
+2015-09-14 17:42:12.064 GAL Leuca[3698:273774] To resolve this problem, either accept the iOS location access prompt or make sure that the 'NSLocationWhenInUseUsageDescription' key is defined in your applications Info.plist.
+2015-09-14 17:42:12.065 GAL Leuca[3698:273774] Set the key's value to e.g. 'Access to GPS information is needed to display POIs around your current location'.
+2015-09-14 17:42:12.066 GAL Leuca[3698:273774] Affected URL's: 
+2015-09-14 17:42:12.067 GAL Leuca[3698:273774] 	URL: file:///private/var/mobile/Containers/Bundle/Application/564D9A1C-72C2-42CB-BD12-9E30505DACE4/GAL%20Leuca.app/www/templates/poi-real-camera.html
+2015-09-14 17:42:12.068 GAL Leuca[3698:273774] --------------------------------------------------------------------------
+2015-09-14 17:42:12.068 GAL Leuca[3698:273774] 
+
+2015-09-14 17:42:12.098 GAL Leuca[3698:273774] getting data by url
+2015-09-14 17:42:12.099 GAL Leuca[3698:273774] getting data by http://itinerari.galcapodileuca.it/index.php?module=api&task=content&object=540&callback=JSON_CALLBACK
+2015-09-14 17:42:16.346 GAL Leuca[3698:273774] Received memory warning.
+2015-09-14 17:42:17.997 GAL Leuca[3698:273774] Wikitude Loaded Successful OK: 
+2015-09-14 17:42:18.979 GAL Leuca[3698:273774] {"doc_count":0,"update_seq":0,"sqlite_plugin":false,"websql_encoding":"UTF-8","db_name":"galleuca","auto_compaction":false}
+2015-09-14 17:42:20.002 GAL Leuca[3698:273774] [{"ok":true,"id":"539","rev":"1-8d3185e9787fe3b47e5ce8205962b136"},{"ok":true,"id":"538","rev":"1-87c0412ba3a6df16102914cbf633745d"},{"ok":true,"id":"541","rev":"1-3143023ab7bca463c1c9b629a004b078"},{"ok":true,"id":"540","rev":"1-62b3d54b0cc95e43652ef208ca3bc2e7"}]
+2015-09-14 17:42:20.004 GAL Leuca[3698:273774] [{"ok":true,"id":"539","rev":"1-8d3185e9787fe3b47e5ce8205962b136"},{"ok":true,"id":"538","rev":"1-87c0412ba3a6df16102914cbf633745d"},{"ok":true,"id":"541","rev":"1-3143023ab7bca463c1c9b629a004b078"},{"ok":true,"id":"540","rev":"1-62b3d54b0cc95e43652ef208ca3bc2e7"}] - Error: false
+2015-09-14 17:42:20.006 GAL Leuca[3698:273774] getting data POI by url
+2015-09-14 17:42:20.007 GAL Leuca[3698:273774] getting data by: http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=37&callback=JSON_CALLBACK
+2015-09-14 17:42:20.008 GAL Leuca[3698:273774] getting data POI by url
+2015-09-14 17:42:20.009 GAL Leuca[3698:273774] getting data by: http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=11&callback=JSON_CALLBACK
+2015-09-14 17:42:20.010 GAL Leuca[3698:273774] getting data POI by url
+2015-09-14 17:42:20.011 GAL Leuca[3698:273774] getting data by: http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=57&callback=JSON_CALLBACK
+2015-09-14 17:42:20.012 GAL Leuca[3698:273774] getting data POI by url
+2015-09-14 17:42:20.013 GAL Leuca[3698:273774] getting data by: http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=54&callback=JSON_CALLBACK
+2015-09-14 17:42:21.389 GAL Leuca[3698:273774] trovati n.4 poi per l'itinerario 
+2015-09-14 17:42:21.391 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:22.413 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:22.414 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:22.415 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:22.416 GAL Leuca[3698:273774] object filtered n.52
+2015-09-14 17:42:22.417 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:22.417 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:22.418 GAL Leuca[3698:273774] trovati n.4 poi per l'itinerario 
+2015-09-14 17:42:22.419 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:22.819 GAL Leuca[3698:273774] trovati n.4 poi per l'itinerario 
+2015-09-14 17:42:22.820 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:23.237 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:23.238 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:23.240 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:23.241 GAL Leuca[3698:273774] object filtered n.52
+2015-09-14 17:42:23.241 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:23.242 GAL Leuca[3698:273774] saving poi n:4
+2015-09-14 17:42:23.243 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:23.244 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:23.248 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:23.249 GAL Leuca[3698:273774] object filtered n.41
+2015-09-14 17:42:23.249 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:23.250 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:23.251 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:23.252 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:23.253 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:23.254 GAL Leuca[3698:273774] object filtered n.39
+2015-09-14 17:42:23.265 GAL Leuca[3698:273774] THREAD WARNING: ['Console'] took '11.528076' ms. Plugin should use a background thread.
+2015-09-14 17:42:23.266 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:23.267 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:23.393 GAL Leuca[3698:273774] trovati n.4 poi per l'itinerario 
+2015-09-14 17:42:23.394 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:24.013 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:24.015 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:24.016 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:24.018 GAL Leuca[3698:273774] object filtered n.41
+2015-09-14 17:42:24.019 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:24.020 GAL Leuca[3698:273774] saving poi n:4
+2015-09-14 17:42:24.020 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:24.021 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:24.023 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:24.024 GAL Leuca[3698:273774] object filtered n.39
+2015-09-14 17:42:24.025 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:24.025 GAL Leuca[3698:273774] saving poi n:4
+2015-09-14 17:42:24.027 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:24.029 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:24.032 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:24.034 GAL Leuca[3698:273774] object filtered n.27
+2015-09-14 17:42:24.034 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:24.035 GAL Leuca[3698:273774] getting doc by id: filters
+2015-09-14 17:42:28.557 GAL Leuca[3698:273774] error to get: {"status":404,"name":"not_found","message":"missing"}
+2015-09-14 17:42:28.558 GAL Leuca[3698:273774] Filters on StartUp: ----------------
+2015-09-14 17:42:28.559 GAL Leuca[3698:273774] start filter ...
+2015-09-14 17:42:28.560 GAL Leuca[3698:273774] object filtered n.27
+2015-09-14 17:42:28.561 GAL Leuca[3698:273774] data filtered Ok.
+2015-09-14 17:42:28.562 GAL Leuca[3698:273774] saving poi n:4
+2015-09-14 17:42:28.563 GAL Leuca[3698:273774] saving poi ... n.4
+2015-09-14 17:42:31.015 GAL Leuca[3698:273774] [{"ok":true,"id":"11_pois","rev":"1-bba72ac4af14967ad0bdfeb1315bec26"},{"ok":true,"id":"57_pois","rev":"1-827bc4af299488a20f4300c0f5f06e61"},{"ok":true,"id":"54_pois","rev":"1-ceb912fcd5544fdfdb2c060727b70a6f"},{"ok":true,"id":"37_pois","rev":"1-6bfeaaf746cfd487bb16aef028822b7a"}]
+2015-09-14 17:42:31.016 GAL Leuca[3698:273774] [{"ok":true,"id":"11_pois","rev":"1-bba72ac4af14967ad0bdfeb1315bec26"},{"ok":true,"id":"57_pois","rev":"1-827bc4af299488a20f4300c0f5f06e61"},{"ok":true,"id":"54_pois","rev":"1-ceb912fcd5544fdfdb2c060727b70a6f"},{"ok":true,"id":"37_pois","rev":"1-6bfeaaf746cfd487bb16aef028822b7a"}] - Error: false
+2015-09-14 17:42:31.018 GAL Leuca[3698:273774] done download
+2015-09-14 17:42:31.019 GAL Leuca[3698:273774] data n.4
+2015-09-14 17:42:31.019 GAL Leuca[3698:273774] pois n.4
+2015-09-14 17:42:31.020 GAL Leuca[3698:273774] syncronizing ok ...
+2015-09-14 17:42:40.149 GAL Leuca[3698:273774] Received memory warning.

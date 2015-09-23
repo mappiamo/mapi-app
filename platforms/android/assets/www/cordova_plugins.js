@@ -8,13 +8,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.wikitude.phonegap.WikitudePlugin/www/WikitudePlugin.js",
-        "id": "com.wikitude.phonegap.WikitudePlugin.WikitudePlugin",
-        "clobbers": [
-            "WikitudePlugin"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-device/www/device.js",
         "id": "cordova-plugin-device.device",
         "clobbers": [
@@ -269,13 +262,55 @@ module.exports = [
         "clobbers": [
             "plugins.backgroundGeoLocation"
         ]
+    },
+    {
+        "file": "plugins/com.wikitude.phonegap.WikitudePlugin/www/WikitudePlugin.js",
+        "id": "com.wikitude.phonegap.WikitudePlugin.WikitudePlugin",
+        "clobbers": [
+            "WikitudePlugin"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-appavailability/www/AppAvailability.js",
+        "id": "cordova-plugin-appavailability.AppAvailability",
+        "clobbers": [
+            "appAvailability"
+        ]
+    },
+    {
+        "file": "plugins/com.lampa.startapp/www/startApp.js",
+        "id": "com.lampa.startapp.startapp",
+        "merges": [
+            "navigator.startApp"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-customurlscheme/www/android/LaunchMyApp.js",
+        "id": "cordova-plugin-customurlscheme.LaunchMyApp",
+        "clobbers": [
+            "window.plugins.launchmyapp"
+        ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.network-information/www/network.js",
+        "id": "org.apache.cordova.network-information.network",
+        "clobbers": [
+            "navigator.connection",
+            "navigator.network.connection"
+        ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.network-information/www/Connection.js",
+        "id": "org.apache.cordova.network-information.Connection",
+        "clobbers": [
+            "Connection"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
     "com.ionic.keyboard": "1.0.4",
-    "com.wikitude.phonegap.WikitudePlugin": "4.1.0",
     "cordova-plugin-device": "1.0.1",
     "cordova-plugin-device-motion": "1.1.1",
     "cordova-plugin-device-orientation": "1.0.1",
@@ -289,7 +324,12 @@ module.exports.metadata =
     "org.apache.cordova.file": "1.3.3",
     "org.apache.cordova.file-transfer": "0.5.0",
     "org.pbernasconi.progressindicator": "1.1.0",
-    "org.transistorsoft.cordova.background-geolocation": "0.2.0"
+    "org.transistorsoft.cordova.background-geolocation": "0.2.0",
+    "com.wikitude.phonegap.WikitudePlugin": "4.1.0",
+    "cordova-plugin-appavailability": "0.4.2",
+    "com.lampa.startapp": "0.0.5",
+    "cordova-plugin-customurlscheme": "4.0.0",
+    "org.apache.cordova.network-information": "0.2.15"
 }
 // BOTTOM OF METADATA
 });

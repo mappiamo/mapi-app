@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.galleuca" version="1.3.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.galleuca" version="1.3.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>GAL Leuca</name>
   <description>
         Applicazione del GAL Capo S.Maria di Leuca
@@ -13,7 +13,7 @@
   <allow-navigation href="https://*/*"/>
   <allow-navigation href="data:*"/>
   <allow-navigation href="blob:*"/>
-  <allow-navigation href="architect://*"/>
+  <allow-navigation href="architect://architect.js"/>
   <allow-navigation href="http://itinerari.galcapodileuca.it/*" />
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
@@ -25,6 +25,7 @@
   <allow-intent href="data:*"/>
   <allow-intent href="blob:*"/>
   <allow-intent href="http://itinerari.galcapodileuca.it/*" />
+  <allow-intent href="architect://architect.js"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

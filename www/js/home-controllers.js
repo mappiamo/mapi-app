@@ -66,49 +66,13 @@ ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geol
     $scope.showConfirm();
   };
 
-  /*
-
-  {
-    "dt":1437998400,
-    "main":{
-      "temp":29.87,
-      "temp_min":28.61,
-      "temp_max":29.87,
-      "pressure":1021.71,
-      "sea_level":1022.06,
-      "grnd_level":1021.71,
-      "humidity":94,
-      "temp_kf":1.26
-    },
-    "weather":[{
-      "id":800,
-      "main":"Clear",
-      "description":"sky is clear",
-      "icon":"01d"
-      }],
-    "clouds":{
-        "all":0
-      },
-    "wind":{
-        "speed":3.36,
-        "deg":280.003
-      },
-    "sys":{
-        "pod":"d"
-      },
-    "dt_txt":
-        "2015-07-27 12:00:00"
-  }
-
-  */
-
   $scope.dataOk = false;
   $scope.isLocated = false;
   $scope.bg = Math.floor((Math.random() * 3) + 1);
 
   var location = Geolocation.location();
 
-  _refresh();
+  // _refresh();
 
   $scope.$on('$ionicView.beforeEnter', function() {
     // showSpinner(true);
@@ -198,35 +162,6 @@ ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geol
       }
   };
 
-  function _refresh() {
-
-    Gal.weather(function (err, data) {
-      
-      if (!err) {
-
-        console.log('location: ' + JSON.stringify(location));
-        // console.log('Weather: ' + JSON.stringify(data));
-
-        var d_sorted = _.sortBy(data, function (item) {
-          return Geolocation.distance(item.item.lat, item.item.lng);
-        });
-
-        // $scope.weathers = d_sorted;
-
-        // console.log('Weather: ' + JSON.stringify(d_sorted[0]))
-
-        console.log(JSON.stringify(d_sorted[0].forecast[3].weather));
-
-        $scope.weather_near = d_sorted[0];
-
-        $scope.dataOk = true;
-        $scope.isLocated = true;
-      };
-
-      showSpinner(false);
-
-    }); 
-  };
 });
 
 // Ricerca dei contenuti

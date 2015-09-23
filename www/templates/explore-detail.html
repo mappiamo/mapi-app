@@ -1,9 +1,13 @@
 <ion-view view-title="{{ title }}" hide-nav-bar="true">
   <ion-header-bar align-title="left" class="bar-positive">
   
-  <div class="button-bar">
-    <a class="button button-icon icon ion-ios-location" href="#/tab/map/{{ content }}/{{ category }}"></a>
+  <div class="buttons">
+    <a class="button button-icon icon ion-ios-arrow-back" href="#/tab/map/{{ content }}/{{ category }}"></a>
+  </div>
+    <h1 class="title">Dettaglio itinerario</h1>
+  <div class="buttons">
     <a class="button button-icon icon ion-share" ng-click="share(explore.title, explore.meta[4].value, explore.meta[5].value)"></a>
+  </div>
     
   </div>
 

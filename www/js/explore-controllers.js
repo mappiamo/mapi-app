@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -25,6 +25,40 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
   });
+
+  // **********************************
+  // Controllo la connessione
+
+  // listen for Online event
+  /*
+
+  var isOnline = $cordovaNetwork.isOnline()
+  var isOffline = $cordovaNetwork.isOffline()
+
+  $scope.$on('$cordovaNetwork:online', function(event, networkState){
+    var onlineState = networkState;
+  })
+
+  // listen for Offline event
+  $scope.$on('$cordovaNetwork:offline', function(event, networkState){
+    var offlineState = networkState;
+  });
+  */
+
+  /*
+  var type = $cordovaNetwork.getNetwork()
+  
+  if (!type.UNKNOWN && !type.NONE) {
+    // esegue il download dei dati solo se esiste una connessione
+    DataSync.download(function (err, data, pois) {
+          console.log('syncronizing ok ...');
+          if (window.ProgressIndicator) {
+            $cordovaProgress.hide();
+          };
+    }, true);
+  };
+  */
+  // **********************************
 
   $scope.showConfirm = function() {
     var confirmPopup = $ionicPopup.confirm({

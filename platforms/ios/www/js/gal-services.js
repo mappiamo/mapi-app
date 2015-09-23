@@ -317,7 +317,7 @@ angular.module('gal.services', [])
         function (callback) {
           $filters.get(function (err, f) {
             console.log('Filters on StartUp: ----------------')
-            console.log(JSON.stringify(f));
+            // console.log(JSON.stringify(f));
             filters = f;
             callback();
           });

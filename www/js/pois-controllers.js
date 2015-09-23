@@ -22,6 +22,9 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
   
   $scope.content = $stateParams.content;
 
+  var content_item = Gal.getRoute($scope.content);
+  $scope.title = content_item.title;
+
   $scope.category = $stateParams.category;
 
   var it = Gal.getRoute($scope.content);
@@ -90,7 +93,11 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
         
         // console.log(JSON.stringify(data.data));
 
-        var d_sorted = _.sortBy(data.filtered, function (item) {
+        var d_place = _.filter(data.filtered, function (item) {
+          return item.type != "route"
+        });
+
+        var d_sorted = _.sortBy(d_place, function (item) {
           return Geolocation.distance(item.lat, item.lon);
         });
 
@@ -463,12 +470,12 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
       var baseMaps = { "OSM Standard": osm };
       
       var overlayMaps = { 
-        "Clouds": clouds, 
-        "Precipitazioni": precipitation,
-        "Neve": snow,
-        "Temperature": temp,
-        "vento": wind,
-        "Cities": city 
+        // "Clouds": clouds, 
+        // "Precipitazioni": precipitation,
+        // "Neve": snow,
+        // "Temperature": temp,
+        // "vento": wind,
+        "Meteo": city 
       };
 
       layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);

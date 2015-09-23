@@ -39,12 +39,13 @@ angular.module('gal', ['ionic',
                        'jquery.plugin.imagedata',
                        'jquery.geo',
                        'wikitude.plugin',
-                       //'wikitude.directive',
                        'ionic.cordova.plugin',
                        'gal.images',
-                       'base64'])
+                       'base64',
+                       'angularLoad',
+                       'gal.startApp'])
 
-.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
   $ionicPlatform.ready(function() {
 
@@ -80,21 +81,11 @@ angular.module('gal', ['ionic',
 
     // -------------------------------
     // sincronia dei dati
-    //if (window.plugins.spinnerDialog) {
-    //  $cordovaSpinnerDialog.show("Sincronia dei Dati","Attendere qualche istante per sincronizzare i dati dal Server", true);
-    //};
-
+    
     if (window.ProgressIndicator) {
       $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
     };
-
-    DataSync.download(function (err, data, pois) {
-          console.log('syncronizing ok ...');
-          if (window.ProgressIndicator) {
-            $cordovaProgress.hide();
-          };
-    }, true);
-
+    
   });
 
 })
@@ -147,10 +138,11 @@ angular.module('gal', ['ionic',
   $stateProvider
 
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/tabs.html'
+    templateUrl: 'templates/tabs.html',
+    controller: 'HomeCtrl'
   })
 
   // Each tab has its own nav history stack:
