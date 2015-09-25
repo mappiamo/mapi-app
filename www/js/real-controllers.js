@@ -14,51 +14,55 @@ var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-direct
 
 ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, $cordovaAppAvailability) {
 
-	var deviceInfo = {
-    	device: $cordovaDevice.getDevice(),
-    	cordova: $cordovaDevice.getCordova(),
-    	model: $cordovaDevice.getModel(),
-    	platform: $cordovaDevice.getPlatform(),
-    	UUID: $cordovaDevice.getUUID(),
-    	version: $cordovaDevice.getVersion()
-    };
+	try {
+	    var deviceInfo = {
+	    	device: $cordovaDevice.getDevice(),
+	    	cordova: $cordovaDevice.getCordova(),
+	    	model: $cordovaDevice.getModel(),
+	    	platform: $cordovaDevice.getPlatform(),
+	    	UUID: $cordovaDevice.getUUID(),
+	    	version: $cordovaDevice.getVersion()
+	    };
 
-    console.log(JSON.stringify($scope.deviceInfo));
+	    console.log(JSON.stringify($scope.deviceInfo));
 
-	if (deviceInfo.platform == 'Android') {
-		var nameApp = "com.mappiamo.galleuca";
-		console.log('run App: ' + nameApp);
-		_runApp(nameApp);
-	} else if (deviceInfo.platform == 'iOS') {
-		var nameApp = "galreality://";
-		console.log('run App: ' + nameApp);
-		_runApp(nameApp);
-	} else {
-		$scope.message = 'Questa funzione è disponibile solo per sistemi Android e IOS';
+		if (deviceInfo.platform == 'Android') {
+			var nameApp = "com.mappiamo.galleuca";
+			console.log('run App: ' + nameApp);
+			_runApp(nameApp);
+		} else if (deviceInfo.platform == 'iOS') {
+			var nameApp = "galreality://";
+			console.log('run App: ' + nameApp);
+			_runApp(nameApp);
+		} else {
+			$scope.message = 'Questa funzione è disponibile solo per sistemi Android e IOS';
+		};
+
+		$scope.devicePlatform = deviceInfo.platform;
+		$scope.deviceVersion = deviceInfo.version;
+		$scope.deviceModel = deviceInfo.model;
+
+		function _runApp (nameApp) {
+			$scope.message = 'Avvio Realtà Aumentata...';
+			
+			$cordovaAppAvailability.check(nameApp)
+				.then(function() {
+					// is available
+					$scope.message = 'App trovata';
+					$startApp.run(nameApp, function (err, message) {
+						$scope.message = message;
+					});
+				}, function () {
+					// not available
+					$scope.message = 'Non ho trovato l\'App Gal Leuca Reality';
+			});
+		  	
+
+		};
+	}
+	catch(err) {
+	    console.log('device don\'t start');
 	};
-
-	$scope.devicePlatform = deviceInfo.platform;
-	$scope.deviceVersion = deviceInfo.version;
-	$scope.deviceModel = deviceInfo.model;
-
-	function _runApp (nameApp) {
-		$scope.message = 'Avvio Realtà Aumentata...';
-		
-		$cordovaAppAvailability.check(nameApp)
-			.then(function() {
-				// is available
-				$scope.message = 'App trovata';
-				$startApp.run(nameApp, function (err, message) {
-					$scope.message = message;
-				});
-			}, function () {
-				// not available
-				$scope.message = 'Non ho trovato l\'App Gal Leuca Reality';
-		});
-	  	
-
-	};
-
     
 });
 

@@ -1,0 +1,235 @@
+
+/*************************
+* HOME EXAMPLE CSS
+*************************/
+
+.ion-social-facebook {
+  color: rgb(59, 89, 152);
+}
+
+.ion-android-playstore {
+  color: rgb(104, 159, 56);
+}
+
+.ion-ios-home {
+  color: rgb(255, 90, 95);
+}
+
+.ion-fork {
+  color: rgb(3, 155, 229);
+}
+
+/*************************
+* DISH EXAMPLE CSS
+*************************/
+
+.dish .button-positive,
+.dish .bar.bar-footer.bar-positive,
+.dish .bar-positive {
+  background-color: rgb(3, 155, 229);
+}
+ 
+.dish .button-positive {
+  border-color: rgb(3, 155, 229);
+}
+
+.dish .cover-img {
+  background-repeat: no-repeat;
+  background-size: cover !important;
+  height: 180px;
+  width: 100%;
+}
+
+.dish hr {
+  color: #eee;
+  width: 70%;
+}
+
+.dish .profile-img {
+  height: 80px;
+  width: 80px;
+  border: 1px solid #DDD;
+  border-radius: 4px;
+}
+ 
+.dish .description {
+  padding: 10px 20px;
+}
+
+.dish .details {
+  padding-bottom: 50px;
+}
+
+/*************************
+* AIRBNB EXAMPLE CSS
+*************************/
+
+.airbnb .button-assertive,
+.airbnb .bar.bar-footer.bar-assertive,
+.airbnb .airbnb-header {
+  background-color: rgb(255, 90, 95);
+}
+ 
+.airbnb .button-assertive {
+  border-color: rgb(255, 90, 95);
+}
+
+.airbnb .cover-img-container {
+  position: relative;
+}
+
+.airbnb .price {
+  font-size: 20px;
+  font-weight: bold;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  letter-spacing: 2px;
+  padding: 7px 14px;
+}
+
+.airbnb .cover-img {
+  background-repeat: no-repeat;
+  background-size: cover !important;
+  height: 210px;
+  width: 100%;
+}
+
+.airbnb .info-block {
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+.airbnb .info-block .icon {
+  font-size: 40px;
+}
+.airbnb h2 {
+  width: 100%;
+  text-align: center;
+  color: #333;
+}
+
+.airbnb .host-profile {
+  border-radius: 50%;
+  width: 80px;
+  margin: auto;
+}
+
+.airbnb .description {
+  padding: 10px;
+  margin-bottom: 50px;
+}
+
+/*************************
+* PLAYSTORE EXAMPLE CSS
+*************************/
+
+.playstore .button-balanced,
+.playstore .playstore-header {
+  background-color: rgb(104, 159, 56);
+}
+
+.playstore .button-balanced.button-outline,
+.playstore .button-balanced {
+  border-color: rgb(104, 159, 56);
+}
+
+.playstore .button-balanced.button-outline {
+  color: rgb(104, 159, 56);
+}
+
+.playstore .cover-img {
+  background-repeat: no-repeat;
+  background-size: cover !important;
+  height: 180px;
+  width: 100%;
+}
+
+.playstore .logo-img {
+  height: 80px;
+  width: 80px;
+}
+
+.playstore p.tagline {
+  width: 100%;
+  text-align: center;
+  color: #333;
+}
+
+.playstore p.whatsnew {
+  background-color: rgba(104, 159, 56, 0.2);
+  color: rgba(104, 159, 56, 1);
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.playstore p.description {
+  padding: 10px;
+  font-size: 12px;
+  color: #333;
+}
+
+/*************************
+* FACEBOOK EXAMPLE CSS
+*************************/
+
+.facebook-profile .facebook-header {
+  background-color: rgb(59, 89, 152);
+}
+
+.facebook-profile .profile-info {
+  background-repeat: no-repeat;
+  background-size: cover !important;
+  height: 260px;
+  width: 100%;
+  
+  display: flex;
+  display: -webkit-flex;
+  align-items: flex-end;
+  -webkit-align-items: flex-end;
+
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
+}
+
+.facebook-profile .profile-info img {
+  width: 80px;
+  height: 80px;
+  border: 2px solid white;
+  margin: 10px;
+}
+
+.facebook-profile .profile-info h2 {
+  color: white;
+  text-shadow: 0px 1px #333;
+  line-height: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.facebook-profile .card {
+  margin: 20px 0;
+}
+
+/*************************
+* MISC CSS
+*************************/
+body {
+  color: #333;
+}
+
+.pane {
+  background-color: #efefef !important;
+}
+
+.bar-header .button-icon:before {
+  font-size: 20px !important;
+}
+
+.platform-ios .col-75 {
+  padding-left: 20px;
+}

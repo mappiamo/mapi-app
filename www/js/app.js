@@ -14,7 +14,7 @@
 
 angular.module('gal', ['ionic', 
                        'ngCordova', 
-                       'gal.home.controllers', 
+                       //'gal.home.controllers', 
                        'gal.real.controllers', 
                        'gal.explore.controllers',
                        'gal.pois.controllers', 
@@ -43,7 +43,12 @@ angular.module('gal', ['ionic',
                        'gal.images',
                        'base64',
                        'angularLoad',
-                       'gal.startApp'])
+                       'gal.startApp',
+                       'ion-gallery',
+                       'ionic-cache-src',
+                       'ionic-sidetabs',
+                       'gal.globalization',
+                       'gal.ui'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -116,7 +121,8 @@ angular.module('gal', ['ionic',
   poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=',
   web: 'http://itinerari.galcapodileuca.it',
   img: 'img/logo/logo-gal.jpg',
-  hashtag: '#galleuca'
+  hashtag: '#galleuca',
+  mediatre: 'http://itinerari.galcapodileuca.it/media/panorama/'
 })
 
 .constant('MAPQUEST', {
@@ -142,7 +148,7 @@ angular.module('gal', ['ionic',
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html',
-    controller: 'HomeCtrl'
+    controller: 'ExploreCtrl'
   })
 
   // Each tab has its own nav history stack:
@@ -153,7 +159,7 @@ angular.module('gal', ['ionic',
     views: {
       'tab-home': {
         templateUrl: 'templates/tab-home.html',
-        controller: 'HomeCtrl'
+        controller: 'ExploreCtrl'
       }
     }
   })

@@ -51,6 +51,14 @@
                         {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"wp-package\" value=\"NetworkStatus\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"wp-package\" value=\"Globalization\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Media\"><param name=\"wp-package\" value=\"Media\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -72,6 +80,18 @@
                         },
                         {
                             "xml": "<Capability Name=\"ID_CAP_NETWORKING\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_AUDIO\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_PLAYBACK\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MICROPHONE\" />",
                             "count": 1
                         }
                     ]
@@ -139,6 +159,12 @@
             "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
         },
         "org.apache.cordova.network-information": {
+            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
+        },
+        "org.apache.cordova.globalization": {
+            "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
+        },
+        "org.apache.cordova.media": {
             "PACKAGE_NAME": "{927311e0-57b5-11e5-864d-7bea3ac5c929}"
         }
     },

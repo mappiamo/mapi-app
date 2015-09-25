@@ -17,23 +17,31 @@
       <div class="list card" ng-if="dataOk">
 
         <div class="item item-text-wrap">
-          <h1 class="main-heading"> {{ explore.title }}</h1>
+          <h1> {{ explore.title }}</h1>
           <div ng-bind-html="explore.meta[12].value | stars"></div>
-          <h3 class="sub-heading"> Tempo di percorrenza <strong>{{ explore.meta[1].value }}</strong>
+          <h3> Tempo di percorrenza <strong>{{ explore.meta[1].value }}</strong>
           </h3>
           
         </div>
 
+        <!--
         <div class="item item-text-wrap" ng-if="!isMedia" align="center">
           <ion-spinner icon="lines"></ion-spinner>
         </div>
+        -->
 
         <!-- immagini -->
+        <!--
         <div class="item item-image" 
              ng-repeat="media in medias"
              ng-if="isMedia">
+          
           <ion-spinner icon="spiral" ng-if="!isMedia"></ion-spinner>
           <img ng-src="{{ media.url }}"></img>
+        -->
+        <div class="item item-image"
+             ng-if="isMedia">
+          <img cache-src="{{ explore.media[0].url }}"></img>
         </div>
 
         <div class="item item-body item-text-wrap">
@@ -74,7 +82,7 @@
 
           <h3>Descrizione</h3>
           <p>
-            {{ explore.text }}
+            {{ text }}
           </p>
         </div>
 

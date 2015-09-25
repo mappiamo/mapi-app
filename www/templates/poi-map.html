@@ -12,18 +12,20 @@
 
   <div class="bar bar-subheader bar-dark">
     <div class="button-bar">
-      <a class="button button-icon button-clear icon ion-ios-paper" href="#/tab/explore/{{ content }}/{{ category }}"> Dettagli</a>
-      <a class="button button-icon button-clear icon ion-ios-toggle" ng-click="openFilters()" bg> Filtri</a>
-      <a class="button button-icon button-clear icon ion-ios-list-outline" href="#/tab/pois/{{ content }}/{{ category }}"> Lista POI</a>
+      <a class="button button-icon button-clear icon ion-ios-paper" href="#/tab/explore/{{ content }}/{{ category }}"> {{ ui[0] }}</a>
+      <a class="button button-icon button-clear icon ion-ios-toggle" ng-click="openFilters()" bg> {{ ui[1] }}</a>
+      <a class="button button-icon button-clear icon ion-ios-list-outline" href="#/tab/pois/{{ content }}/{{ category }}"> {{ ui[2] }}</a>
     </div>
   </div>
   
-  <ion-content data-tap-disabled="true" class="has-header has-subheader">
-      <leaflet id="map"
-               center="center" 
-               defaults="defaults"
-               geojson="geojson">
-      </leaflet> 
+  <ion-content class="has-header has-subheader">
+      <div data-tap-disabled="true">
+        <leaflet id="map"
+                 center="center" 
+                 defaults="defaults"
+                 geojson="geojson">
+        </leaflet> 
+      </div>
   </ion-content>
 
 </ion-view>

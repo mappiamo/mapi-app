@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -26,12 +26,38 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
       showSpinner(true);
   });
 
+  $language.get(function (err, result) {
+    $scope.language = result;
+    console.log(JSON.stringify(result));
+  });
+
+  $scope.setLanguage = function(l) {
+    $language.save(l);
+    _refresh();
+  };
+
   // **********************************
   // Controllo la connessione
 
   // listen for Online event
-  /*
+  
+  try {
+      var type = $cordovaNetwork.getNetwork()
+      if (!type.UNKNOWN && !type.NONE) {
+        // esegue il download dei dati solo se esiste una connessione
+        DataSync.download(function (err, data, pois) {
+              console.log('syncronizing ok ...');
+              if (window.ProgressIndicator) {
+                $cordovaProgress.hide();
+              };
+        }, true);
+      };
+  }
+  catch(err) {
+      console.log('non posso verificare la connessione');
+  };
 
+      /*
   var isOnline = $cordovaNetwork.isOnline()
   var isOffline = $cordovaNetwork.isOffline()
 
@@ -44,20 +70,7 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
     var offlineState = networkState;
   });
   */
-
-  /*
-  var type = $cordovaNetwork.getNetwork()
   
-  if (!type.UNKNOWN && !type.NONE) {
-    // esegue il download dei dati solo se esiste una connessione
-    DataSync.download(function (err, data, pois) {
-          console.log('syncronizing ok ...');
-          if (window.ProgressIndicator) {
-            $cordovaProgress.hide();
-          };
-    }, true);
-  };
-  */
   // **********************************
 
   $scope.showConfirm = function() {
@@ -129,8 +142,31 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
     _refresh();  
   });
 
+  $ui.get('home', function (err, result) {
+      $scope.ui = result;
+    });
+
+  $ui.get('tab', function (err, result) {
+      $scope.uiTab = result;
+  });
+
   function _refresh() {
-    $scope.routes = Gal.routes;
+    // $scope.routes = Gal.routes;
+    
+    console.log('refresh data ...');
+
+    $ui.get('home', function (err, result) {
+      $scope.ui = result;
+    });
+
+    $ui.get('tab', function (err, result) {
+      $scope.uiTab = result;
+    });
+
+    Gal.getRoutes(function (err, routes) {
+      $scope.routes = routes;
+    });
+
     $scope.dataOk = true;
     showSpinner(false); 
   };
@@ -153,14 +189,15 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   
   $scope.category = $stateParams.category;
 
-  var it = Gal.getRoute(content);
+  Gal.getRoute(content, function (err, item_it) {
+    $scope.title = item_it.title;
+  });
 
   var color;
   var layer_control;
 
   $scope.isMedia = false;
   $scope.dataOk = false;
-  $scope.title = it.title;
 
   console.log('Explore details: ' + content);
 
@@ -411,6 +448,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         };
       
         $scope.explore = dt;
+        $scope.text = S(S(dt.text).decodeHTMLEntities().s).stripTags().s;
         $scope.dataOk = true;
 
         _geojson();

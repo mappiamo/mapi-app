@@ -147,24 +147,39 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 			});
 		},
 
-		poi_nearest: function (data, done) {
+		poi_nearest: function (done, options) {
 			var self = this;
+
 			this.geojson_data.features = [];
+
+			this.pois(function (err, geojson) {
+				// seleziono il geojson con i punti più vicini
+
+				// filtri i primi otions.limit POI
+
+			}, options);
 
 			// console.log('Data to convert: ' + JSON.stringify(data));
 
+			/*
 			var options = {
 				all: true,  // tutti i POI
 		      	category: null, 
 		      	content: null, 
 		      	poi: null, 
 		      	filters: null,
-		      	nearest: true
+		      	nearest: true,
+		      	limit: 10,
+		      	lat: 0,
+		      	lng: 0
 			};
 
 			this._pois_geojson(data, options, function (err) {
+				var d_filtered = _.first(self.geojson_data.features, options.limit);
+				self.geojson_data.features = d_filtered;
 				done(err, self.geojson_data);
 			});
+			*/
 		},
 
 		_pois_geojson: function (data, options, done) {
@@ -239,7 +254,13 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 			console.log('search pois by ' + category + ' and ' + options.poi );
 
-			Gal.poi(category, options.poi, function (err, data) {
+			var options_poi = {
+				category: category,
+				idpoi: options.poi,
+				byUrl: false
+			};
+
+			Gal.poi(function (err, data) {
 
 				// console.log(JSON.stringify(data));
 
@@ -257,7 +278,8 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 				};
 
 				self._pois_geojson(d, options, done, false);
-		  	});
+				
+		  	}, options_poi);
 
 		},
 
@@ -271,12 +293,19 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 				options
 				--------
 
-				all: false,  // tutti i POI
-		      	category: category, 
-		      	content: content, 
-		      	poi: null, 
+				var options = {
+					all: true,  // tutti i POI
+		      		category: null, 
+		      		content: null, 
+		      		poi: null, 
+		      		filters: null,
+		      		nearest: false,
+		      		limit: 10	// quando si cercano tutti i POI vicini alle coordinate
+				};
 		      	
 			*/
+
+			console.log('create geojson ... ');
 
 			if (!options.all) {
 				this.geojson_data.features = [];
@@ -287,16 +316,19 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 					};
 				});
 			} else {
-				async.each(Gal.routes, function (item, callback) {
-					self._pois(item._categories, options, function (err) {
-						callback();
+				Gal.getRoutes(function (err, route) {
+					async.each(routes, function (item, callback) {
+						self._pois(item._categories, options, function (err) {
+							callback();
+						});
+					}, function (err) {
+						if (typeof done === 'function') {
+							console.log('*** GeoJSON All Pois: ' + JSON.stringify(self.geojson_data));
+							done(err, self.geojson_data);
+						}
 					});
-				}, function (err) {
-					if (typeof done === 'function') {
-						console.log('*** GeoJSON All Pois: ' + JSON.stringify(self.geojson_data));
-						done(err, self.geojson_data);
-					}
 				});
+				
 			};
 		}
 	};
