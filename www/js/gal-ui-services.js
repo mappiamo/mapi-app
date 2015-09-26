@@ -50,6 +50,14 @@ angular.module('gal.ui', [])
 					}
 				};
 
+				if (uiIndex == 'compass') {
+					if (result == 'it') {
+						list = self.compass.it;
+					} else if (result == 'en') {
+						list = self.compass.en;
+					}
+				};
+
 				done(err, list);
 
 			});
@@ -73,6 +81,10 @@ angular.module('gal.ui', [])
 		poidetail: {
 			it: ['Dettaglio POI'],
 			en: ['POI Details']
+		},
+		compass: {
+			it: ['Bussola'],
+			en: ['Compass']
 		}
 	};
 

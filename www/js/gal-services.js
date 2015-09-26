@@ -131,7 +131,7 @@ angular.module('gal.services', [])
           };
           callback();
         }, function (err) {
-          console.log('Routes: ' + JSON.stringify(self.routes));
+          // console.log('Routes: ' + JSON.stringify(self.routes));
           done(err, self.routes);
         })
 
@@ -314,13 +314,14 @@ angular.module('gal.services', [])
       var self = this; 
 
       if (idpoi != null) {
-        console.log('search POI by :' + idpoi);
+
+        console.log('search POI :' + idpoi);
 
         var d = _.filter(data.data, function (item) {
           return item.id == idpoi;
         });
 
-        // console.log('trovato -> ' + JSON.stringify(d));
+        console.log('trovato -> ' + JSON.stringify(d));
         done(false, d);
 
       } else {
@@ -361,10 +362,13 @@ angular.module('gal.services', [])
 
               self._send_pois(idpoi, dt, function (err, response) {
                 self.decodeHTML(response, function (err, response2) {
-                  self._setFilters(response2, function (err, response3) {
-                    console.log('data filtered Ok.')
-                    callback(err, response3);
-                  });
+
+                    self._setFilters(response2, function (err, response3) {
+                      console.log('data filtered Ok.')
+                      callback(err, response3);
+                    });
+                  
+
                 });
               });
               

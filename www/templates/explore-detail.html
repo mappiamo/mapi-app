@@ -18,27 +18,8 @@
 
         <div class="item item-text-wrap">
           <h1> {{ explore.title }}</h1>
-          <div ng-bind-html="explore.meta[12].value | stars"></div>
-          <h3> Tempo di percorrenza <strong>{{ explore.meta[1].value }}</strong>
-          </h3>
-          
         </div>
 
-        <!--
-        <div class="item item-text-wrap" ng-if="!isMedia" align="center">
-          <ion-spinner icon="lines"></ion-spinner>
-        </div>
-        -->
-
-        <!-- immagini -->
-        <!--
-        <div class="item item-image" 
-             ng-repeat="media in medias"
-             ng-if="isMedia">
-          
-          <ion-spinner icon="spiral" ng-if="!isMedia"></ion-spinner>
-          <img ng-src="{{ media.url }}"></img>
-        -->
         <div class="item item-image"
              ng-if="isMedia">
           <img cache-src="{{ explore.media[0].url }}"></img>
@@ -47,46 +28,45 @@
         <div class="item item-body item-text-wrap">
 
           <div class="list list-inset">
-            <div class="item">
-              <h4>Partenza</h4>
-              {{ explore.meta[4].value }}
-            </div>
-            <div class="item">
-              <h4>Arrivo</h4>
-              {{ explore.meta[5].value }}
-            </div>
-            <div class="item">
-              <h4>Mezzi consigliati</h4>
-              {{ explore.meta[2].value }}
-            </div>
-            <div class="item">
-              <h4>Periodo</h4>
-              {{ explore.meta[6].value }}
-            </div>
+            <p>
+              {{ text }}
+            </p>
+
+            <leaflet id="map_explore"
+                     geojson="geojson"
+                     defaults="defaults">
+            </leaflet>
+          
           </div>
 
-          <leaflet id="map_explore"
-                   geojson="geojson"
-                   defaults="defaults">
-          </leaflet>
-          
-          <h3>Caratteristiche</h3>
-          <p>
-            {{ explore.meta[3].value }}
-          </p>
-
-          <h3>Punti di sosta</h3>
-          <p>
-            {{ explore.meta[7].value }}
-          </p>
-
-          <h3>Descrizione</h3>
-          <p>
-            {{ text }}
-          </p>
         </div>
-
       </div>
 
   </ion-content>
+
+  <ion-side-tabs on-expand="tabExpand(index)" on-collapse="tabCollapse(index)">
+    
+
+    <ion-side-tab class="dark-bg" style="border-radius: 10px;">
+      <ion-side-tab-handle width="40" height="50" toggle="ion-ios-information ion-ios-information-outline" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-ios-information"></i>
+    </ion-side-tab-handle>
+      
+      <ion-content>
+      <!-- Meta informazioni -->
+        <div class="list" ng-repeat="info in meta">
+          <div class="item item-divider">
+            {{ info.name }}
+          </div>
+
+          <a class="item item-text-wrap" href="#">
+            {{ info.value }}
+          </a>
+
+        </div>
+      </ion-content>
+
+    </ion-side-tab>
+    
+  </ion-side-tabs>
+
 </ion-view>

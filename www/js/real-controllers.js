@@ -67,8 +67,9 @@ ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, 
 });
 
 // Bussola
-ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal, GeoJSON, leafletData) {
+ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal, GeoJSON, leafletData, $ui) {
 
+	/*
 	var test = {
 		state: TEST.value,
 		value: function (random) {
@@ -79,21 +80,29 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 			}
 		}
 	};
+	*/
 
+	/*
 	var magnetic = 0;
 	var magneticHeading;
 	var trueHeading;
 	var accuracy;
 	var timeStamp;
 	var watch;
-	var layer_control;
+	*/
 
+	var layer_control;
+	var layer_nearest;
+	var geojson;
+
+	/*
 	var orientation = {
 		magneticHeading: 0,
         trueHeading: false,
         accuracy: 0,
         timeStamp: null
 	};
+	*/
 
 	var location = {
 		latitude: 0,
@@ -102,14 +111,15 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	$scope.$on('$ionicView.beforeLeave', function() {
 		console.log('view before leave');
-		$scope.closeMap();
-		_stopWatch();
+		// $scope.closeMap();
+		// _stopWatch();
 	});
 
 	$scope.$on('$ionicView.leave', function() {
 		console.log('view leave');
 	});
 
+	/*
 	$ionicModal.fromTemplateUrl('templates/real-map.html', {
 	    scope: $scope,
 	    animation: 'slide-in-up'
@@ -120,6 +130,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$scope.openMap = function() {
 		$scope.modal.show();
 	};
+	*/
 
 	/*
 	$scope.viewInfo = function (id, idpoi, lat, lon) {
@@ -129,6 +140,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	};
 	*/
 
+	/*
 	$scope.closeMap = function() {
 		$scope.isPOI = false;
 		$scope.modal.hide();
@@ -148,10 +160,12 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$scope.$on('modal.removed', function() {
 	// Execute action
 	});
+	*/
 
 	$scope.$on('$ionicView.beforeEnter', function() {
 		// test = TEST.value;
 		
+		/*
 		$scope.isSearch = false;
 		$scope.isError = false;
 		
@@ -161,14 +175,21 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		} else {
 			_setMagnetic(0);
 		};
+		*/
 
-		Geolocation.get(_onSuccess, _onError);
+		_geojson();
 
+		// Geolocation.get(_onSuccess, _onError);
+
+		/*
 		if (!test.state) {
 			_startWatch();    
 		};
+		*/
 
   	});
+
+  	Geolocation.watch(_onSuccess, _onError);
 
   	function _initMap () {
 
@@ -203,12 +224,12 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	      var baseMaps = { "OSM Standard": osm };
 	      
 	      var overlayMaps = { 
-	        "Clouds": clouds, 
-	        "Precipitazioni": precipitation,
-	        "Neve": snow,
-	        "Temperature": temp,
-	        "vento": wind,
-	        "Cities": city 
+	        // "Clouds": clouds, 
+	        // "Precipitazioni": precipitation,
+	        // "Neve": snow,
+	        // "Temperature": temp,
+	        // "vento": wind,
+	        "Meteo": city 
 	      };
 
 	      layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -243,14 +264,17 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     });
 
 	function _onSuccess(result) {
+		
 		console.log('success geolocation');
+		
 		location.latitude = result.coords.latitude;
 		location.longitude = result.coords.longitude;
-		$scope.location = location;
-		$scope.isLocation = true;
+		
+		// $scope.location = location;
+		// $scope.isLocation = true;
+		
 		Geolocation.save(result);
 
-		/*
 		angular.extend($scope, {
 	      center: {
 	        lat: result.coords.latitude,
@@ -278,12 +302,15 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	        map.invalidateSize();
 	    });
-		*/
+
+	    _geojson_nearest();
 	};  
 
 	function _onError(err) {
 		console.log('error to orientation');
 	};
+
+	/*
 	
 	function _startWatch() {
 		// Compass 
@@ -336,6 +363,10 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
     $ionicGesture.on('hold', function(e) {
     	_search();
     }, el);
+	
+	*/
+
+	/*
 
     function _getPois(magnetic) {
 
@@ -393,19 +424,25 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		});
 	};
 
-	function _geojson(pois) {
+	*/
+
+	function _geojson() {
+
+		$ui.get('compass', function (err, lang) {
+      		$scope.ui = lang;
+    	});
 
 		_initMap();
 
-		// Geolocation.get(_onSuccess, _onError);
+		GeoJSON.poi_all(function (err, geojson_data) {
 
-		GeoJSON.poi_nearest(pois, function (err, data) {
+			geojson = geojson_data;
 
-			console.log('GeoJSON: ' + JSON.stringify(data));
+			// console.log('GeoJSON : ' + JSON.stringify(geojson));
 
 			angular.extend($scope, {
 	            geojson: {
-	                data: data,
+	                data: geojson,
 	                style: 
 	                function (feature) {
 	                    return {
@@ -414,7 +451,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	                },
 	                pointToLayer: function(feature, latlng) {
 	                  var icon_url = 'img/markers/' + feature.properties.marker;
-	                  console.log('Icon: ' + icon_url);
+	                  // console.log('Icon: ' + icon_url);
 
 	                  var markerIcon = L.icon({
 	                    iconUrl: icon_url,
@@ -427,9 +464,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	                    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 	                  });
 
-	                  _setView(latlng);
-
-	                  console.log(JSON.stringify(feature.properties));
+	                  // console.log(JSON.stringify(feature.properties));
 
 	                  var descr = '<h4><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
                                   '<p>' + feature.properties.address + '</p>';
@@ -444,21 +479,68 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	                } 
 	            }
         	});
-
 		});
 
 	};
 
+	function _geojson_nearest() {
+
+		_initMap();
+
+		GeoJSON.poi_nearest(function (err, nearest, distance) {
+
+			console.log('GeoJSON nearest: ' + JSON.stringify(nearest));
+
+			leafletData.getMap('map_compass').then(function(map) {
+
+				if (layer_nearest) {
+					map.removeLayer(layer_nearest);
+				};
+				
+				var layer_nearest = L.geoJson(nearest, {
+				    style: function (feature) {
+				        return {
+				        	color: feature.properties.color
+				        };
+				    },
+				    onEachFeature: function (feature, layer) {
+				    	var descr = '<h4><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
+                                  '<p>' + feature.properties.address + '<br /> - ' + Math.round(distance) + ' Km';
+                      	console.log('Distance: ' + Math.round(distance));
+	                	layer.bindPopup(descr);
+	                	// _setBounds(layer);
+				    }
+				});
+
+				layer_nearest.addTo(map);
+
+			});
+
+		}, location.latitude, location.longitude, geojson);
+
+	};
+
+	function _setBounds(layer) {
+    	leafletData.getMap('map_compass').then(function(map) {
+      		map.fitBounds(layer.getBounds());
+    	});
+  	};
+
+	/*
 	$scope.goPOI = function () {
 		$scope.closeModal();
 	};
+	*/
 
+	/*
 	function _setView(latlng) {
 		leafletData.getMap('map_compass').then(function(map) {
 	      map.setView(latlng, 9);
 	    });
   	};	
+  	*/
 
+  	/*
 	function _stopWatch() {
 
 		if (!test.state) {
@@ -485,6 +567,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
      	$scope.closeMap();
 
   	}, 6000);
+	*/
 });
 
 ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest, MapBox) {

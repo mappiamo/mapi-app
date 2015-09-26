@@ -49,7 +49,19 @@
     <ion-side-tab class="dark-bg" style="border-radius: 10px;">
       <ion-side-tab-handle width="40" height="50" toggle="ion-ios-information ion-ios-information-outline" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-ios-information"></i></ion-side-tab-handle>
       
+      <ion-content>
       <!-- Meta informazioni -->
+      <div class="list" ng-repeat="info in meta">
+        <div class="item item-divider">
+          {{ info.name }}
+        </div>
+
+        <a class="item item-text-wrap" href="#">
+          {{ info.value }}
+        </a>
+
+      </div>
+      </ion-content>
 
     </ion-side-tab>
 

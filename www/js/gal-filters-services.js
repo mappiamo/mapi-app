@@ -23,7 +23,7 @@ angular.module('gal.filters.services', [])
           var cat = _.find(filters.categories, function(item){ 
             return (item.name == cat_item.value) && item.value;
           });
-          console.log('Filtro Categoria: ' + JSON.stringify(cat) + '-' + cat_item.value);
+          // console.log('Filtro Categoria: ' + JSON.stringify(cat) + '-' + cat_item.value);
           ret = ret || (typeof JSON.stringify(cat) !== 'undefined');
         };
 
@@ -35,7 +35,7 @@ angular.module('gal.filters.services', [])
           var age = _.find(filters.ages, function(item){ 
             return (item.name == age_item.value) && item.value;
           });
-          console.log('Filtro Epoca: ' + JSON.stringify(age) + '-' + age_item.value);
+          // console.log('Filtro Epoca: ' + JSON.stringify(age) + '-' + age_item.value);
           ret = ret || (typeof JSON.stringify(age) !== 'undefined');
         };
 
@@ -53,7 +53,7 @@ angular.module('gal.filters.services', [])
         };
         */
 
-        console.log('Ok Filter: ' + ret);
+        // console.log('Ok Filter: ' + ret);
 
         return ret;
 
@@ -251,7 +251,7 @@ Site multilayered
 
         $language.get(function (err, result) {
 
-          console.log('language: ' + result);
+          //console.log('language: ' + result);
               
           async.each(data, function (item, callback) {
             if (result == 'it') {
@@ -261,7 +261,7 @@ Site multilayered
             };
             callback();
           }, function (err) {
-            console.log('Routes: ' + JSON.stringify(self.routes));
+            //console.log('Routes: ' + JSON.stringify(self.routes));
             done(err, data);
           })
 

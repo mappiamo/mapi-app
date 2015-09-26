@@ -7,10 +7,16 @@ service.factory('$language', function ($localstorage, $cordovaGlobalization) {
 
 		get: function (done) {
 
-			var location = $localstorage.getObject('language');
-			
-			console.log('Language in memory saved: ' + location);
+			var language = $localstorage.getObject('language');
+			// console.log('Language in memory saved: ' + location);
 
+			if (typeof location == 'undefined') {
+				done(false, 'it');	
+			} else {
+				done(false, language);
+			};
+
+			/*
 			if (location != 'it' && location != 'en' && typeof location == 'undefined') {
 				try {
 				    $cordovaGlobalization.getPreferredLanguage().then(
@@ -29,6 +35,7 @@ service.factory('$language', function ($localstorage, $cordovaGlobalization) {
 			} else {
 				done(false, location);
 			}
+			*/
 		},
 		save: function (lang) {
 			console.log('saving language: ' + lang);

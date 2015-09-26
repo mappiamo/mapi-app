@@ -508,7 +508,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 // ** dettaglio del punto di interesse
 // *****************************
 
-ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui) {
+ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta) {
 
   var content = $stateParams.content;
   $scope.content = $stateParams.content;
@@ -651,6 +651,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
         attribution: osmAttribution
       }).addTo(map);
 
+      /*
       if (layer_control) {
         layer_control.removeFrom(map);
       };
@@ -680,6 +681,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
       };
 
       layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
+      */
       
       map.invalidateSize();
 
@@ -785,6 +787,10 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
         _geojson();
 
         $scope.isGallery = false;
+
+        $meta.get('poi', dt[0].meta, function (err, meta) {
+          $scope.meta = meta;
+        })
 
         var itre = _.find(dt[0].meta, function (item) {
           return item.name == 'virtual_tour';

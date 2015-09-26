@@ -7,12 +7,6 @@ navigation history that also transitions its views in and out.
 
   <!-- Dashboard Tab -->
 
-  <!--
-  <ion-tab title="Home" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/tab/home">
-    <ion-nav-view name="tab-home"></ion-nav-view>
-  </ion-tab>
-  -->
-
   <ion-tab title="{{ uiTab[0] }}" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/tab/explore" ng-model="uiTab">
     <ion-nav-view name="tab-explore"></ion-nav-view>
   </ion-tab>
@@ -24,12 +18,6 @@ navigation history that also transitions its views in and out.
   <ion-tab title="{{ uiTab[2] }}" icon-off="ion-android-compass" icon-on="ion-android-compass" href="#/tab/compass" ng-model="uiTab">
     <ion-nav-view name="tab-compass"></ion-nav-view>
   </ion-tab>
-
-  <!--
-  <ion-tab title="Cerca" icon-off="ion-ios-search-strong" icon-on="ion-ios-search" href="#/tab/search">
-    <ion-nav-view name="tab-search"></ion-nav-view>
-  </ion-tab>
-  -->
 
 
 </ion-tabs>

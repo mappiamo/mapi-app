@@ -48,7 +48,8 @@ angular.module('gal', ['ionic',
                        'ionic-cache-src',
                        'ionic-sidetabs',
                        'gal.globalization',
-                       'gal.ui'])
+                       'gal.ui',
+                       'gal.meta'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -154,6 +155,7 @@ angular.module('gal', ['ionic',
   // Each tab has its own nav history stack:
 
   // home page
+  /*
   .state('tab.home', {
     url: '/home',
     views: {
@@ -163,13 +165,14 @@ angular.module('gal', ['ionic',
       }
     }
   })
+  */
 
   // realtà aumentata
   .state('tab.compass', {
     url: '/compass',
     views: {
       'tab-compass': {
-        templateUrl: 'templates/tab-real.html',
+        templateUrl: 'templates/tab-compass.html',
         controller: 'RealCtrl'
       }
     }

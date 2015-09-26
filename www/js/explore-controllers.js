@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -182,7 +182,7 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf, $meta) {
 
   var content = $stateParams.content;
   $scope.content = content;
@@ -224,6 +224,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         attribution: osmAttribution
       }).addTo(map);
 
+      /*
       if (layer_control) {
         layer_control.removeFrom(map);
       };
@@ -253,6 +254,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
       };
 
       layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
+      */
       
       map.invalidateSize();
 
@@ -437,16 +439,10 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
         // console.log(JSON.stringify(dt));
 
-        dt.text = S(S(dt.text).stripTags().s).decodeHTMLEntities().s;
+        $meta.get('content', dt.meta, function (err, meta) {
+          $scope.meta = meta;
+        });
         
-        if (typeof dt.meta[3] !== undefined) {
-          dt.meta[3].value = S(S(dt.meta[3].value).stripTags().s).decodeHTMLEntities().s;
-        };
-
-        if (typeof dt.meta[7] !== undefined) {
-          dt.meta[7].value = S(S(dt.meta[7].value).stripTags().s).decodeHTMLEntities().s;
-        };
-      
         $scope.explore = dt;
         $scope.text = S(S(dt.text).decodeHTMLEntities().s).stripTags().s;
         $scope.dataOk = true;
