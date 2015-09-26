@@ -10,9 +10,11 @@
  *
  */
 
+/*
+
 var ctrls = angular.module('gal.home.controllers', []);
 
-ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geolocation, $ionicLoading, $ionicModal, DataSync, $ionicPopup, $timeout) {
+ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geolocation, $ionicLoading, $ionicModal, DataSync, $ionicPopup, $timeout, $ui) {
 
   // configurazione del download
   $scope.config = {
@@ -23,6 +25,10 @@ ctrls.controller('HomeCtrl', function ($scope, $stateParams, $timeout, Gal, Geol
   };
 
   $scope.isSaved = false;
+
+  $ui.get('tab', function (err, result) {
+    $scope.uiTab = result;
+  });
 
   $scope.showConfirm = function() {
     var confirmPopup = $ionicPopup.confirm({
@@ -170,3 +176,4 @@ ctrls.controller('SearchCtrl', function($scope) {
     enableFriends: true
   };
 });
+*/

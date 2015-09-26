@@ -51,20 +51,35 @@ angular.module('gal.sync', [])
 
 		_content: function (done) {
 
-			async.each(Gal.routes, function (item, callback_child) {
+			Gal.getRoutes(function (err, routes) {
 
-				Gal.content(item._content, function (err, data) {
-					data_json.push(data);
-					callback_child();
-				}, true);
+				async.each(routes, function (item, callback_child) {
 
-			}, function (err) {
-				// console.log(JSON.stringify(data_json));
-				pdb.bulkDocs(db, data_json, function (err, response) {
-					console.log(JSON.stringify(response) + ' - Error: ' + err);
-					done(err, 'next');
-				});
+					var options = {
+						all: false,  // tutti i POI
+		      			category: item._categories, 
+		      			content: item._content, 
+		      			poi: null, 
+		      			byUrl: true,
+		      			filters: null,
+		      			nearest: false,
+		      			limit: null	// quando si cercano tutti i POI vicini alle coordinate
+					};
+
+					Gal.content(function (err, data) {
+						data_json.push(data);
+						callback_child();
+					}, options);
+
+				}, function (err) {
+					// console.log(JSON.stringify(data_json));
+					pdb.bulkDocs(db, data_json, function (err, response) {
+						console.log(JSON.stringify(response) + ' - Error: ' + err);
+						done(err, 'next');
+					});
+				});	
 			});
+			
 		},
 
 		_pois: function (done) {
@@ -72,22 +87,36 @@ angular.module('gal.sync', [])
 			var self = this;
 			pois_json = [];
 
-			async.each(Gal.routes, function (item, callback_child) {
-				Gal.poi(item._categories, null, function (err, data) {
-					if (!err) {
-						console.log('saving poi n:' + _.size(data));
-						pois_json.push(data);
-						callback_child();
-					} else {
-						callback_child();
-					}
-				}, true);
+			Gal.getRoutes(function (err, routes) {
+				async.each(routes, function (item, callback_child) {
 
-			}, function (err) {
-				console.log('saving poi ... n.' + _.size(pois_json));
-				pdb.bulkDocs(db, pois_json, function (err, response) {
-					console.log(JSON.stringify(response) + ' - Error: ' + err);
-					done(err, 'done');
+					var options = {
+						all: false,  // tutti i POI
+		      			category: item._categories, 
+		      			content: item._content, 
+		      			poi: null, 
+		      			byUrl: true,
+		      			filters: null,
+		      			nearest: false,
+		      			limit: null	// quando si cercano tutti i POI vicini alle coordinate
+					};
+
+					Gal.poi(function (err, data) {
+						if (!err) {
+							console.log('saving poi n:' + _.size(data));
+							pois_json.push(data);
+							callback_child();
+						} else {
+							callback_child();
+						}
+					}, options);
+
+				}, function (err) {
+					console.log('saving poi ... n.' + _.size(pois_json));
+					pdb.bulkDocs(db, pois_json, function (err, response) {
+						console.log(JSON.stringify(response) + ' - Error: ' + err);
+						done(err, 'done');
+					});
 				});
 			});
 		},

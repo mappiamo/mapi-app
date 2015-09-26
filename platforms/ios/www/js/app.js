@@ -14,7 +14,7 @@
 
 angular.module('gal', ['ionic', 
                        'ngCordova', 
-                       'gal.home.controllers', 
+                       //'gal.home.controllers', 
                        'gal.real.controllers', 
                        'gal.explore.controllers',
                        'gal.pois.controllers', 
@@ -43,9 +43,15 @@ angular.module('gal', ['ionic',
                        'gal.images',
                        'base64',
                        'angularLoad',
-                       'gal.startApp'])
+                       'gal.startApp',
+                       'ion-gallery',
+                       'ionic-cache-src',
+                       'ionic-sidetabs',
+                       'gal.globalization',
+                       'gal.ui',
+                       'gal.meta'])
 
-.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $wikitude, $wikitudeWorld) {
+.run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
   $ionicPlatform.ready(function() {
 
@@ -85,14 +91,6 @@ angular.module('gal', ['ionic',
     if (window.ProgressIndicator) {
       $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
     };
-
-    DataSync.download(function (err, data, pois) {
-          console.log('syncronizing ok ...');
-          if (window.ProgressIndicator) {
-            $cordovaProgress.hide();
-          };
-    }, true);
-    
     
   });
 
@@ -124,7 +122,8 @@ angular.module('gal', ['ionic',
   poi: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=category&object=',
   web: 'http://itinerari.galcapodileuca.it',
   img: 'img/logo/logo-gal.jpg',
-  hashtag: '#galleuca'
+  hashtag: '#galleuca',
+  mediatre: 'http://itinerari.galcapodileuca.it/media/panorama/'
 })
 
 .constant('MAPQUEST', {
@@ -150,28 +149,30 @@ angular.module('gal', ['ionic',
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html',
-    controller: 'HomeCtrl'
+    controller: 'ExploreCtrl'
   })
 
   // Each tab has its own nav history stack:
 
   // home page
+  /*
   .state('tab.home', {
     url: '/home',
     views: {
       'tab-home': {
         templateUrl: 'templates/tab-home.html',
-        controller: 'HomeCtrl'
+        controller: 'ExploreCtrl'
       }
     }
   })
+  */
 
   // realtà aumentata
   .state('tab.compass', {
     url: '/compass',
     views: {
       'tab-compass': {
-        templateUrl: 'templates/tab-real.html',
+        templateUrl: 'templates/tab-compass.html',
         controller: 'RealCtrl'
       }
     }

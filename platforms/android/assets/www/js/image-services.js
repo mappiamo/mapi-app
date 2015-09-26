@@ -56,6 +56,22 @@ angular.module('gal.images', ['base64'])
 				done(err, images);
 			});
 
+		}, 
+
+		getGallery: function (media, done) {
+			var medias = [];
+			
+			async.each(media, function (item, callback) {
+		        var m = {
+		          src: item.url,
+		          sub: item.title
+		        };
+		        medias.push(m);
+		        callback();
+		      }, function (err) {
+		        done(err, medias);
+		    });
+
 		}
 	};
 

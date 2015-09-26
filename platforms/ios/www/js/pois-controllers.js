@@ -18,16 +18,20 @@
 
 var ctrls = angular.module('gal.pois.controllers', ['leaflet-directive']);
 
-ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading, $cordovaSocialSharing, $ionicActionSheet, $timeout, MAPPIAMO) {
+ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading, $cordovaSocialSharing, $ionicActionSheet, $timeout, MAPPIAMO, $ui) {
   
   $scope.content = $stateParams.content;
-
   $scope.category = $stateParams.category;
 
-  var it = Gal.getRoute($scope.content);
-
-  $scope.title = it.title;
+  Gal.getRoute($scope.content, function (err, item_it) {
+    $scope.title = item_it.title;
+  });
+  
   $scope.dataOk = false;
+
+  $ui.get('poilist', function (err, result) {
+    $scope.ui = result;
+  });
   
   console.log('Param content: ' + $scope.content);
   console.log('Param category: ' + $scope.category);
@@ -81,7 +85,13 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
 
   function _refresh() {
 
-    Gal.poi($scope.category, null, function (err, data) {
+    var options_poi = {
+      category: $scope.category,
+      idpoi: null,
+      byUrl: false
+    };
+
+    Gal.poi(function (err, data) {
       // creo un file geojson con i dati 
       // la lista dei luoghi di interesse ordinati per coordinate
       // mappa da poter visualizzare
@@ -90,7 +100,11 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
         
         // console.log(JSON.stringify(data.data));
 
-        var d_sorted = _.sortBy(data.filtered, function (item) {
+        var d_place = _.filter(data.filtered, function (item) {
+          return item.type != "route"
+        });
+
+        var d_sorted = _.sortBy(d_place, function (item) {
           return Geolocation.distance(item.lat, item.lon);
         });
 
@@ -103,7 +117,7 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
         $scope.dataOk = true;
         showSpinner(false);
       }
-    });
+    }, options_poi);
   };
   
   // ------------------------------------
@@ -195,7 +209,7 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
 // **
 // ** Mappa dei punti di interesse
 
-ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async, $ionicModal, $filters) {
+ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async, $ionicModal, $filters, $ui) {
 
   var marker;
   var layer_control;
@@ -206,12 +220,17 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
   var content = $stateParams.content;
   var category = $stateParams.category;
-  var it = Gal.getRoute(content);
+  
+  Gal.getRoute(content, function (err, item_it) {
+    console.log(JSON.stringify(item_it));
+    $scope.title = item_it.title;
+  });
 
-  console.log(JSON.stringify(it));
+  $ui.get('map', function (err, result) {
+    $scope.ui = result;
+  });
 
   $scope.isMap = false;
-  $scope.title = it.title;
   $scope.content = content;
   $scope.category = category;
   $scope.dataOk = false;
@@ -284,7 +303,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   $scope.$on('$ionicView.enter', function(e) {
     $filters.get(function (err, filters) {
       console.log('Filters: ----------------')
-      // console.log(JSON.stringify(filters));
+      console.log(JSON.stringify(filters));
       $scope.filters = filters;
       _refresh();
     });
@@ -385,13 +404,13 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
                       iconSize:     [32, 37], // size of the icon
                       // shadowSize:   [50, 64], // size of the shadow
-                      iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                      iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
                       // shadowAnchor: [4, 62],  // the same for the shadow
                       popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                     });
 
-                    var descr = '<h3><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h3><br />' +
-                                '<p>' + feature.properties.address + '</p>';
+                    var descr = '<h4><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
+                                '<h5>' + feature.properties.address + '</h5>';
 
                     return L.marker(latlng, {
                       icon: markerIcon
@@ -418,7 +437,6 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   function _setBounds(layer) {
     leafletData.getMap('map').then(function(map) {
       map.fitBounds(layer.getBounds());
-      map.setZoom(12);
     });
   };
 
@@ -463,12 +481,12 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
       var baseMaps = { "OSM Standard": osm };
       
       var overlayMaps = { 
-        "Clouds": clouds, 
-        "Precipitazioni": precipitation,
-        "Neve": snow,
-        "Temperature": temp,
-        "vento": wind,
-        "Cities": city 
+        // "Clouds": clouds, 
+        // "Precipitazioni": precipitation,
+        // "Neve": snow,
+        // "Temperature": temp,
+        // "vento": wind,
+        "Meteo": city 
       };
 
       layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -490,7 +508,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 // ** dettaglio del punto di interesse
 // *****************************
 
-ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON) {
+ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta) {
 
   var content = $stateParams.content;
   $scope.content = $stateParams.content;
@@ -505,7 +523,17 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
   var layer_geojson;
   var geojson;
+  var mediaAudio;
 
+  $scope.isGallery = false;
+  $scope.is360 = false;
+  $scope.isVideo = false;
+  $scope.isAudio = false;
+
+  $ui.get('poidetail', function (err, result) {
+    $scope.ui = result;
+  });
+  
   console.log('Parameter: ' + content + ',' + category + ',' + idpoi + ',' + lat + ',' + lng);
 
   // ------------------------------------
@@ -593,9 +621,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
   console.log('Parameters: ' + $scope.content + ',' + $scope.category + ',' + idpoi);
   
-  // var it = Gal.getRoute(id);
-
-  // $scope.title = it.name;
+  
   $scope.dataOk = false;
 
   $scope.goBack = function (id) {
@@ -625,6 +651,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
         attribution: osmAttribution
       }).addTo(map);
 
+      /*
       if (layer_control) {
         layer_control.removeFrom(map);
       };
@@ -645,15 +672,16 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
       var baseMaps = { "OSM Standard": osm };
       
       var overlayMaps = { 
-        "Clouds": clouds, 
-        "Precipitazioni": precipitation,
-        "Neve": snow,
-        "Temperature": temp,
-        "vento": wind,
-        "Cities": city 
+        // "Clouds": clouds, 
+        // "Precipitazioni": precipitation,
+        // "Neve": snow,
+        // "Temperature": temp,
+        // "vento": wind,
+        "Meteo": city 
       };
 
       layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
+      */
       
       map.invalidateSize();
 
@@ -700,9 +728,40 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
       }
   });
 
+  $scope.playAudio = function (urlAudio) {
+    
+    try {
+      mediaAudio = $cordovaMedia.newMedia(urlAudio);
+
+      var iOSPlayOptions = {
+        numberOfLoops: 2,
+        playAudioWhenScreenIsLocked : false
+      }
+
+      mediaAudio.play(options); // iOS only!
+      mediaAudio.play(); // Android
+    } catch (err) {
+      console.log('funziona attiva solo sul didpositivo mobile')
+    }
+  };
+
+  $scope.pauseAudio = function () {
+    mediaAudio.pause();
+  };
+
+  $scope.stopAudio = function () {
+    mediaAudio.stop();
+  };
+
   function _refresh() {
 
-    Gal.poi($scope.category, idpoi, function (err, data) {
+    var options_poi = {
+      category: $scope.category,
+      idpoi: idpoi,
+      byUrl: false
+    };
+
+    Gal.poi(function (err, data) {
 
       // creo un file geojson con i dati 
       // la lista dei luoghi di interesse ordinati per coordinate
@@ -713,25 +772,70 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $stateParams, Gal, S, $ionic
 
         var dt = data;
 
-        // console.log(JSON.stringify(dt));
+        $scope.isGallery = _.size(dt[0].media > 0);
+        // ----------------------------
+        console.log('-------------');
+        // console.log(_.size(dt[0].media) > 0);
 
+        $scope.text = S(S(dt[0].text).decodeHTMLEntities().s).stripTags().s;
+        
         $scope.poi = dt[0];
-        $scope.dataOk = true;
+        console.log(JSON.stringify($scope.poi.media[0]));
 
-        console.log('init map');
+        $scope.dataOk = true;
 
         _geojson();
 
-        // ----------------------------
-        console.log('adding media... ' + _.size(dt[0].media));
-        $image.getData(dt[0].media, function (err, medias) {
-          $scope.isMedia = true;
-          $scope.medias = medias;  
+        $scope.isGallery = false;
+
+        $meta.get('poi', dt[0].meta, function (err, meta) {
+          $scope.meta = meta;
+        })
+
+        var itre = _.find(dt[0].meta, function (item) {
+          return item.name == 'virtual_tour';
         });
 
+        if (typeof itre !== 'undefined') {
+          console.log(JSON.stringify(itre));
+          $scope.is360 = true;
+          // var u_tre = MAPPIAMO.mediatre + encodeURIComponent(itre.value) + '.html';
+          var u_tre = $sce.trustAsHtml('<iframe src="' + MAPPIAMO.mediatre + encodeURIComponent(itre.value) + '.html' + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen width="400" height="560"></iframe>');
+
+          console.log('360: ' + u_tre);
+          $scope.url_tre = u_tre;
+        };
+
+        var iVideo = _.find(dt[0].meta, function (item) {
+          return item.name == 'filmato';
+        });
+
+        if (typeof iVideo !== 'undefined') {
+          console.log(JSON.stringify(iVideo));
+          $scope.isVideo = true;
+          var u_video = $sce.trustAsHtml('<iframe src="' + iVideo.value + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen width="400" height="360"></iframe>');
+          $scope.video_url = iVideo.value;
+        };
+
+        var iAudio = _.find(dt[0].meta, function (item) {
+          return item.name == 'audio';
+        });
+
+        if (typeof iAudio !== 'undefined') {
+          console.log(JSON.stringify(iAudio));
+          $scope.isAudio = true;
+          $scope.url_audio = JSON.stringify(iAudio);
+        };
+
+        $image.getGallery($scope.poi.media, function (err, medias) {
+          console.log('loaded images n.' + _.size(medias));
+          $scope.medias = medias;
+          $scope.isGallery = true;
+        });
+        
         showSpinner(false);
       }
-    });
+    }, options_poi);
   };
 
   function _geojson() {

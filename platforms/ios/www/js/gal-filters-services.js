@@ -1,6 +1,6 @@
 angular.module('gal.filters.services', [])
 
-.factory('$filters', function ($http, async, _, MAPPIAMO, pdb, DB, S) {
+.factory('$filters', function ($http, async, _, MAPPIAMO, pdb, DB, S, $language) {
 
   var filters_json = {
 
@@ -65,18 +65,39 @@ angular.module('gal.filters.services', [])
 
         var ret;
 
+        console.log('get filters ****')
+
         pdb.open(DB.name, function (db) {
             pdb.get(db, self._id, function (err, data) {
               if (err) {
+                
                 var f = {
                   _id: self._id,
                   _rev: '',
-                  ages: self.ages,
-                  categories: self.categories,
+                  ages: [],
+                  categories: [],
                   cities: self.cities
                 };
+
+                self.getAges(function (err, ages) {
+                  f.ages = ages;
+                });
+
+                self.getCategory(function (err, cat) {
+                  f.categories = cat;
+                }); 
+
                 ret = f;
               } else {
+
+                self.getAges(function (err, ages) {
+                  data.ages = ages;
+                });
+
+                self.getCategory(function (err, cat) {
+                  data.categories = cat;
+                });
+
                 ret = data;
               };
 
@@ -99,82 +120,237 @@ angular.module('gal.filters.services', [])
 
       },
 
+      /*
+      
+      Contemporanea
+Medievale
+Medievale-Moderna
+Messapica
+Messapico-Romana
+Moderna
+Pre-protostorica
+Romana
+Romano-Medievale
+
+      Contemporary
+Medieval
+Medieval-Modern
+Messapica
+Messapian-Roman
+Moderna
+Pre-proto
+Romana
+Roman-Medieval
+
+
+      */
+
       // epoca
       ages: [
         {
           name: 'Contemporanea',
+          lang: {
+            en: 'Contemporary',
+            it: 'Contemporanea'
+          },
           value: true
         },
         {
           name: 'Medievale',
+          lang: {
+            en: 'Medieval',
+            it: 'Medievale'
+          },
           value: true
         },
         {
-          name: 'Medievale/Moderna',
+          name: 'Medievale-Moderna',
+          lang: {
+            en: 'Medieval-Modern',
+            it: 'Medievale-Moderna'
+          },
           value: true
         },
         {
           name: 'Messapica',
+          lang: {
+            en: 'Messapica',
+            it: 'Messapica'
+          },
           value: true
         },
         {
-          name: 'Messapico/Romana',
+          name: 'Messapico-Romana',
+          lang: {
+            en: 'Messapian-Roman',
+            it: 'Messapico-Romana'
+          },
           value: true
         },
         {
           name: 'Moderna',
+          lang: {
+            en: 'Moderna',
+            it: 'Moderna'
+          },
           value: true
         },
         {
           name: 'Pre-protostorica',
+          lang: {
+            en: 'Pre-proto',
+            it: 'Pre-protostorica'
+          },
           value: true
         },
         {
           name: 'Romana',
+          lang: {
+            en: 'Romana',
+            it: 'Romana'
+          },
           value: true
         },
         {
-          name: 'Romano/Medievale',
+          name: 'Romano-Medievale',
+          lang: {
+            en: 'Roman-Medieval',
+            it: 'Romano-Medievale'
+          },
           value: true
         }
       ],
+
+      /*
+
+      Architettura Civile
+Architettura Militare
+Architettura Religiosa
+Architettura Rurale
+Archeologia
+Archeologia Industriale
+Paesaggio e Natura
+Parco naturale
+Sito pluristratificato
+
+      Civil Architecture
+Military Architecture
+Religious Architecture
+Rural Architecture
+Archeology
+Industrial Archaeology
+Landscape and Nature
+Natural Parks
+Site multilayered
+
+      */
+
+      _getData: function (data, done) {
+
+        var self = this;
+
+        $language.get(function (err, result) {
+
+          //console.log('language: ' + result);
+              
+          async.each(data, function (item, callback) {
+            if (result == 'it') {
+              item.name = item.lang.it;
+            } else if (result == 'en') {
+              item.name = item.lang.en;
+            };
+            callback();
+          }, function (err) {
+            //console.log('Routes: ' + JSON.stringify(self.routes));
+            done(err, data);
+          })
+
+        });
+
+      },
+
+      getAges: function (done) {
+        var self = this;
+        this._getData(self.ages, done);
+      },
+
+      getCategory: function (done) {
+        var self = this;
+        this._getData(self.categories, done);
+      },
 
       // cateorie punti di interesse
       categories: [
         {
           name: 'Architettura Civile',
+          lang: {
+            en: 'Civil architecture',
+            it: 'Architettura Civile'
+          },
           value: true
         },
         {
           name: 'Architettura Militare',
+          lang: {
+            en: 'Military Architecture',
+            it: 'Architettura Militare'
+          },
           value: true
         },
         {
           name: 'Architettura Religiosa',
+          lang: {
+            en: 'Civil architecture',
+            it: 'Architettura Religiosa'
+          },
           value: true
         },
         {
           name: 'Architettura Rurale',
+          lang: {
+            en: 'Rural Architecture',
+            it: 'Architettura Rurale'
+          },
           value: true
         },
         {
           name: 'Archeologia',
+          lang: {
+            en: 'Archeology',
+            it: 'Archeologia'
+          },
           value: true
         },
         {
           name: 'Archeologia Industriale',
+          lang: {
+            en: 'Industrial Archaeology',
+            it: 'Archeologia Industriale'
+          },
           value: true
         },
         {
           name: 'Paesaggio e Natura',
+          lang: {
+            en: 'Landscape and Nature',
+            it: 'Paesaggio e Natura'
+          },
           value: true
         },
         {
           name: 'Parco Naturale',
+          lang: {
+            en: 'Natural Parks',
+            it: 'Parco Naturale'
+          },
           value: true
         },
         {
           name: 'Sito pluristartificato',
+          lang: {
+            en: 'Site multilayered',
+            it: 'Sito pluristartificato'
+          },
           value: true
         }
       ],

@@ -12,7 +12,7 @@
 
 angular.module('gal.services', [])
 
-.factory('Gal', function ($http, Weather, async, _, TEST, MAPPIAMO, Geolocation, MAPQUEST, $utility, pdb, DB, $filters) {
+.factory('Gal', function ($http, Weather, async, _, TEST, MAPPIAMO, Geolocation, MAPQUEST, $utility, pdb, DB, $filters, $language) {
 
   var db;
 
@@ -31,13 +31,26 @@ angular.module('gal.services', [])
       return it;
     },
 
+    events: [],
+
     // itinerari
     routes:[
       {
         title: 'Paduli',
         _content: '539',
         _categories: '37',
+        lang: {
+          en: {
+            _content: '543',
+            _categories: '85'
+          },
+          it: {
+            _content: '539',
+            _categories: '37'
+          }
+        },
         name: 'Paduli',
+        color: '#00CCCC',
         image: 'img/itinerari/paduli.jpg',
         description: 'Un percorso che si snoda lungo sei comuni del basso Salento, partendo da Nociglia, il comune più a nord, per toccare Montesano Salentino, Miggiano, Taurisano, Ruffano e Specchia.'
       },
@@ -45,6 +58,17 @@ angular.module('gal.services', [])
         title: 'Fede',
         _content: '538',
         _categories: '11',
+        lang: {
+          en: {
+            _content: '542',
+            _categories: '62'
+          },
+          it: {
+            _content: '538',
+            _categories: '11'
+          }
+        },
+        color: '#FF00FF',
         name: 'Fede',
         image: 'img/itinerari/fede.jpg',
         description: 'Un affascinante percorso costellato di chiese rurali, cripte, luoghi di ristoro, attraversando una campagna ricca di quelle testimonianze rurali tipiche del territorio salentino.'
@@ -53,6 +77,17 @@ angular.module('gal.services', [])
         title: 'Naturalistico/Archeologico',
         _content: '541',
         _categories: '57',
+        lang: {
+          en: {
+            _content: '545',
+            _categories: '103'
+          },
+          it: {
+            _content: '541',
+            _categories: '57'
+          }
+        },
+        color: '#68B42E',
         name: 'Naturalistico\/archeologico',
         image: 'img/itinerari/natura.jpg',
         description: 'Un percorso che attraversa i comuni di Ugento, Salve, Morciano di Leuca, Presicce ed Acquarica del Capo, fino a raggiungere il famoso Parco Naturale Litorale di Ugento.'
@@ -61,78 +96,112 @@ angular.module('gal.services', [])
         title: 'Falesie',
         _content: '540',
         _categories: '54',
+        lang: {
+          en: {
+            _content: '544',
+            _categories: '99'
+          },
+          it: {
+            _content: '540',
+            _categories: '54'
+          }
+        },
+        color: '#CC9999',
         name: 'Falesie',
         image: 'img/itinerari/falesie.jpg',
         description: 'Un percorso che si dispiega lungo la costa adriatica del Capo di Leuca, un paesaggio spettacolare dove il mare e la terra quasi si scontrano lungo la linea di costa, alta, rocciosa, costellata di grotte e insenature.'
       }
     ],
 
-    getRoute: function (id) {
+    getRoutes: function (done) {
 
-      var it = _.find(gal_json.routes, function (item) {
-        return item._content == id;
+      var self = this;
+
+      $language.get(function (err, result) {
+
+        console.log('language: ' + result);
+            
+        async.each(self.routes, function (item, callback) {
+          if (result == 'it') {
+            item._content = item.lang.it._content;
+            item._categories = item.lang.it._categories;
+          } else if (result == 'en') {
+            item._content = item.lang.en._content;
+            item._categories = item.lang.en._categories;
+          };
+          callback();
+        }, function (err) {
+          // console.log('Routes: ' + JSON.stringify(self.routes));
+          done(err, self.routes);
+        })
+
       });
-
-      return it;
 
     },
 
-    pois: [],
+    getRoute: function (id, done) {
+
+      var self = this;
+
+      $language.get(function (err, result) {
+        
+        console.log('get route by language: ' + result + ' and id ' + id);
+
+        var it = _.find(self.routes, function (item) {
+          // console.log('route item: ' + JSON.stringify(item));
+          if (result == 'it') {
+            return item.lang.it._content == id;
+          } else if (result == 'en') {
+            return item.lang.en._content == id;
+          }
+          
+        });
+
+        // console.log('found route item: ' + JSON.stringify(it));
+
+        done(err, it);
+
+      });
+    },
+
+    // pois: [],
 
     // punti di interesse ordinate per coordinate più vicine
-    poi_latlng: function (done) {
+    /*
+    poi_latlng: function (done, options) {
       
       var pois = [];
 
       var self = this;
+
+      // leggo i routes
   
       async.each(self.routes, function (item, callback) {
-        console.log('getting pois by ' + item._content);
-        self.poi(item._content, null, function (err, data) {
-          self._poi_latlng(data, item._content, function (err) {
-            callback();
-          });
+        console.log('getting pois by ' + item._categories);
+        self.poi(item._categories, null, function (err, data) {
+
+          // creo un unico array di POI
+
+          //self._poi_latlng(data, item._content, function (err) {
+          //  callback();
+          //});
+
         });
 
       }, function (err) {
+        // filtro solo i poi di tipo 'places'
+        // fitro solo i primi N poi più vicini
+        // creo JSON per visulizzarli sulla mappa
+        
         console.log('*** total pois: ' + _.size(self.pois));
         done(err, self.pois);
       });
 
     },
-
-    // punti di interesse ordinate per coordinate più vicine
-    _poi_latlng: function (data, content, done) {
-
-      var self = this;
-
-      async.each(data, function (item, callback) {
-
-        // console.log('-------------------');
-        // console.log(JSON.stringify(item));
-
-        var poiData = {
-            id: item.id,
-            content: content,
-            category: item.id,
-            longitude: item.lon,
-            latitude: item.lat,
-            altitude: 0,
-            description: item.address,
-            title: item.title
-        };
-
-        self.pois.push(poiData);
-
-        callback();
-
-      }, function (err) {
-        done(err)
-      });
-
-    },
+    */
 
     // leggo il punto di interesse più vicino in una direzione
+    /*
     poi_nearest: function (direction, done) {
       
       var nearest_pois = [];
@@ -209,32 +278,33 @@ angular.module('gal.services', [])
       });
 
     },
+    */
 
     // punti di interesse
-    poi: function (category, idpoi, callback, byUrl) {
+    poi: function (callback, options) {
 
       var self = this;
 
-      if (byUrl) {
+      if (options.byUrl) {
         console.log('getting data POI by url')
-        self._poi_URI(category, idpoi, callback);
+        self._poi_URI(options.category, options.idpoi, callback);
       } else {
         pdb.open(DB.name, function (db_callback) {
             db = db_callback;
             
-            pdb.get(db, category + '_pois', function (err, data) {
+            pdb.get(db, options.category + '_pois', function (err, data) {
               if (!err) {
                 console.log('getting data POI by Database ');
                 console.log('pois n.' + _.size(data));
                 //console.log('pois : ' + JSON.stringify(data));
                 
-                self._send_pois(idpoi, data, function (err, response) {
+                self._send_pois(options.idpoi, data, function (err, response) {
                   callback(err, response);
                 });
                 
               } else {
                 console.log('getting data POI by url')
-                self._poi_URI(category, idpoi, callback);
+                self._poi_URI(options.category, options.idpoi, callback);
               };
             });
         });
@@ -246,13 +316,14 @@ angular.module('gal.services', [])
       var self = this; 
 
       if (idpoi != null) {
-        console.log('search POI by :' + idpoi);
+
+        console.log('search POI :' + idpoi);
 
         var d = _.filter(data.data, function (item) {
           return item.id == idpoi;
         });
 
-        // console.log('trovato -> ' + JSON.stringify(d));
+        console.log('trovato -> ' + JSON.stringify(d));
         done(false, d);
 
       } else {
@@ -293,10 +364,13 @@ angular.module('gal.services', [])
 
               self._send_pois(idpoi, dt, function (err, response) {
                 self.decodeHTML(response, function (err, response2) {
-                  self._setFilters(response2, function (err, response3) {
-                    console.log('data filtered Ok.')
-                    callback(err, response3);
-                  });
+
+                    self._setFilters(response2, function (err, response3) {
+                      console.log('data filtered Ok.')
+                      callback(err, response3);
+                    });
+                  
+
                 });
               });
               
@@ -316,7 +390,7 @@ angular.module('gal.services', [])
       async.series([
         function (callback) {
           $filters.get(function (err, f) {
-            console.log('Filters on StartUp: ----------------')
+            // console.log('Filters on StartUp: ----------------')
             // console.log(JSON.stringify(f));
             filters = f;
             callback();
@@ -325,7 +399,7 @@ angular.module('gal.services', [])
 
         function (callback) {
 
-          console.log('start filter ...')
+          // console.log('start filter ...')
           data.filtered = [];
 
           async.each(data.data, function (item, callback_child) {
@@ -362,23 +436,23 @@ angular.module('gal.services', [])
     },
 
     // itinerari
-    content: function (id, callback, byUrl) {
+    content: function (callback, options) {
 
       var self = this;
 
-      if (byUrl) {
+      if (options.byUrl) {
         console.log('getting data by url')
-        self._content_URI(id, callback);
+        self._content_URI(options.content, callback);
       } else {
         pdb.open(DB.name, function (db_callback) {
             db = db_callback;
-            pdb.get(db, id, function (err, data) {
+            pdb.get(db, options.content, function (err, data) {
               if (!err) {
                 console.log('getting data by Database ');
                 callback(err, data);
               } else {
                 console.log('getting data by url')
-                self._content_URI(id, callback);
+                self._content_URI(options.content, callback);
               }
             });
         });

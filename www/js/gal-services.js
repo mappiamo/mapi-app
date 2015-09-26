@@ -201,6 +201,7 @@ angular.module('gal.services', [])
     */
 
     // leggo il punto di interesse più vicino in una direzione
+    /*
     poi_nearest: function (direction, done) {
       
       var nearest_pois = [];
@@ -277,6 +278,7 @@ angular.module('gal.services', [])
       });
 
     },
+    */
 
     // punti di interesse
     poi: function (callback, options) {
@@ -434,23 +436,23 @@ angular.module('gal.services', [])
     },
 
     // itinerari
-    content: function (id, callback, byUrl) {
+    content: function (callback, options) {
 
       var self = this;
 
-      if (byUrl) {
+      if (options.byUrl) {
         console.log('getting data by url')
-        self._content_URI(id, callback);
+        self._content_URI(options.content, callback);
       } else {
         pdb.open(DB.name, function (db_callback) {
             db = db_callback;
-            pdb.get(db, id, function (err, data) {
+            pdb.get(db, options.content, function (err, data) {
               if (!err) {
                 console.log('getting data by Database ');
                 callback(err, data);
               } else {
                 console.log('getting data by url')
-                self._content_URI(id, callback);
+                self._content_URI(options.content, callback);
               }
             });
         });
