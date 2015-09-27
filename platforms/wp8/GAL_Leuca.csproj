@@ -267,9 +267,6 @@
         <Compile Include="Plugins\org.apache.cordova.file-transfer\FileTransfer.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.network-information\NetworkStatus.cs" />
-    </ItemGroup>
-    <ItemGroup>
         <Compile Include="Plugins\org.apache.cordova.globalization\Globalization.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -283,5 +280,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Plugins\org.apache.cordova.media\AudioPlayer.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\org.apache.cordova.network-information\NetworkStatus.cs" />
     </ItemGroup>
 </Project>

@@ -1,23 +1,35 @@
-<div style="background: none;">
+<ion-view view-title="Device Information">
 
- 
-</div>
+  <ion-content class="has-header">
 
-<!-- Wikitude library -->
-<script src="architect://architect.js"></script>
-<script type="text/javascript" src="lib/wikitude/marker.js"></script>
-<script type="text/javascript" src="lib/wikitude/selectingPOIs.js"></script>
+  	<div class="card">
+	  <div class="item item-text-wrap">
+	    {{ devicePlatform }}
+	  </div>
+	</div>
 
+	<div class="list card">
+	  <a href="#" class="item item-icon-left">
+	    <i class="icon ion-android-phone-portrait"></i>
+	    {{ devicePlatform }}
+	  </a>
 
-<!--
-<ion-view view-title="{{ title }}" hide-nav-bar="true">
-  <ion-header-bar align-title="left" class="bar-positive">
-  <h1 class="title">Realtà aumentata</h1>
-</ion-header-bar>
-  <ion-content class="has-header" style="background: none;">
+	  <a href="#" class="item item-icon-left">
+	    <i class="icon ion-android-done"></i>
+	    {{ deviceVersion }}
+	  </a>
 
- 
+	  <a href="#" class="item item-icon-left">
+	    <i class="icon ion-android-checkbox-blank"></i>
+	    {{ deviceModel }}
+	  </a>
+
+	  <div class="item item-text-wrap">
+    	{{ message }}
+  	 </div>
+
+	</div>
+
   </ion-content>
   
 </ion-view>
--->

@@ -508,7 +508,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 // ** dettaglio del punto di interesse
 // *****************************
 
-ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta) {
+ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta, $cordovaDevice, $cordovaFileTransfer, $cordovaFile) {
 
   var content = $stateParams.content;
   $scope.content = $stateParams.content;
@@ -728,21 +728,99 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
       }
   });
 
-  $scope.playAudio = function (urlAudio) {
-    
+  function _setTrack(audioFile, title) {
+
+    $scope.track = {
+        url: audioFile,
+        artist: 'Gal Capo di S.Maria di Leuca',
+        title: title,
+        art: 'img/logo/logo-gal_small.jpg'
+    };
+
+  };
+
+  $scope.playAudio = function (urlAudio, id, title) {
+
     try {
-      mediaAudio = $cordovaMedia.newMedia(urlAudio);
 
-      var iOSPlayOptions = {
-        numberOfLoops: 2,
-        playAudioWhenScreenIsLocked : false
-      }
+      var url = urlAudio;
+      var fileMP3 = id + '.mp3';
+      var pathMP3 = cordova.file.documentsDirectory
+      var targetPath = pathMP3 + fileMP3;
+      
+      $cordovaFile.checkFile(pathMP3, fileMP3)
+        .then(function (success) {
+          // success
+          // 
+          console.log('audio file: ' + targetPath);
+          //$scope.audio_embed = $sce.trustAsHtml('<embed src="' + targetPath + '" autostart=false loop=false </embed>');
+          _playAudio(targetPath);
+          //_setTrack(targetPath, title);
 
-      mediaAudio.play(options); // iOS only!
-      mediaAudio.play(); // Android
+        }, function (error) {
+          // error
+          _downloadAudio(url, targetPath, function (err) {
+            if (!err) {
+              console.log('downloaed audio file: ' + targetPath);
+              //$scope.audio_embed = $sce.trustAsHtml('<embed src="' + targetPath + '" autostart=false loop=false </embed>');
+              _playAudio(targetPath);
+              //_setTrack(targetPath, title);
+            };
+          });
+        });
+
     } catch (err) {
-      console.log('funziona attiva solo sul didpositivo mobile')
+      console.log('Error play media: ' + err)
     }
+  };
+
+  function _playAudio(file) {
+
+    // var media = new Media(file, null, null, mediaStatusCallback);
+    console.log('start playing ... ' + file);
+
+    var media = $cordovaMedia.newMedia(file);
+
+    console.log('Play.');
+    
+    $cordovaMedia.play(media);
+
+  };
+
+  var mediaStatusCallback = function(status) {
+      if(status == 1) {
+          $ionicLoading.show({ template: 'playing ...' });
+      } else {
+          $ionicLoading.hide();
+      }
+  };
+
+  function _downloadAudio(url, filePath, done) {
+
+    var trustHosts = true
+    var options = {};
+
+    console.log('Transfer file from ' + url + ' to ' + filePath);
+
+    $ionicLoading.show({template: 'Loading...'});
+
+    $cordovaFileTransfer.download(url, filePath, options, trustHosts)
+      .then(function(result) {
+        // Success!
+        console.log('play audio ' + filePath);
+        $ionicLoading.hide();
+        done(false);
+    
+      }, function(err) {
+        // Error
+        $ionicLoading.hide();
+        done(true);
+      }, function (progress) {
+        $timeout(function () {
+          $ionicLoading.show({ template: Math.round((progress.loaded / progress.total) * 100) + ' %'});
+        })
+      });
+
   };
 
   $scope.pauseAudio = function () {
@@ -790,7 +868,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
 
         $meta.get('poi', dt[0].meta, function (err, meta) {
           $scope.meta = meta;
-        })
+        });
 
         var itre = _.find(dt[0].meta, function (item) {
           return item.name == 'virtual_tour';
@@ -824,7 +902,10 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
         if (typeof iAudio !== 'undefined') {
           console.log(JSON.stringify(iAudio));
           $scope.isAudio = true;
-          $scope.url_audio = JSON.stringify(iAudio);
+          // <embed src="success.wav" autostart=false loop=false>
+          $scope.audio_url = iAudio.value;
+          // $scope.audio_embed = $sce.trustAsHtml('<embed src="' + iAudio.value + '" autostart=false loop=false </embed>');
+          // $scope.playAudio(iAudio.value, dt[0].id, dt[0].title);
         };
 
         $image.getGallery($scope.poi.media, function (err, medias) {
@@ -869,7 +950,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
 
                   iconSize:     [32, 37], // size of the icon
                   // shadowSize:   [50, 64], // size of the shadow
-                  iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                  iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
                   // shadowAnchor: [4, 62],  // the same for the shadow
                   popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                 });

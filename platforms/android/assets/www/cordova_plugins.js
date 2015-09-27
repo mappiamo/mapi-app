@@ -8,6 +8,27 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/com.lampa.startapp/www/startApp.js",
+        "id": "com.lampa.startapp.startapp",
+        "merges": [
+            "navigator.startApp"
+        ]
+    },
+    {
+        "file": "plugins/com.wikitude.phonegap.WikitudePlugin/www/WikitudePlugin.js",
+        "id": "com.wikitude.phonegap.WikitudePlugin.WikitudePlugin",
+        "clobbers": [
+            "WikitudePlugin"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-appavailability/www/AppAvailability.js",
+        "id": "cordova-plugin-appavailability.AppAvailability",
+        "clobbers": [
+            "appAvailability"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-device/www/device.js",
         "id": "cordova-plugin-device.device",
         "clobbers": [
@@ -250,63 +271,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.pbernasconi.progressindicator/www/progressIndicator.js",
-        "id": "org.pbernasconi.progressindicator.ProgressIndicator",
-        "clobbers": [
-            "ProgressIndicator"
-        ]
-    },
-    {
-        "file": "plugins/org.transistorsoft.cordova.background-geolocation/www/BackgroundGeoLocation.js",
-        "id": "org.transistorsoft.cordova.background-geolocation.BackgroundGeoLocation",
-        "clobbers": [
-            "plugins.backgroundGeoLocation"
-        ]
-    },
-    {
-        "file": "plugins/com.wikitude.phonegap.WikitudePlugin/www/WikitudePlugin.js",
-        "id": "com.wikitude.phonegap.WikitudePlugin.WikitudePlugin",
-        "clobbers": [
-            "WikitudePlugin"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-appavailability/www/AppAvailability.js",
-        "id": "cordova-plugin-appavailability.AppAvailability",
-        "clobbers": [
-            "appAvailability"
-        ]
-    },
-    {
-        "file": "plugins/com.lampa.startapp/www/startApp.js",
-        "id": "com.lampa.startapp.startapp",
-        "merges": [
-            "navigator.startApp"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-customurlscheme/www/android/LaunchMyApp.js",
-        "id": "cordova-plugin-customurlscheme.LaunchMyApp",
-        "clobbers": [
-            "window.plugins.launchmyapp"
-        ]
-    },
-    {
-        "file": "plugins/org.apache.cordova.network-information/www/network.js",
-        "id": "org.apache.cordova.network-information.network",
-        "clobbers": [
-            "navigator.connection",
-            "navigator.network.connection"
-        ]
-    },
-    {
-        "file": "plugins/org.apache.cordova.network-information/www/Connection.js",
-        "id": "org.apache.cordova.network-information.Connection",
-        "clobbers": [
-            "Connection"
-        ]
-    },
-    {
         "file": "plugins/org.apache.cordova.globalization/www/GlobalizationError.js",
         "id": "org.apache.cordova.globalization.GlobalizationError",
         "clobbers": [
@@ -333,12 +297,51 @@ module.exports = [
         "clobbers": [
             "window.Media"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.network-information/www/network.js",
+        "id": "org.apache.cordova.network-information.network",
+        "clobbers": [
+            "navigator.connection",
+            "navigator.network.connection"
+        ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.network-information/www/Connection.js",
+        "id": "org.apache.cordova.network-information.Connection",
+        "clobbers": [
+            "Connection"
+        ]
+    },
+    {
+        "file": "plugins/org.pbernasconi.progressindicator/www/progressIndicator.js",
+        "id": "org.pbernasconi.progressindicator.ProgressIndicator",
+        "clobbers": [
+            "ProgressIndicator"
+        ]
+    },
+    {
+        "file": "plugins/org.transistorsoft.cordova.background-geolocation/www/BackgroundGeoLocation.js",
+        "id": "org.transistorsoft.cordova.background-geolocation.BackgroundGeoLocation",
+        "clobbers": [
+            "plugins.backgroundGeoLocation"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-customurlscheme/www/android/LaunchMyApp.js",
+        "id": "cordova-plugin-customurlscheme.LaunchMyApp",
+        "clobbers": [
+            "window.plugins.launchmyapp"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
     "com.ionic.keyboard": "1.0.4",
+    "com.lampa.startapp": "0.0.5",
+    "com.wikitude.phonegap.WikitudePlugin": "4.1.0",
+    "cordova-plugin-appavailability": "0.4.2",
     "cordova-plugin-device": "1.0.1",
     "cordova-plugin-device-motion": "1.1.1",
     "cordova-plugin-device-orientation": "1.0.1",
@@ -351,15 +354,12 @@ module.exports.metadata =
     "org.apache.cordova.console": "0.2.13",
     "org.apache.cordova.file": "1.3.3",
     "org.apache.cordova.file-transfer": "0.5.0",
+    "org.apache.cordova.globalization": "0.3.4",
+    "org.apache.cordova.media": "0.2.16",
+    "org.apache.cordova.network-information": "0.2.15",
     "org.pbernasconi.progressindicator": "1.1.0",
     "org.transistorsoft.cordova.background-geolocation": "0.2.0",
-    "com.wikitude.phonegap.WikitudePlugin": "4.1.0",
-    "cordova-plugin-appavailability": "0.4.2",
-    "com.lampa.startapp": "0.0.5",
-    "cordova-plugin-customurlscheme": "4.0.0",
-    "org.apache.cordova.network-information": "0.2.15",
-    "org.apache.cordova.globalization": "0.3.4",
-    "org.apache.cordova.media": "0.2.16"
+    "cordova-plugin-customurlscheme": "4.0.0"
 }
 // BOTTOM OF METADATA
 });

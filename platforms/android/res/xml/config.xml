@@ -5,6 +5,15 @@
         <param name="android-package" value="com.ionic.keyboard.IonicKeyboard" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="startApp">
+        <param name="android-package" value="com.lampa.startapp.startApp" />
+    </feature>
+    <feature name="WikitudePlugin">
+        <param name="android-package" value="com.wikitude.phonegap.WikitudePlugin" />
+    </feature>
+    <feature name="AppAvailability">
+        <param name="android-package" value="com.ohh2ahh.appavailability.AppAvailability" />
+    </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>
@@ -38,32 +47,23 @@
     <feature name="FileTransfer">
         <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
     </feature>
+    <feature name="Globalization">
+        <param name="android-package" value="org.apache.cordova.globalization.Globalization" />
+    </feature>
+    <feature name="Media">
+        <param name="android-package" value="org.apache.cordova.media.AudioHandler" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+    </feature>
     <feature name="ProgressIndicator">
         <param name="android-package" value="org.apache.cordova.plugin.ProgressIndicator" />
     </feature>
     <feature name="BackgroundGeoLocation">
         <param name="android-package" value="com.tenforwardconsulting.cordova.bgloc.BackgroundGpsPlugin" />
     </feature>
-    <feature name="WikitudePlugin">
-        <param name="android-package" value="com.wikitude.phonegap.WikitudePlugin" />
-    </feature>
-    <feature name="AppAvailability">
-        <param name="android-package" value="com.ohh2ahh.appavailability.AppAvailability" />
-    </feature>
-    <feature name="startApp">
-        <param name="android-package" value="com.lampa.startapp.startApp" />
-    </feature>
     <feature name="LaunchMyApp">
         <param name="android-package" value="nl.xservices.plugins.LaunchMyApp" />
-    </feature>
-    <feature name="NetworkStatus">
-        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
-    </feature>
-    <feature name="Globalization">
-        <param name="android-package" value="org.apache.cordova.globalization.Globalization" />
-    </feature>
-    <feature name="Media">
-        <param name="android-package" value="org.apache.cordova.media.AudioHandler" />
     </feature>
     <allow-intent href="market:*" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />

@@ -49,7 +49,8 @@ angular.module('gal', ['ionic',
                        'ionic-sidetabs',
                        'gal.globalization',
                        'gal.ui',
-                       'gal.meta'])
+                       'gal.meta',
+                       'ionic-audio'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -87,10 +88,11 @@ angular.module('gal', ['ionic',
 
     // -------------------------------
     // sincronia dei dati
-    
+    /*
     if (window.ProgressIndicator) {
       $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
     };
+    */
     
   });
 

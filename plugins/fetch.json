@@ -196,16 +196,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-customurlscheme": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-customurlscheme"
-        },
-        "is_top_level": true,
-        "variables": {
-            "URL_SCHEME": "galleuca"
-        }
-    },
     "org.apache.cordova.network-information": {
         "source": {
             "type": "registry",
@@ -234,6 +224,24 @@
         "source": {
             "type": "registry",
             "id": "org.apache.cordova.media"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-customurlscheme": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-customurlscheme"
+        },
+        "is_top_level": true,
+        "variables": {
+            "URL_SCHEME": "galleuca"
+        }
+    },
+    "cordova-plugin-media": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-media"
         },
         "is_top_level": true,
         "variables": {}

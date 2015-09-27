@@ -147,11 +147,11 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 			});
 		},
 
-		poi_nearest: function (data, done) {
-			var self = this;
-			this.geojson_data.features = [];
+		poi_all: function (done) {
 
-			// console.log('Data to convert: ' + JSON.stringify(data));
+			var self = this;
+
+			this.geojson_data.features = [];
 
 			var options = {
 				all: true,  // tutti i POI
@@ -159,63 +159,93 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 		      	content: null, 
 		      	poi: null, 
 		      	filters: null,
-		      	nearest: true
+		      	nearest: true,
+		      	limit: 10,
+		      	lat: 0,
+		      	lng: 0
 			};
 
-			this._pois_geojson(data, options, function (err) {
-				done(err, self.geojson_data);
-			});
+			this.pois(function (err, geojson) {
+				var key = "type";
+				var value = "place";
+				var filtered = turf.filter(geojson, key, value);
+				done(err, filtered);
+			}, options);
+
 		},
 
+		poi_nearest: function (done, lat, lng, geojson) {
+			var self = this;
+
+			var point = {
+			  "type": "Feature",
+			  "properties": {},
+			  "geometry": {
+			    "type": "Point",
+			    "coordinates": [lng, lat]
+			  }
+			};
+
+			var key = "type";
+			var value = "place";
+			var filtered = turf.filter(geojson, key, value);
+
+			var nearest = turf.nearest(point, filtered);
+			nearest.properties['color'] = '#f00';
+
+			var n = { 
+				"type": "FeatureCollection",
+    			"features": []
+    		};
+
+    		n.features.push(nearest);
+
+			var distance = turf.distance(point, nearest, 'kilometers');
+
+			done(false, n, distance);
+		},
+
+		/*
 		_pois_geojson: function (data, options, done) {
 
 			var self = this;
-			var co;
-			var ca;
+			//var co;
+			//var ca;
 
-			console.log('start convert n.' + _.size(data));
+			// console.log('start convert n.' + _.size(data));
 
 			async.each(data, function (item, callback) {
 
-				var isOk = true;
+				// var isOk = true;
 
-				var it;
+				// var it;
 
-				if (options.nearest) {
-					// console.log(JSON.stringify(item));
-					it = item.item;
-					co = item.content._content;
-					ca = item.content._categories;
-				} else {
-					it = item;	
-					co = options.content;
-					ca = options.category;
-				};
-
-				console.log('content-category: ' + co + ',' + ca);
 				
-				var geometry = $geo.parse(it.route);
+
+				// console.log('item: ' + JSON.stringify(item));
+				
+				var geometry = $geo.parse(item.route);
 
 		        var feature = {
 		          "type": "Feature",
 		          "geometry": geometry,
 		          "properties": {
-		            id: it.id,
-		            content: co,
-		            category: ca,
-		            type: it.type,
-		            title: it.title,
-		            address: it.address,
-		            marker: it.meta[1].value,
+		            id: item.id,
+		            content: options.content,
+		            category: options.category,
+		            type: item.type,
+		            title: item.title,
+		            address: item.address,
+		            marker: item.meta[1].value,
 		            color: '',
-		            lat: it.lat,
-		            lon: it.lon
+		            lat: item.lat,
+		            lon: item.lon
 		          }
 		        };
 
 		        if (item.type === 'route') {
-		        	console.log('Color:' + it.meta[0].value);
-		        	feature.properties.color = it.meta[0].value;
+		        	console.log('Color:' + item.meta[0].value);
+		        	feature.properties.color = item.meta[0].value;
 		        } else {
 		        	feature.properties.color = '#FFFFFF'
 		        };
@@ -232,18 +262,25 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 		      });
 		},
+		*/
 
-		_pois: function (category, options, done) {
+		_pois: function (done, options) {
 
 			var self = this;
 
-			console.log('search pois by ' + category + ' and ' + options.poi );
+			console.log('search pois by ' + options.category + ' and ' + options.poi );
 
-			Gal.poi(category, options.poi, function (err, data) {
+			var options_poi = {
+				category: options.category,
+				idpoi: options.poi,
+				byUrl: false
+			};
+
+			Gal.poi(function (err, data) {
 
 				// console.log(JSON.stringify(data));
 
-				console.log('loaded pois. Start convert to geojson ... n.' + _.size(data));
+				console.log('loaded pois. Start convert to geojson n.' + _.size(data));
 
 				var d;
 
@@ -256,8 +293,49 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 					d = data.filtered;
 				};
 
-				self._pois_geojson(d, options, done, false);
-		  	});
+				async.each(d, function (item, callback) {
+
+					var geometry = $geo.parse(item.route);
+
+			        var feature = {
+			          "type": "Feature",
+			          "geometry": geometry,
+			          "properties": {
+			            id: item.id,
+			            content: options.content,
+			            category: options.category,
+			            type: item.type,
+			            title: item.title,
+			            address: item.address,
+			            marker: item.meta[1].value,
+			            color: '',
+			            lat: item.lat,
+			            lon: item.lon
+			          }
+			        };
+
+			        if (item.type === 'route') {
+			        	console.log('Color:' + item.meta[0].value);
+			        	feature.properties.color = item.meta[0].value;
+			        } else {
+			        	feature.properties.color = '#FFFFFF'
+			        };
+
+		        	self.geojson_data.features.push(feature);
+			
+		        	callback();
+
+		      	}, function (err) {
+
+		      		if (typeof done === 'function') {
+		      			done(err);
+		      		};
+
+				});
+
+				// self._pois_geojson(d, options, done);
+				
+		  	}, options_poi);
 
 		},
 
@@ -271,32 +349,48 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 				options
 				--------
 
-				all: false,  // tutti i POI
-		      	category: category, 
-		      	content: content, 
-		      	poi: null, 
+				var options = {
+					all: true,  // tutti i POI
+		      		category: null, 
+		      		content: null, 
+		      		poi: null, 
+		      		filters: null,
+		      		nearest: false,
+		      		limit: 10	// quando si cercano tutti i POI vicini alle coordinate
+				};
 		      	
 			*/
 
+			console.log('create geojson ... ');
+
 			if (!options.all) {
 				this.geojson_data.features = [];
-				self._pois(options.category, options, function (err) {
+				self._pois(function (err) {
 					if (typeof done === 'function') {
 						// console.log('*** GeoJSON: ' + JSON.stringify(self.geojson_data));
 						done(err, self.geojson_data);
 					};
-				});
+				}, options);
 			} else {
-				async.each(Gal.routes, function (item, callback) {
-					self._pois(item._categories, options, function (err) {
-						callback();
+				Gal.getRoutes(function (err, routes) {
+					async.each(routes, function (item, callback) {
+						
+						options.category = item._categories;
+						options.content = item._content;
+
+						console.log(JSON.stringify(options))
+
+						self._pois(function (err) {
+							callback();
+						}, options);
+					}, function (err) {
+						if (typeof done === 'function') {
+							// console.log('*** GeoJSON All Pois: ' + JSON.stringify(self.geojson_data));
+							done(err, self.geojson_data);
+						}
 					});
-				}, function (err) {
-					if (typeof done === 'function') {
-						console.log('*** GeoJSON All Pois: ' + JSON.stringify(self.geojson_data));
-						done(err, self.geojson_data);
-					}
 				});
+				
 			};
 		}
 	};

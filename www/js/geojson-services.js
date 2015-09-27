@@ -205,65 +205,6 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 			done(false, n, distance);
 		},
 
-		/*
-		_pois_geojson: function (data, options, done) {
-
-			var self = this;
-			//var co;
-			//var ca;
-
-			// console.log('start convert n.' + _.size(data));
-
-			async.each(data, function (item, callback) {
-
-				// var isOk = true;
-
-				// var it;
-
-				
-
-				// console.log('item: ' + JSON.stringify(item));
-				
-				var geometry = $geo.parse(item.route);
-
-		        var feature = {
-		          "type": "Feature",
-		          "geometry": geometry,
-		          "properties": {
-		            id: item.id,
-		            content: options.content,
-		            category: options.category,
-		            type: item.type,
-		            title: item.title,
-		            address: item.address,
-		            marker: item.meta[1].value,
-		            color: '',
-		            lat: item.lat,
-		            lon: item.lon
-		          }
-		        };
-
-		        if (item.type === 'route') {
-		        	console.log('Color:' + item.meta[0].value);
-		        	feature.properties.color = item.meta[0].value;
-		        } else {
-		        	feature.properties.color = '#FFFFFF'
-		        };
-
-		        self.geojson_data.features.push(feature);
-			
-		        callback();
-
-		      }, function (err) {
-
-		      	if (typeof done === 'function') {
-		      		done(err);
-		      	};
-
-		      });
-		},
-		*/
-
 		_pois: function (done, options) {
 
 			var self = this;

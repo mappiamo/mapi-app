@@ -17,8 +17,14 @@
     <feature name="Keyboard">
         <param name="ios-package" onload="true" value="IonicKeyboard" />
     </feature>
+    <feature name="startApp">
+        <param name="ios-package" value="startApp" />
+    </feature>
     <feature name="WikitudePlugin">
         <param name="ios-package" value="WTWikitudePlugin" />
+    </feature>
+    <feature name="AppAvailability">
+        <param name="ios-package" value="AppAvailability" />
     </feature>
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
@@ -56,26 +62,20 @@
     <feature name="FileTransfer">
         <param name="ios-package" value="CDVFileTransfer" />
     </feature>
-    <feature name="ProgressIndicator">
-        <param name="ios-package" value="ProgressIndicator" />
-    </feature>
-    <feature name="BackgroundGeoLocation">
-        <param name="ios-package" value="CDVBackgroundGeoLocation" />
-    </feature>
-    <feature name="AppAvailability">
-        <param name="ios-package" value="AppAvailability" />
-    </feature>
-    <feature name="startApp">
-        <param name="ios-package" value="startApp" />
-    </feature>
-    <feature name="NetworkStatus">
-        <param name="ios-package" value="CDVConnection" />
-    </feature>
     <feature name="Globalization">
         <param name="ios-package" value="CDVGlobalization" />
     </feature>
     <feature name="Media">
         <param name="ios-package" value="CDVSound" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="ios-package" value="CDVConnection" />
+    </feature>
+    <feature name="ProgressIndicator">
+        <param name="ios-package" value="ProgressIndicator" />
+    </feature>
+    <feature name="BackgroundGeoLocation">
+        <param name="ios-package" value="CDVBackgroundGeoLocation" />
     </feature>
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
