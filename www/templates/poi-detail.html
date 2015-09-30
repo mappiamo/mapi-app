@@ -4,15 +4,23 @@
   <div class="buttons">
     <a class="button button-icon icon ion-ios-arrow-back" href="#/tab/map/{{ content }}/{{ category }}"></a>
   </div>
-  <h1 class="title">{{ui[0]}}</h1>
+  <h1 class="title">{{ ui[0] }}</h1>
   <div class="buttons">
-    <a class="button button-icon icon ion-android-map" href="#/tab/route/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}"></a>
     <a class="button button-icon icon ion-share" ng-click="share(poi)" href="#"></a>
   </div>
+  </ion-header-bar>
 
-</ion-header-bar>
+  <div class="bar bar-subheader bar-dark">
+    <div class="button-bar">
+      <a class="button button-icon icon ion-android-image" href="#/tab/gallery/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="isGallery"></a>
+      <a class="button button-icon icon ion-android-camera" href="#/tab/i360/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="is360"></a>
+      <a class="button button-icon icon ion-android-film" href="#/tab/video/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="isVideo"></a>
+      <a class="button button-icon icon ion-android-volume-up" href="#/tab/audio/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="isAudio"></a>
+      <a class="button button-icon icon ion-android-map" href="#/tab/route/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}"></a>
+    </div>
+  </div>
 
-   <ion-content class="has-header">
+   <ion-content class="has-header has-subheader">
       
       <div class="list card" ng-if="dataOk">
 
@@ -41,16 +49,6 @@
         
       </div>
 
-  </ion-content>
-
-  <ion-side-tabs on-expand="tabExpand(index)" on-collapse="tabCollapse(index)">
-    
-
-    <ion-side-tab class="dark-bg" style="border-radius: 10px;">
-      <ion-side-tab-handle width="40" height="50" toggle="ion-ios-information ion-ios-information-outline" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-ios-information"></i></ion-side-tab-handle>
-      
-      <ion-content>
-      <!-- Meta informazioni -->
       <div class="list" ng-repeat="info in meta">
         <div class="item item-divider">
           {{ info.name }}
@@ -61,80 +59,7 @@
         </a>
 
       </div>
-      </ion-content>
 
-    </ion-side-tab>
-
-    <ion-side-tab class="dark-bg" style="border-radius: 10px;" ng-show="isGallery">
-      
-      <ion-side-tab-handle width="40" height="50" toggle="ion-android-camera ion-android-camera" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-android-camera"></i></ion-side-tab-handle>
-        <!--
-        <ion-gallery ion-gallery-items="medias"></ion-gallery>
-        -->
-        <ion-content>
-          <h3 align="center" style="color: #FFFFFF">Gallery</h3>
-          <div class="list card">
-            <div class="item item-image" ng-repeat="media in medias">
-              <img cache-src="{{ media.src }}"></img>
-            </div>
-          </div>
-        </ion-content>
-
-    </ion-side-tab>
-
-    <ion-side-tab class="dark-bg" style="border-radius: 10px;" ng-show="is360">
-      <ion-side-tab-handle width="40" height="50" toggle="ion-android-image ion-android-image" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-android-image"></i></ion-side-tab-handle>
-      
-      <div ng-bind-html="url_tre"></div>
-
-    </ion-side-tab>
-
-    <ion-side-tab class="dark-bg" style="border-radius: 10px;" ng-show="isVideo">
-      <ion-side-tab-handle width="40" height="50" toggle="ion-android-film ion-android-film" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-android-film"></i></ion-side-tab-handle>
-      
-      <div class="video-container">
-          <div ng-bind-html="video_url"></div>
-      </div>
-
-    </ion-side-tab>
-
-    <ion-side-tab class="dark-bg" style="border-radius: 10px;" ng-show="isAudio">
-      <ion-side-tab-handle width="40" height="50" toggle="ion-android-volume-up ion-android-volume-up" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-android-volume-up"></i></ion-side-tab-handle>
-
-      <!--
-      <ion-audio-track track="track">
-          <div class="list list-inset">
-              <div class="item item-thumbnail-left">
-                  <img src="{{ track.art }}">
-                  <h2>{{ track.title }}</h2>
-                  <p>{{ track.artist }}</p>
-                  <ion-audio-controls>
-                        <a class="button button-icon icon" ion-audio-play></a>
-                        <ion-spinner icon="ios"></ion-spinner>
-                    </ion-audio-controls>
-              </div>
-              <div class="item">
-                <ion-audio-progress-bar display-time></ion-audio-progress-bar>
-              </div>
-          </div>
-      </ion-audio-track>
-      -->
-      
-      <!--
-
-      <div class="audio-container">
-        <div ng-bind-html="audio_embed"></div>
-      </div>
-      -->
-
-      <div class="button-bar">
-        <a class="button" ng-click="playAudio(audio_url, poi.id, poi.title)"><i class="icon ion-play"></i></a>
-        <a class="button" ng-click="pauseAudio()"><i class="icon ion-pause"></i></a>
-        <a class="button" ng-click="stopAudio()"><i class="icon ion-stop"></i></a>
-      </div>
-      
-    </ion-side-tab>
-
-  </ion-side-tabs>
+  </ion-content>
 
 </ion-view>

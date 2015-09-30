@@ -478,11 +478,11 @@ angular.module('gal.services', [])
         .success(function(data) {
           dt._id = id;
           dt.data = data;
-          callback(false, dt, 0);
+          callback(false, dt);
         })
         .error(function(data, status, headers, config) {
             console.log('Unable to get itinerario ' + name);
-            callback(true, null, 0);
+            callback(true, null);
       });
     }
 

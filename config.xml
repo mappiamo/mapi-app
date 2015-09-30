@@ -14,17 +14,17 @@
   <allow-navigation href="data:*"/>
   <allow-navigation href="blob:*"/>
   <allow-navigation href="architect://architect.js"/>
-  <allow-navigation href="http://itinerari.galcapodileuca.it/*" />
-  <allow-intent href="http://*/*" />
-  <allow-intent href="https://*/*" />
-  <allow-intent href="tel:*" />
-  <allow-intent href="sms:*" />
-  <allow-intent href="mailto:*" />
-  <allow-intent href="geo:*" />
+  <allow-navigation href="http://itinerari.galcapodileuca.it/*"/>
+  <allow-intent href="http://*/*"/>
+  <allow-intent href="https://*/*"/>
+  <allow-intent href="tel:*"/>
+  <allow-intent href="sms:*"/>
+  <allow-intent href="mailto:*"/>
+  <allow-intent href="geo:*"/>
   <allow-intent href="architect://*"/>
   <allow-intent href="data:*"/>
   <allow-intent href="blob:*"/>
-  <allow-intent href="http://itinerari.galcapodileuca.it/*" />
+  <allow-intent href="http://itinerari.galcapodileuca.it/*"/>
   <allow-intent href="architect://architect.js"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
@@ -34,8 +34,8 @@
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="3000"/>
   <platform name="ios">
-    <allow-intent href="itms:*" />
-    <allow-intent href="itms-apps:*" />
+    <allow-intent href="itms:*"/>
+    <allow-intent href="itms-apps:*"/>
     <icon src="resources/ios/icon/icon.png" width="57" height="57"/>
     <icon src="resources/ios/icon/icon@2x.png" width="114" height="114"/>
     <icon src="resources/ios/icon/icon-40.png" width="40" height="40"/>
@@ -64,7 +64,7 @@
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
   <platform name="android">
-    <allow-intent href="market:*" />
+    <allow-intent href="market:*"/>
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
     <icon src="resources/android/icon/drawable-mdpi-icon.png" density="mdpi"/>
     <icon src="resources/android/icon/drawable-hdpi-icon.png" density="hdpi"/>
@@ -87,7 +87,7 @@
   <platform name="wp8">
     <icon height="99" src="resources/wp8/icon/ApplicationIcon.png" width="99"/>
     <icon height="159" src="resources/wp8/icon/Background.png" width="159"/>
-    <splash height="1280" src="resources/wp8/splash/SplashScreenImage.png" width="768"/>
+    <splash src="resources/wp8/splash/SplashScreenImage.png" width="768" height="1280"/>
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
   <engine name="ios" spec="^3.9.0"/>

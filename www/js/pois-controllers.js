@@ -744,7 +744,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
     try {
 
       var url = urlAudio;
-      var fileMP3 = id + '.mp3';
+      var fileMP3 = id; // + '.mp3';
       var pathMP3 = cordova.file.documentsDirectory
       var targetPath = pathMP3 + fileMP3;
       

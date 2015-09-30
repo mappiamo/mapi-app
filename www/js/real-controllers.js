@@ -12,7 +12,7 @@
 
 var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, $cordovaAppAvailability) {
+ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, $cordovaAppAvailability, REALITY) {
 
 	try {
 	    var deviceInfo = {
@@ -27,13 +27,11 @@ ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, 
 	    console.log(JSON.stringify($scope.deviceInfo));
 
 		if (deviceInfo.platform == 'Android') {
-			var nameApp = "com.mappiamo.galleuca";
-			console.log('run App: ' + nameApp);
-			_runApp(nameApp);
+			console.log('run App: ' + REALITY.android.url);
+			_runApp(REALITY.android.url);
 		} else if (deviceInfo.platform == 'iOS') {
-			var nameApp = "galreality://";
-			console.log('run App: ' + nameApp);
-			_runApp(nameApp);
+			console.log('run App: ' + REALITY.iOS.url);
+			_runApp(REALITY.iOS.url);
 		} else {
 			$scope.message = 'Questa funzione è disponibile solo per sistemi Android e IOS';
 		};
@@ -55,9 +53,21 @@ ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, 
 				}, function () {
 					// not available
 					$scope.message = 'Non ho trovato l\'App Gal Leuca Reality';
-			});
-		  	
+					
+					var appStore = '';
 
+					if (deviceInfo.platform == 'Android') {
+						appStore = REALITY.android.store;
+					} else if (deviceInfo.platform == 'iOS') {
+						appStore = REALITY.iOS.store;
+					} else {
+						$scope.message = 'Questa funzione è disponibile solo per sistemi Android e IOS';
+					};
+
+					$startApp.run(appStore, function (err, message) {
+						$scope.message = message;
+					});
+			});
 		};
 	}
 	catch(err) {
@@ -69,40 +79,9 @@ ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, 
 // Bussola
 ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion, $cordovaDeviceOrientation, Gal, _, $ionicLoading, TEST, $timeout, $utility, $ionicGesture, $ionicModal, GeoJSON, leafletData, $ui) {
 
-	/*
-	var test = {
-		state: TEST.value,
-		value: function (random) {
-			if (random) {
-				return Math.floor((Math.random() * 360) + 1);
-			} else {
-				return 1; // Direzione Nord
-			}
-		}
-	};
-	*/
-
-	/*
-	var magnetic = 0;
-	var magneticHeading;
-	var trueHeading;
-	var accuracy;
-	var timeStamp;
-	var watch;
-	*/
-
 	var layer_control;
 	var layer_nearest;
 	var geojson;
-
-	/*
-	var orientation = {
-		magneticHeading: 0,
-        trueHeading: false,
-        accuracy: 0,
-        timeStamp: null
-	};
-	*/
 
 	var location = {
 		latitude: 0,
@@ -118,49 +97,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	$scope.$on('$ionicView.leave', function() {
 		console.log('view leave');
 	});
-
-	/*
-	$ionicModal.fromTemplateUrl('templates/real-map.html', {
-	    scope: $scope,
-	    animation: 'slide-in-up'
-	  }).then(function(modal) {
-	    $scope.modal = modal;
-	});
-	 
-	$scope.openMap = function() {
-		$scope.modal.show();
-	};
-	*/
-
-	/*
-	$scope.viewInfo = function (id, idpoi, lat, lon) {
-		console.log('view info');
-		_stopWatch();
-		window.location.href = '#/tab/poi/' + id + '/' + idpoi + '/' + lat + '/' + lon;
-	};
-	*/
-
-	/*
-	$scope.closeMap = function() {
-		$scope.isPOI = false;
-		$scope.modal.hide();
-	};
-
-	//Cleanup the modal when we're done with it!
-	$scope.$on('$destroy', function() {
-		$scope.modal.remove();
-	});
-
-	// Execute action on hide modal
-	$scope.$on('modal.hidden', function() {
-	// Execute action
-	});
-	
-	// Execute action on remove modal
-	$scope.$on('modal.removed', function() {
-	// Execute action
-	});
-	*/
 
 	$scope.$on('$ionicView.beforeEnter', function() {
 		// test = TEST.value;
@@ -310,122 +246,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		console.log('error to orientation');
 	};
 
-	/*
-	
-	function _startWatch() {
-		// Compass 
-		var options = {
-	      frequency: 3000,
-	      filter: true     // if frequency is set, filter is ignored
-	    };
-
-    	watch = $cordovaDeviceOrientation.watchHeading(options).then(
-	      null,
-	      function(error) {
-	        // An error occurred
-	        console.log('error to device orientation');
-	      },
-	      function(result) {   // updates constantly (depending on frequency value)
-	       	magneticHeading = result.magneticHeading;
-	        trueHeading = result.trueHeading;
-	        accuracy = result.headingAccuracy;
-	        timeStamp = result.timestamp;
-	        _setMagnetic(result.magneticHeading);
-	    });
-    };
-
-    function _setMagnetic(m) {
-    	console.log('Magnetic Heading: ' + m);
-    	magnetic = m;
-    	$scope.magnetic = m;
-    	$scope.transform = "rotate(" + m + "deg)";
-
-    	if (test.state) {
-    		$scope.location = Geolocation.location();
-    		$scope.isLocation = true;
-    	}
-
-    };
-
-    $scope.search = function () {
-    	_search();	
-    };
-
-    function _search() {
-    	$scope.magnetic_search = magnetic;
-    	$scope.isSearch = true;
-		$scope.isError = false;
-       _getPois(magnetic);
-    };
-
-    // Hold Compass
-    var el = angular.element('#compass');
-    $ionicGesture.on('hold', function(e) {
-    	_search();
-    }, el);
-	
-	*/
-
-	/*
-
-    function _getPois(magnetic) {
-
-    	var direction = $utility._getDirection(magnetic);
-    	
-    	console.log('search pois in ' + direction);
-		
-		Gal.poi_nearest(direction, function (err, data, direction) {
-			
-			console.log('Direction to filter: ' + direction + ' POIs ' + _.size(data));
-			
-			$scope.isSearch = false;
-		
-			if (_.size(data) > 0) {
-
-				//console.log(JSON.stringify(data[0].item));
-
-				var d = _.sortBy(data, function (item) {
-					return Geolocation.distance(item.item.lat, item.item.lon);
-				});
-
-				//console.log('Direction: ' + direction + ' - ' + JSON.stringify(d[0].item));
-
-				var s = _.filter(d, function (item) {
-					return item.direction == direction;
-				});
-
-				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in direzione ' + $utility._getWindRose(magnetic, true);
-
-				// console.log('Item: --------> ' + JSON.stringify(s[0]));
-
-				$scope.isError = false;
-				
-				if (_.size(s) > 0) {
-					$scope.content = s[0].content._content;
-					$scope.category = s[0].content._categories;
-
-					console.log('Content: ' + s[0].content._content);
-
-					$scope.openMap();
-
-					_geojson(s);
-
-					_stopWatch();
-
-				} else {
-					// non sono stati trovati punti di interesse
-					$scope.error_msg = 'Non ho trovato nessun Punto di interesse in direzione ' + $utility._getWindRose(magnetic, true);
-					$scope.isError = true;
-				};
-
-			} else {
-				$scope.isPOI = false;
-			};
-		});
-	};
-
-	*/
-
 	function _geojson() {
 
 		$ui.get('compass', function (err, lang) {
@@ -450,23 +270,22 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	                    };
 	                },
 	                pointToLayer: function(feature, latlng) {
-	                  var icon_url = 'img/markers/' + feature.properties.marker;
-	                  // console.log('Icon: ' + icon_url);
+	                  	var icon_url = 'img/markers/' + feature.properties.marker;
+	                  	// console.log('Icon: ' + icon_url);
 
-	                  var markerIcon = L.icon({
-	                    iconUrl: icon_url,
-	                    // shadowUrl: 'leaf-shadow.png',
+						var markerIcon = L.icon({
+							iconUrl: icon_url,
+							// shadowUrl: 'leaf-shadow.png',
+							iconSize:     [32, 37], // size of the icon
+							// shadowSize:   [50, 64], // size of the shadow
+							iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
+							// shadowAnchor: [4, 62],  // the same for the shadow
+							popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+						});
 
-	                    iconSize:     [32, 37], // size of the icon
-	                    // shadowSize:   [50, 64], // size of the shadow
-	                    iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
-	                    // shadowAnchor: [4, 62],  // the same for the shadow
-	                    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-	                  });
+	                  	// console.log(JSON.stringify(feature.properties));
 
-	                  // console.log(JSON.stringify(feature.properties));
-
-	                  var descr = '<h4><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
+	                  	var descr = '<h4><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
                                   '<p>' + feature.properties.address + '</p>';
                                   
 	                    return L.marker(latlng, {
@@ -527,21 +346,187 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
   	};
 
 	/*
+
+	var orientation = {
+		magneticHeading: 0,
+        trueHeading: false,
+        accuracy: 0,
+        timeStamp: null
+	};
+
+	var test = {
+		state: TEST.value,
+		value: function (random) {
+			if (random) {
+				return Math.floor((Math.random() * 360) + 1);
+			} else {
+				return 1; // Direzione Nord
+			}
+		}
+	};
+	var magnetic = 0;
+	var magneticHeading;
+	var trueHeading;
+	var accuracy;
+	var timeStamp;
+	var watch;
+	
+	$scope.viewInfo = function (id, idpoi, lat, lon) {
+		console.log('view info');
+		_stopWatch();
+		window.location.href = '#/tab/poi/' + id + '/' + idpoi + '/' + lat + '/' + lon;
+	};
+
+	$ionicModal.fromTemplateUrl('templates/real-map.html', {
+	    scope: $scope,
+	    animation: 'slide-in-up'
+	  }).then(function(modal) {
+	    $scope.modal = modal;
+	});
+	 
+	$scope.openMap = function() {
+		$scope.modal.show();
+	};
+
+	$scope.closeMap = function() {
+		$scope.isPOI = false;
+		$scope.modal.hide();
+	};
+
+	//Cleanup the modal when we're done with it!
+	$scope.$on('$destroy', function() {
+		$scope.modal.remove();
+	});
+
+	// Execute action on hide modal
+	$scope.$on('modal.hidden', function() {
+	// Execute action
+	});
+	
+	// Execute action on remove modal
+	$scope.$on('modal.removed', function() {
+	// Execute action
+	});
+
+	function _startWatch() {
+		// Compass 
+		var options = {
+	      frequency: 3000,
+	      filter: true     // if frequency is set, filter is ignored
+	    };
+
+    	watch = $cordovaDeviceOrientation.watchHeading(options).then(
+	      null,
+	      function(error) {
+	        // An error occurred
+	        console.log('error to device orientation');
+	      },
+	      function(result) {   // updates constantly (depending on frequency value)
+	       	magneticHeading = result.magneticHeading;
+	        trueHeading = result.trueHeading;
+	        accuracy = result.headingAccuracy;
+	        timeStamp = result.timestamp;
+	        _setMagnetic(result.magneticHeading);
+	    });
+    };
+
+    function _setMagnetic(m) {
+    	console.log('Magnetic Heading: ' + m);
+    	magnetic = m;
+    	$scope.magnetic = m;
+    	$scope.transform = "rotate(" + m + "deg)";
+
+    	if (test.state) {
+    		$scope.location = Geolocation.location();
+    		$scope.isLocation = true;
+    	}
+
+    };
+
+    $scope.search = function () {
+    	_search();	
+    };
+
+    function _search() {
+    	$scope.magnetic_search = magnetic;
+    	$scope.isSearch = true;
+		$scope.isError = false;
+       _getPois(magnetic);
+    };
+
+    // Hold Compass
+    var el = angular.element('#compass');
+    $ionicGesture.on('hold', function(e) {
+    	_search();
+    }, el);
+
+	function _getPois(magnetic) {
+
+    	var direction = $utility._getDirection(magnetic);
+    	
+    	console.log('search pois in ' + direction);
+		
+		Gal.poi_nearest(direction, function (err, data, direction) {
+			
+			console.log('Direction to filter: ' + direction + ' POIs ' + _.size(data));
+			
+			$scope.isSearch = false;
+		
+			if (_.size(data) > 0) {
+
+				//console.log(JSON.stringify(data[0].item));
+
+				var d = _.sortBy(data, function (item) {
+					return Geolocation.distance(item.item.lat, item.item.lon);
+				});
+
+				//console.log('Direction: ' + direction + ' - ' + JSON.stringify(d[0].item));
+
+				var s = _.filter(d, function (item) {
+					return item.direction == direction;
+				});
+
+				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in direzione ' + $utility._getWindRose(magnetic, true);
+
+				// console.log('Item: --------> ' + JSON.stringify(s[0]));
+
+				$scope.isError = false;
+				
+				if (_.size(s) > 0) {
+					$scope.content = s[0].content._content;
+					$scope.category = s[0].content._categories;
+
+					console.log('Content: ' + s[0].content._content);
+
+					$scope.openMap();
+
+					_geojson(s);
+
+					_stopWatch();
+
+				} else {
+					// non sono stati trovati punti di interesse
+					$scope.error_msg = 'Non ho trovato nessun Punto di interesse in direzione ' + $utility._getWindRose(magnetic, true);
+					$scope.isError = true;
+				};
+
+			} else {
+				$scope.isPOI = false;
+			};
+		});
+	};
+
 	$scope.goPOI = function () {
 		$scope.closeModal();
 	};
-	*/
-
-	/*
+	
 	function _setView(latlng) {
 		leafletData.getMap('map_compass').then(function(map) {
 	      map.setView(latlng, 9);
 	    });
   	};	
-  	*/
-
-  	/*
-	function _stopWatch() {
+  	
+  	function _stopWatch() {
 
 		if (!test.state) {
 			// watch.clearWatch();
@@ -567,6 +552,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
      	$scope.closeMap();
 
   	}, 6000);
+
 	*/
 });
 

@@ -51,7 +51,6 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
   // Controllo la connessione
 
   // listen for Online event
-  /*
   try {
       var type = $cordovaNetwork.getNetwork();
       if (!type.UNKNOWN && !type.NONE) {
@@ -70,8 +69,7 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
   catch(err) {
       console.log('non posso verificare la connessione');
   };
-  */
-
+  
       /*
   var isOnline = $cordovaNetwork.isOnline()
   var isOffline = $cordovaNetwork.isOffline()
@@ -197,15 +195,20 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf, $meta) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf, $meta, $ui) {
 
-  var content = $stateParams.content;
-  $scope.content = content;
-  
+  // var content = $stateParams.content;
+  $scope.content = $stateParams.content;
   $scope.category = $stateParams.category;
 
-  Gal.getRoute(content, function (err, item_it) {
+  console.log('Param Detail Route: ' + $scope.content + ', ' + $scope.category);
+
+  Gal.getRoute($scope.content, function (err, item_it) {
     $scope.title = item_it.title;
+  });
+
+  $ui.get('exploreDetail', function (err, result) {
+      $scope.ui = result;
   });
 
   var color;
@@ -214,7 +217,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.isMedia = false;
   $scope.dataOk = false;
 
-  console.log('Explore details: ' + content);
+  // console.log('Explore details: ' + $scope.content);
 
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
@@ -283,7 +286,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.share = function(title, start, end) {
 
     var msg = 'Itinerario: ' + title + ' ' + MAPPIAMO.hashtag + 
-              ' ' + MAPPIAMO.contentWeb + content;
+              ' ' + MAPPIAMO.contentWeb + $scope.content;
 
     console.log('Sharing: ' + msg);
 
@@ -402,7 +405,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
     var location = Geolocation.location();
 
-    GeoJSON.content(content, function (err, data) {
+    GeoJSON.content($scope.content, function (err, data) {
 
       angular.extend($scope, {
             geojson: {
@@ -425,8 +428,6 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
             }
       });
 
-      // $scope.length = turf.lineDistance(data, 'kilometers');
-
     });
 
     function _setBounds(bounds) {
@@ -444,9 +445,14 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   function _refresh() {
 
-    console.log('Detail by content ' + content);
+    // console.log('Detail by content ' + $scope.content);
 
-    Gal.content(content, function (err, data) {
+    var options = {
+      content: $scope.content,
+      byUrl: false
+    };
+
+    Gal.content(function (err, data) {
 
       if (!err) {
 
@@ -474,7 +480,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         showSpinner(false);
       
       };
-    });
+    }, options);
   };
 
 });
