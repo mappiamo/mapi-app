@@ -49,7 +49,8 @@ angular.module('gal', ['ionic',
                        'ionic-sidetabs',
                        'gal.globalization',
                        'gal.ui',
-                       'gal.meta'])
+                       'gal.meta',
+                       'ionic-audio'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -87,10 +88,11 @@ angular.module('gal', ['ionic',
 
     // -------------------------------
     // sincronia dei dati
-    
+    /*
     if (window.ProgressIndicator) {
       $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
     };
+    */
     
   });
 
@@ -130,6 +132,17 @@ angular.module('gal', ['ionic',
   key: 'Fmjtd|luur2ha7n9,b5=o5-9wb0q0'
 })
 
+.constant('REALITY', {
+  android: {
+    url: 'com.mappiamo.galleuca',
+    store: ''
+  },
+  iOS: {
+    url: 'galreality://',
+    store: ''
+  }
+})
+
 .constant('MAPBOX', {
   access_token: 'pk.eyJ1IjoiZ3ppbGVuaSIsImEiOiJlVmxEaHJzIn0.GFrZQ08L-B96nN7dHjAa7g' 
 })
@@ -151,21 +164,6 @@ angular.module('gal', ['ionic',
     templateUrl: 'templates/tabs.html',
     controller: 'ExploreCtrl'
   })
-
-  // Each tab has its own nav history stack:
-
-  // home page
-  /*
-  .state('tab.home', {
-    url: '/home',
-    views: {
-      'tab-home': {
-        templateUrl: 'templates/tab-home.html',
-        controller: 'ExploreCtrl'
-      }
-    }
-  })
-  */
 
   // realtà aumentata
   .state('tab.compass', {
@@ -238,6 +236,46 @@ angular.module('gal', ['ionic',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-detail.html',
+          controller: 'PoiDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.gallery', {
+      url: '/gallery/:content/:category/:idpoi/:lat/:lng',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-gallery.html',
+          controller: 'PoiDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.i360', {
+      url: '/i360/:content/:category/:idpoi/:lat/:lng',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-i360.html',
+          controller: 'PoiDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.video', {
+      url: '/video/:content/:category/:idpoi/:lat/:lng',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-video.html',
+          controller: 'PoiDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.audio', {
+      url: '/audio/:content/:category/:idpoi/:lat/:lng',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-audio.html',
           controller: 'PoiDetailCtrl'
         }
       }

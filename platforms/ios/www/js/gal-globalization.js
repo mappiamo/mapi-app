@@ -8,9 +8,9 @@ service.factory('$language', function ($localstorage, $cordovaGlobalization) {
 		get: function (done) {
 
 			var language = $localstorage.getObject('language');
-			// console.log('Language in memory saved: ' + location);
+			console.log('Language in memory saved: ' + JSON.stringify(language));
 
-			if (typeof location == 'undefined') {
+			if (typeof location === 'undefined' || JSON.stringify(language) == '{}') {
 				done(false, 'it');	
 			} else {
 				done(false, language);

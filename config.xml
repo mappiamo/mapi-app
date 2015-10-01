@@ -13,19 +13,18 @@
   <allow-navigation href="https://*/*"/>
   <allow-navigation href="data:*"/>
   <allow-navigation href="blob:*"/>
-  <allow-navigation href="architect://architect.js"/>
   <allow-navigation href="http://itinerari.galcapodileuca.it/*"/>
+  <allow-navigation href="https://api.mapbox.com/v4/directions/*" />
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
   <allow-intent href="sms:*"/>
   <allow-intent href="mailto:*"/>
   <allow-intent href="geo:*"/>
-  <allow-intent href="architect://*"/>
   <allow-intent href="data:*"/>
   <allow-intent href="blob:*"/>
   <allow-intent href="http://itinerari.galcapodileuca.it/*"/>
-  <allow-intent href="architect://architect.js"/>
+  <allow-intent href="https://api.mapbox.com/v4/directions/*" />
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

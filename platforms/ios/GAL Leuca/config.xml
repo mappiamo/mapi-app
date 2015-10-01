@@ -20,9 +20,6 @@
     <feature name="startApp">
         <param name="ios-package" value="startApp" />
     </feature>
-    <feature name="WikitudePlugin">
-        <param name="ios-package" value="WTWikitudePlugin" />
-    </feature>
     <feature name="AppAvailability">
         <param name="ios-package" value="AppAvailability" />
     </feature>
@@ -74,9 +71,6 @@
     <feature name="ProgressIndicator">
         <param name="ios-package" value="ProgressIndicator" />
     </feature>
-    <feature name="BackgroundGeoLocation">
-        <param name="ios-package" value="CDVBackgroundGeoLocation" />
-    </feature>
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -118,7 +112,6 @@
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
     <allow-navigation href="blob:*" />
-    <allow-navigation href="architect://architect.js" />
     <allow-navigation href="http://itinerari.galcapodileuca.it/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -130,7 +123,6 @@
     <allow-intent href="data:*" />
     <allow-intent href="blob:*" />
     <allow-intent href="http://itinerari.galcapodileuca.it/*" />
-    <allow-intent href="architect://architect.js" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />

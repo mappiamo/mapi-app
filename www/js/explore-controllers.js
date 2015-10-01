@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta, $ionicModal) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -29,6 +29,36 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
   $language.get(function (err, result) {
     $scope.language = result;
     console.log(JSON.stringify(result));
+  });
+
+  $ionicModal.fromTemplateUrl('templates/config-modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
   });
 
   $scope.reportAppLaunched = function (url) {
@@ -43,20 +73,21 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
     _refresh();
   };
 
-  $scope.data = {
-      "launched" : "No"
-  };
-
   // **********************************
   // Controllo la connessione
 
   // listen for Online event
   try {
+
       var type = $cordovaNetwork.getNetwork();
-      if (!type.UNKNOWN && !type.NONE) {
+      console.log('type connection: ' + type);
+
+      if ($cordovaNetwork.isOnline()) {
+        
         if (window.ProgressIndicator) {
           $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
         };
+        
         // esegue il download dei dati solo se esiste una connessione
         DataSync.download(function (err, data, pois) {
               console.log('syncronizing ok ...');
@@ -64,6 +95,9 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
                 $cordovaProgress.hide();
               };
         }, true);
+
+      } else {
+        console.log('Connection Offline.');
       };
   }
   catch(err) {

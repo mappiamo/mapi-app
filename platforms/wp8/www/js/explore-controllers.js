@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -31,19 +31,32 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
     console.log(JSON.stringify(result));
   });
 
+  $scope.reportAppLaunched = function (url) {
+    console.log('receveid url: ' + url);
+    // var goUrl = '#/tab/' + url;
+    window.location.href = url;
+    // $state.go(goUrl);
+  };
+
   $scope.setLanguage = function(l) {
     $language.save(l);
     _refresh();
+  };
+
+  $scope.data = {
+      "launched" : "No"
   };
 
   // **********************************
   // Controllo la connessione
 
   // listen for Online event
-  /*
   try {
-      var type = $cordovaNetwork.getNetwork()
+      var type = $cordovaNetwork.getNetwork();
       if (!type.UNKNOWN && !type.NONE) {
+        if (window.ProgressIndicator) {
+          $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
+        };
         // esegue il download dei dati solo se esiste una connessione
         DataSync.download(function (err, data, pois) {
               console.log('syncronizing ok ...');
@@ -56,7 +69,7 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
   catch(err) {
       console.log('non posso verificare la connessione');
   };
-  */
+  
       /*
   var isOnline = $cordovaNetwork.isOnline()
   var isOffline = $cordovaNetwork.isOffline()
@@ -182,15 +195,20 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf, $meta) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf, $meta, $ui) {
 
-  var content = $stateParams.content;
-  $scope.content = content;
-  
+  // var content = $stateParams.content;
+  $scope.content = $stateParams.content;
   $scope.category = $stateParams.category;
 
-  Gal.getRoute(content, function (err, item_it) {
+  console.log('Param Detail Route: ' + $scope.content + ', ' + $scope.category);
+
+  Gal.getRoute($scope.content, function (err, item_it) {
     $scope.title = item_it.title;
+  });
+
+  $ui.get('exploreDetail', function (err, result) {
+      $scope.ui = result;
   });
 
   var color;
@@ -199,7 +217,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.isMedia = false;
   $scope.dataOk = false;
 
-  console.log('Explore details: ' + content);
+  // console.log('Explore details: ' + $scope.content);
 
   $scope.$on('$ionicView.beforeEnter', function() {
       showSpinner(true);
@@ -268,7 +286,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.share = function(title, start, end) {
 
     var msg = 'Itinerario: ' + title + ' ' + MAPPIAMO.hashtag + 
-              ' ' + MAPPIAMO.contentWeb + content;
+              ' ' + MAPPIAMO.contentWeb + $scope.content;
 
     console.log('Sharing: ' + msg);
 
@@ -387,7 +405,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
     var location = Geolocation.location();
 
-    GeoJSON.content(content, function (err, data) {
+    GeoJSON.content($scope.content, function (err, data) {
 
       angular.extend($scope, {
             geojson: {
@@ -410,8 +428,6 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
             }
       });
 
-      // $scope.length = turf.lineDistance(data, 'kilometers');
-
     });
 
     function _setBounds(bounds) {
@@ -429,9 +445,14 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   function _refresh() {
 
-    console.log('Detail by content ' + content);
+    // console.log('Detail by content ' + $scope.content);
 
-    Gal.content(content, function (err, data) {
+    var options = {
+      content: $scope.content,
+      byUrl: false
+    };
+
+    Gal.content(function (err, data) {
 
       if (!err) {
 
@@ -459,10 +480,30 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         showSpinner(false);
       
       };
-    });
+    }, options);
   };
 
 });
+
+
+// **********************************
+// Avvio App con URL 
+
+function handleOpenURL(url) {
+
+    console.log('loading by ' + url);
+
+    var rootUrl = S(url).left(S('galleuca://').length).s;
+    var subUrl = S(url).strip(rootUrl).s;
+
+    var goUrl = '#/tab/' + subUrl;
+    console.log('go to ' + goUrl);
+    
+    var home = document.getElementsByTagName("ion-nav-view")[1];
+    var mainController = angular.element(home).scope();
+    mainController.reportAppLaunched(goUrl);
+
+};
 
 
 

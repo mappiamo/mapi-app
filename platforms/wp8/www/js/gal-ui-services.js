@@ -58,6 +58,14 @@ angular.module('gal.ui', [])
 					}
 				};
 
+				if (uiIndex == 'exploreDetail') {
+					if (result == 'it') {
+						list = self.exploredetail.it;
+					} else if (result == 'en') {
+						list = self.exploredetail.en;
+					}
+				};
+
 				done(err, list);
 
 			});
@@ -85,6 +93,10 @@ angular.module('gal.ui', [])
 		compass: {
 			it: ['Bussola'],
 			en: ['Compass']
+		},
+		exploredetail: {
+			it: ['Dettaglio Itinerario'],
+			en: ['Route Detail']
 		}
 	};
 

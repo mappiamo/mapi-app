@@ -17,11 +17,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"WikitudePlugin\"><param name=\"android-package\" value=\"com.wikitude.phonegap.WikitudePlugin\" /></feature>",
+                            "xml": "<feature name=\"AppAvailability\"><param name=\"android-package\" value=\"com.ohh2ahh.appavailability.AppAvailability\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"AppAvailability\"><param name=\"android-package\" value=\"com.ohh2ahh.appavailability.AppAvailability\" /></feature>",
+                            "xml": "<feature name=\"LaunchMyApp\"><param name=\"android-package\" value=\"nl.xservices.plugins.LaunchMyApp\" /></feature>",
                             "count": 1
                         },
                         {
@@ -79,92 +79,12 @@
                         {
                             "xml": "<feature name=\"ProgressIndicator\"><param name=\"android-package\" value=\"org.apache.cordova.plugin.ProgressIndicator\" /></feature>",
                             "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"BackgroundGeoLocation\"><param name=\"android-package\" value=\"com.tenforwardconsulting.cordova.bgloc.BackgroundGpsPlugin\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"LaunchMyApp\"><param name=\"android-package\" value=\"nl.xservices.plugins.LaunchMyApp\" /></feature>",
-                            "count": 1
                         }
                     ]
                 }
             },
             "AndroidManifest.xml": {
                 "parents": {
-                    "/manifest": [
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-                            "count": 2
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-                            "count": 2
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-                            "count": 2
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_LOCATION_EXTRA_COMMANDS\" />",
-                            "count": 2
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 2
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_GPS\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.CAMERA\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:glEsVersion=\"0x00020000\" android:required=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.location\" android:required=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.sensor.accelerometer\" android:required=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.sensor.compass\" android:required=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
-                            "count": 1
-                        }
-                    ],
-                    "/manifest/application": [
-                        {
-                            "xml": "<activity android:name=\"com.wikitude.tools.activities.MediaPlayerActivity\" android:screenOrientation=\"landscape\"><intent-filter><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /></intent-filter></activity>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<service android:enabled=\"true\" android:name=\"com.tenforwardconsulting.cordova.bgloc.LocationUpdateService\" android:process=\":remote\" />",
-                            "count": 1
-                        }
-                    ],
                     "/*/application/activity": [
                         {
                             "xml": "<intent-filter><data android:scheme=\"galleuca\" /><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /><category android:name=\"android.intent.category.BROWSABLE\" /></intent-filter>",
@@ -212,10 +132,11 @@
         "com.lampa.startapp": {
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
-        "com.wikitude.phonegap.WikitudePlugin": {
+        "cordova-plugin-appavailability": {
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
-        "cordova-plugin-appavailability": {
+        "cordova-plugin-customurlscheme": {
+            "URL_SCHEME": "galleuca",
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "cordova-plugin-device": {
@@ -264,13 +185,6 @@
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         },
         "org.pbernasconi.progressindicator": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
-        },
-        "org.transistorsoft.cordova.background-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
-        },
-        "cordova-plugin-customurlscheme": {
-            "URL_SCHEME": "galleuca",
             "PACKAGE_NAME": "com.ionicframework.galleuca"
         }
     },

@@ -2,15 +2,16 @@
 
   <ion-header-bar class="bar-positive dish-header">
     <h1 class="title">GAL Capo di S.Maria di Leuca</h1>
+    <div class="buttons"> 
+      <button class="button" ng-click="openModal()"><i class="icon ion-ios-gear"></i></button>
+    </div>
   </ion-header-bar>
   
     <!--
     <h1 class="title"><a href="#/tab/home"><img src="img/logo/logo-gal_tra_small.png"></img></a></h1>
-  
-    <div class="buttons">
-      <button class="button" ng-click="download()"><i class="icon ion-ios-cloud-download"></i></button>
-    </div>
     -->
+
+    
     
   <ion-content class="has header" id="home">
 
@@ -33,31 +34,6 @@
         
   </ion-content>
 
-  <ion-side-tabs on-expand="tabExpand(index)" on-collapse="tabCollapse(index)">
-    
-    <ion-side-tab class="dark-bg" style="border-radius: 10px;">
-      
-      <ion-side-tab-handle width="40" height="50" toggle="ion-ios-gear ion-ios-gear" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-ios-gear"></i></ion-side-tab-handle>
-        
-        <div class="list card">
-          <a href="#" class="item item-icon-left" ng-click="download()">
-            <i class="icon ion-ios-cloud-download"></i>
-             Download dei dati
-          </a>
-
-          <a href="#" class="item item-icon-left">
-            <i class="icon ion-ios-people"></i>
-            Credits
-          </a>
-        </div>
-
-        <div class="list">
-          <h4 style="color: #FFFFFF">Scegli la lingua</h4>
-          <ion-radio ng-model="language" ng-value="'it'" ng-change="setLanguage('it')">Italian</ion-radio>
-          <ion-radio ng-model="language" ng-value="'en'" ng-change="setLanguage('en')">English</ion-radio>
-        </div>
-    </ion-side-tab>
-
-  </ion-side-tabs>
+  
 
 </ion-view>

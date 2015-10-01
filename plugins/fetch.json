@@ -103,14 +103,6 @@
         "is_top_level": false,
         "variables": {}
     },
-    "org.transistorsoft.cordova.background-geolocation": {
-        "source": {
-            "type": "registry",
-            "id": "org.transistorsoft.cordova.background-geolocation"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "org.apache.cordova.geolocation": {
         "source": {
             "type": "registry",
@@ -157,15 +149,6 @@
         "source": {
             "type": "git",
             "url": "https://github.com/pbernasconi/cordova-progressIndicator.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "com.wikitude.phonegap.WikitudePlugin": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Wikitude/wikitude-cordova-plugin.git",
             "subdir": "."
         },
         "is_top_level": true,

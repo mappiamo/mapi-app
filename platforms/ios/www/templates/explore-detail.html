@@ -4,7 +4,7 @@
   <div class="buttons">
     <a class="button button-icon icon ion-ios-arrow-back" href="#/tab/map/{{ content }}/{{ category }}"></a>
   </div>
-    <h1 class="title">Dettaglio itinerario</h1>
+    <h1 class="title">{{ ui[0] }}</h1>
   <div class="buttons">
     <a class="button button-icon icon ion-share" ng-click="share(explore.title, explore.meta[4].value, explore.meta[5].value)"></a>
   </div>
@@ -42,18 +42,7 @@
         </div>
       </div>
 
-  </ion-content>
-
-  <ion-side-tabs on-expand="tabExpand(index)" on-collapse="tabCollapse(index)">
-    
-
-    <ion-side-tab class="dark-bg" style="border-radius: 10px;">
-      <ion-side-tab-handle width="40" height="50" toggle="ion-ios-information ion-ios-information-outline" class="dark-bg stable" style="border-radius: 10px 0 0 10px"><i class="icon ion-ios-information"></i>
-    </ion-side-tab-handle>
-      
-      <ion-content>
-      <!-- Meta informazioni -->
-        <div class="list" ng-repeat="info in meta">
+      <div class="list" ng-repeat="info in meta">
           <div class="item item-divider">
             {{ info.name }}
           </div>
@@ -63,10 +52,7 @@
           </a>
 
         </div>
-      </ion-content>
 
-    </ion-side-tab>
-    
-  </ion-side-tabs>
+  </ion-content>
 
 </ion-view>

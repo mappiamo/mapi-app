@@ -15,17 +15,17 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.wikitude.phonegap.WikitudePlugin/www/WikitudePlugin.js",
-        "id": "com.wikitude.phonegap.WikitudePlugin.WikitudePlugin",
-        "clobbers": [
-            "WikitudePlugin"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-appavailability/www/AppAvailability.js",
         "id": "cordova-plugin-appavailability.AppAvailability",
         "clobbers": [
             "appAvailability"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-customurlscheme/www/ios/LaunchMyApp.js",
+        "id": "cordova-plugin-customurlscheme.LaunchMyApp",
+        "clobbers": [
+            "window.plugins.launchmyapp"
         ]
     },
     {
@@ -349,20 +349,6 @@ module.exports = [
         "clobbers": [
             "ProgressIndicator"
         ]
-    },
-    {
-        "file": "plugins/org.transistorsoft.cordova.background-geolocation/www/BackgroundGeoLocation.js",
-        "id": "org.transistorsoft.cordova.background-geolocation.BackgroundGeoLocation",
-        "clobbers": [
-            "plugins.backgroundGeoLocation"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-customurlscheme/www/ios/LaunchMyApp.js",
-        "id": "cordova-plugin-customurlscheme.LaunchMyApp",
-        "clobbers": [
-            "window.plugins.launchmyapp"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -370,8 +356,8 @@ module.exports.metadata =
 {
     "com.ionic.keyboard": "1.0.4",
     "com.lampa.startapp": "0.0.5",
-    "com.wikitude.phonegap.WikitudePlugin": "4.1.0",
     "cordova-plugin-appavailability": "0.4.2",
+    "cordova-plugin-customurlscheme": "4.0.0",
     "cordova-plugin-device": "1.0.1",
     "cordova-plugin-device-motion": "1.1.1",
     "cordova-plugin-device-orientation": "1.0.1",
@@ -387,9 +373,7 @@ module.exports.metadata =
     "org.apache.cordova.globalization": "0.3.4",
     "org.apache.cordova.media": "0.2.16",
     "org.apache.cordova.network-information": "0.2.15",
-    "org.pbernasconi.progressindicator": "1.1.0",
-    "org.transistorsoft.cordova.background-geolocation": "0.2.0",
-    "cordova-plugin-customurlscheme": "4.0.0"
+    "org.pbernasconi.progressindicator": "1.1.0"
 }
 // BOTTOM OF METADATA
 });

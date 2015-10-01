@@ -1,7 +1,4 @@
-<!--
 <ion-view view-title="Itinerari" hide-nav-bar="true">
--->
-<ion-view class="dish" ion-cover-header="220" hide-nav-bar="true">
 
   <ion-header-bar class="bar-positive dish-header">
     <h1 class="title">GAL Capo di S.Maria di Leuca</h1>
@@ -9,39 +6,27 @@
   
     <!--
     <h1 class="title"><a href="#/tab/home"><img src="img/logo/logo-gal_tra_small.png"></img></a></h1>
+  
     <div class="buttons">
       <button class="button" ng-click="download()"><i class="icon ion-ios-cloud-download"></i></button>
     </div>
     -->
+    
+  <ion-content class="has header" id="home">
 
-  
-  <!--
-  <div class="bar bar-subheader bar-positive">
-      <h4 class="title">Selezionare uno degli itinerari</h4>
-    </div>
-  -->
-
-  <ion-content>
-
-    <img class="cover-img" src="img/bg/cover.jpg"/>
-
-    <div class="row">
-      <div class="col">
-        <img class="profile-img" src="img/logo/logo-profile.png"/>
+      <div class="card">
+        <div class="item item-text-wrap">
+          <h2>{{ ui[0] }}</h2>
+          <h3>{{ ui[1] }}</h3>
+        </div>
       </div>
-      <div class="col col-75"> <h4>{{ ui[0] }}</h4>
-        <p>
-        {{ ui[1] }}
-        </p>
-      </div>
-    </div>
 
       <div class="list card" 
            collection-repeat="route in routes">
 
-        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/map/{{route._content}}/{{route._categories}}" style="background-color: {{route.color}}">
-          <img src="{{ route.image }}">
-          <h2 style="color: #FFFFFF">{{ route.title }}</h2>
+        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/map/{{route._content}}/{{route._categories}}">
+          <img src="{{ route.image }}" />
+          <h2 style="color: {{route.color}}">{{ route.title }}</h2>
         </a>
 
       </div>

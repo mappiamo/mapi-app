@@ -116,7 +116,12 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 			this.geojson_data.features = [];
 
-			Gal.content(content, function (err, data) {
+			var options = {
+				content: content,
+				byUrl: false
+			};
+
+			Gal.content(function (err, data) {
 
 				var dt = data.data;
 
@@ -144,7 +149,7 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 		        self.geojson_data.features.push(feature);
 
 		        done(err, self.geojson_data);
-			});
+			}, options);
 		},
 
 		poi_all: function (done) {
@@ -205,65 +210,6 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 			done(false, n, distance);
 		},
 
-		/*
-		_pois_geojson: function (data, options, done) {
-
-			var self = this;
-			//var co;
-			//var ca;
-
-			// console.log('start convert n.' + _.size(data));
-
-			async.each(data, function (item, callback) {
-
-				// var isOk = true;
-
-				// var it;
-
-				
-
-				// console.log('item: ' + JSON.stringify(item));
-				
-				var geometry = $geo.parse(item.route);
-
-		        var feature = {
-		          "type": "Feature",
-		          "geometry": geometry,
-		          "properties": {
-		            id: item.id,
-		            content: options.content,
-		            category: options.category,
-		            type: item.type,
-		            title: item.title,
-		            address: item.address,
-		            marker: item.meta[1].value,
-		            color: '',
-		            lat: item.lat,
-		            lon: item.lon
-		          }
-		        };
-
-		        if (item.type === 'route') {
-		        	console.log('Color:' + item.meta[0].value);
-		        	feature.properties.color = item.meta[0].value;
-		        } else {
-		        	feature.properties.color = '#FFFFFF'
-		        };
-
-		        self.geojson_data.features.push(feature);
-			
-		        callback();
-
-		      }, function (err) {
-
-		      	if (typeof done === 'function') {
-		      		done(err);
-		      	};
-
-		      });
-		},
-		*/
-
 		_pois: function (done, options) {
 
 			var self = this;
@@ -271,10 +217,13 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 			console.log('search pois by ' + options.category + ' and ' + options.poi );
 
 			var options_poi = {
+				content: options.content,
 				category: options.category,
 				idpoi: options.poi,
 				byUrl: false
 			};
+
+			console.log(JSON.stringify(options_poi));
 
 			Gal.poi(function (err, data) {
 
@@ -295,35 +244,42 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 				async.each(d, function (item, callback) {
 
-					var geometry = $geo.parse(item.route);
+					if (options.all && item.type === 'route') {
+						callback();
+					} else {
+						var geometry = $geo.parse(item.route);
 
-			        var feature = {
-			          "type": "Feature",
-			          "geometry": geometry,
-			          "properties": {
-			            id: item.id,
-			            content: options.content,
-			            category: options.category,
-			            type: item.type,
-			            title: item.title,
-			            address: item.address,
-			            marker: item.meta[1].value,
-			            color: '',
-			            lat: item.lat,
-			            lon: item.lon
-			          }
+				        var feature = {
+				          "type": "Feature",
+				          "geometry": geometry,
+				          "properties": {
+				            id: item.id,
+				            content: options_poi.content,
+				            category: options_poi.category,
+				            type: item.type,
+				            title: item.title,
+				            address: item.address,
+				            marker: item.meta[1].value,
+				            color: '',
+				            lat: item.lat,
+				            lon: item.lon
+				          }
+				        };
+
+				        if (item.type === 'route') {
+				        	console.log('Color:' + item.meta[0].value);
+				        	feature.properties.color = item.meta[0].value;
+				        } else {
+				        	feature.properties.color = '#FFFFFF'
+				        };
+
+			        	self.geojson_data.features.push(feature);
+
+			        	console.log('*********************************');
+				    	console.log('*** GeoJSON : ' + JSON.stringify(self.geojson_data));
+				
+			        	callback();
 			        };
-
-			        if (item.type === 'route') {
-			        	console.log('Color:' + item.meta[0].value);
-			        	feature.properties.color = item.meta[0].value;
-			        } else {
-			        	feature.properties.color = '#FFFFFF'
-			        };
-
-		        	self.geojson_data.features.push(feature);
-			
-		        	callback();
 
 		      	}, function (err) {
 
@@ -344,23 +300,6 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 			var self = this;
 
-			/*
-
-				options
-				--------
-
-				var options = {
-					all: true,  // tutti i POI
-		      		category: null, 
-		      		content: null, 
-		      		poi: null, 
-		      		filters: null,
-		      		nearest: false,
-		      		limit: 10	// quando si cercano tutti i POI vicini alle coordinate
-				};
-		      	
-			*/
-
 			console.log('create geojson ... ');
 
 			if (!options.all) {
@@ -377,6 +316,7 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 						
 						options.category = item._categories;
 						options.content = item._content;
+						options.poi = null;
 
 						console.log(JSON.stringify(options))
 
@@ -385,7 +325,6 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 						}, options);
 					}, function (err) {
 						if (typeof done === 'function') {
-							// console.log('*** GeoJSON All Pois: ' + JSON.stringify(self.geojson_data));
 							done(err, self.geojson_data);
 						}
 					});
