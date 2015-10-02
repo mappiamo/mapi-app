@@ -275,8 +275,8 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 			        	self.geojson_data.features.push(feature);
 
-			        	console.log('*********************************');
-				    	console.log('*** GeoJSON : ' + JSON.stringify(self.geojson_data));
+			        	// console.log('*********************************');
+				    	//console.log('*** GeoJSON : ' + JSON.stringify(self.geojson_data));
 				
 			        	callback();
 			        };

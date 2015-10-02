@@ -139,6 +139,21 @@ angular.module('gal.services', [])
 
     },
 
+    getRouteByName: function (name, done) {
+
+      var self = this;
+
+      var it = _.find(self.routes, function (item) {
+        // console.log('route item: ' + JSON.stringify(item));
+          return item.name == name;
+      });
+
+        // console.log('found route item: ' + JSON.stringify(it));
+
+        done(false, it);
+
+    },
+
     getRoute: function (id, done) {
 
       var self = this;
@@ -162,6 +177,62 @@ angular.module('gal.services', [])
         done(err, it);
 
       });
+    },
+
+    poiAll: function (done) {
+
+      var self = this;
+      var pois = [];
+
+      var options = {
+        all: true,  // tutti i POI
+        category: null, 
+        content: null, 
+        poi: null, 
+        filters: null,
+        nearest: true,
+        limit: 10,
+        lat: 0,
+        lng: 0
+      };
+
+      this.getRoutes(function (err, routes) {
+          
+          async.each(routes, function (item, callback) {
+            
+            var options = {
+              content: item._content,
+              category: item._categories,
+              idpoi: null,
+              byUrl: false
+            };
+
+            console.log(JSON.stringify(options));
+
+            self.poi(function (err, data) {
+
+              console.log('loading pois n.' + _.size(data.data));
+              //console.log('first element --> ' + JSON.stringify(data))
+              var data_filtered = _.filter(data.data, function (item) {
+                return item.type != 'route';
+              });
+
+              pois = _.union(data_filtered, pois);
+              console.log('Now pois n.' + _.size(pois));
+              callback();
+
+            }, options);
+            
+          }, function (err) {
+            if (typeof done === 'function') {
+              console.log(JSON.stringify(pois[0]));
+              console.log('Elements n.' + _.size(pois));
+              done(err, pois);
+            }
+          });
+
+        });
+
     },
 
     // punti di interesse

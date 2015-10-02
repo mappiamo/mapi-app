@@ -15,6 +15,7 @@
   <allow-navigation href="blob:*"/>
   <allow-navigation href="http://itinerari.galcapodileuca.it/*"/>
   <allow-navigation href="https://api.mapbox.com/v4/directions/*" />
+  <allow-navigation href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
@@ -25,6 +26,7 @@
   <allow-intent href="blob:*"/>
   <allow-intent href="http://itinerari.galcapodileuca.it/*"/>
   <allow-intent href="https://api.mapbox.com/v4/directions/*" />
+  <allow-intent href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>

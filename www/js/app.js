@@ -17,6 +17,7 @@ angular.module('gal', ['ionic',
                        //'gal.home.controllers', 
                        'gal.real.controllers', 
                        'gal.explore.controllers',
+                       'gal.search.controllers',
                        'gal.pois.controllers', 
                        'gal.filters.services',
                        'gal.services', 
@@ -50,7 +51,8 @@ angular.module('gal', ['ionic',
                        'gal.globalization',
                        'gal.ui',
                        'gal.meta',
-                       'ionic-audio'])
+                       'ionic-audio',
+                       'gal.tab'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -172,6 +174,16 @@ angular.module('gal', ['ionic',
       'tab-compass': {
         templateUrl: 'templates/tab-compass.html',
         controller: 'RealCtrl'
+      }
+    }
+  })
+
+  .state('tab.search', {
+    url: '/search',
+    views: {
+      'tab-search': {
+        templateUrl: 'templates/tab-search.html',
+        controller: 'SearchCtrl'
       }
     }
   })

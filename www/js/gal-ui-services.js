@@ -1,6 +1,6 @@
 angular.module('gal.ui', [])
 
-.factory('$ui', function ($language) {
+.factory('$ui', function ($language, $cordovaDevice) {
 
 	var ui = {
 		get: function (uiIndex, done) {
@@ -27,11 +27,12 @@ angular.module('gal.ui', [])
 				};
 
 				if (uiIndex == 'tab') {
+
 					if (result == 'it') {
 						list = self.tab.it;
 					} else if (result == 'en') {
 						list = self.tab.en;
-					}
+					};
 				};
 
 				if (uiIndex == 'poilist') {
@@ -66,6 +67,14 @@ angular.module('gal.ui', [])
 					}
 				};
 
+				if (uiIndex == 'search') {
+					if (result == 'it') {
+						list = self.search.it;
+					} else if (result == 'en') {
+						list = self.search.en;
+					}
+				};
+
 				done(err, list);
 
 			});
@@ -79,8 +88,8 @@ angular.module('gal.ui', [])
 			en: ['Details', 'Filters', 'POI list']
 		},
 		tab: {
-			it: ['Home', 'Realtà aumentata', 'Bussola'],
-			en: ['Home', 'Reality', 'Compass']
+			it: ['Home', 'Realtà aumentata', 'Bussola', 'Cerca'],
+			en: ['Home', 'Reality', 'Compass', 'Search']
 		},
 		poilist: {
 			it: ['Distanza dalla tua posizione:'],
@@ -97,6 +106,10 @@ angular.module('gal.ui', [])
 		exploredetail: {
 			it: ['Dettaglio Itinerario'],
 			en: ['Route Detail']
+		},
+		search: {
+			it: ['Ricerca', 'Nome', 'Categoria', 'Via', 'Ripristina'],
+			en: ['Search', 'Name', 'Category', 'Address', 'Undo']
 		}
 	};
 
