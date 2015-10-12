@@ -1,6 +1,6 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Download</h1>
+    <h1 class="title"></h1>
     <div class="buttons">
       <a class="button button-icon icon ion-ios-close-outline" ng-click="closeModal()"></a>
     </div>
@@ -8,19 +8,23 @@
   
     <ion-content class="has-header">
       
-      <ion-toggle ng-model="config.data" 
-                  toggle-class="toggle-calm">
-          Dati off-line
-      </ion-toggle>
+      <div class="list card">
+          <a href="#" class="item item-icon-left" ng-click="download()">
+            <i class="icon ion-ios-cloud-download"></i>
+             Download dei dati
+          </a>
 
-      <ion-toggle ng-model="config.media" 
-                  toggle-class="toggle-calm">
-          Media off-line
-      </ion-toggle>
+          <a href="#" class="item item-icon-left" ng-click="openCredits()">
+            <i class="icon ion-ios-people"></i>
+            Credits
+          </a>
+        </div>
 
-      <button class="button button-full button-positive" ng-show="isSaved" ng-click="saveConfig()">
-        Salva la configurazione
-      </button>
+        <div class="list">
+          <h4 style="color: #FFFFFF">Scegli la lingua</h4>
+          <ion-radio ng-model="language" ng-value="'it'" ng-change="setLanguage('it')">Italian</ion-radio>
+          <ion-radio ng-model="language" ng-value="'en'" ng-change="setLanguage('en')">English</ion-radio>
+        </div>
 
   </ion-content>
 </ion-modal-view>

@@ -52,7 +52,9 @@ angular.module('gal', ['ionic',
                        'gal.ui',
                        'gal.meta',
                        'ionic-audio',
-                       'gal.tab'])
+                       'gal.tab',
+                       'gal.launchnavigator',
+                       'gal.launchapp'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -127,7 +129,8 @@ angular.module('gal', ['ionic',
   web: 'http://itinerari.galcapodileuca.it',
   img: 'img/logo/logo-gal.jpg',
   hashtag: '#galleuca',
-  mediatre: 'http://itinerari.galcapodileuca.it/media/panorama/'
+  mediatre: 'http://itinerari.galcapodileuca.it/media/panorama/',
+  api: 'http://itinerari.galcapodileuca.it/index.php?module=api&task=search&field=type&data=place&auth=dfgw4356dgfDSFGdsfgret3'
 })
 
 .constant('MAPQUEST', {
@@ -136,7 +139,7 @@ angular.module('gal', ['ionic',
 
 .constant('REALITY', {
   android: {
-    url: 'com.mappiamo.galleuca',
+    url: 'com.mappiamo.galreality',
     store: ''
   },
   iOS: {
@@ -210,41 +213,39 @@ angular.module('gal', ['ionic',
     })
 
     // dettaglio del percorso
-    .state('tab.detail', {
+    .state('detail', {
       url: '/explore/:content/:category',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/explore-detail.html',
-          controller: 'ExploreDetailCtrl'
-        }
-      }
+      templateUrl: 'templates/explore-detail.html',
+      controller: 'ExploreDetailCtrl'
     })
 
-    // lista dei punti di interesse
-    .state('tab.pois', {
+    .state('credits', {
+      url: '/credits',
+      templateUrl: 'templates/credits.html',
+      controller: 'ExploreCtrl'
+    })
+
+    .state('pois', {
       url: '/pois/:content/:category',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/poi-list.html',
-          controller: 'PoiListCtrl'
-        }
-      }
+      templateUrl: 'templates/poi-list.html',
+      controller: 'PoiListCtrl'
     })
 
-    // mappa dei punti di interesse
-    .state('tab.map', {
+    .state('map', {
       url: '/map/:content/:category',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/poi-map.html',
-          controller: 'PoiMapCtrl'
-        }
-      }
+      templateUrl: 'templates/poi-map.html',
+      controller: 'PoiMapCtrl'
     })
 
     // dettaglio del POI
-    .state('tab.poi', {
+    .state('poi', {
       url: '/poi/:content/:category/:idpoi/:lat/:lng',
+      templateUrl: 'templates/poi-detail.html',
+      controller: 'PoiDetailCtrl'
+    })
+
+    .state('tab.poiDetail', {
+      url: '/poidetail/:content/:category/:idpoi/:lat/:lng',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-detail.html',
@@ -253,54 +254,44 @@ angular.module('gal', ['ionic',
       }
     })
 
-    .state('tab.gallery', {
+    .state('tab.poiAPI', {
+      url: '/poiapi/:idpoi/:lat/:lng',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/poi-detail.html',
+          controller: 'PoiDetailCtrl'
+        }
+      }
+    })
+
+    .state('gallery', {
       url: '/gallery/:content/:category/:idpoi/:lat/:lng',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/poi-gallery.html',
-          controller: 'PoiDetailCtrl'
-        }
-      }
+      templateUrl: 'templates/poi-gallery.html',
+      controller: 'PoiDetailCtrl'
     })
 
-    .state('tab.i360', {
+    .state('i360', {
       url: '/i360/:content/:category/:idpoi/:lat/:lng',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/poi-i360.html',
-          controller: 'PoiDetailCtrl'
-        }
-      }
+      templateUrl: 'templates/poi-i360.html',
+      controller: 'PoiDetailCtrl'
     })
 
-    .state('tab.video', {
+    .state('video', {
       url: '/video/:content/:category/:idpoi/:lat/:lng',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/poi-video.html',
-          controller: 'PoiDetailCtrl'
-        }
-      }
+      templateUrl: 'templates/poi-video.html',
+      controller: 'PoiDetailCtrl'
     })
 
-    .state('tab.audio', {
+    .state('audio', {
       url: '/audio/:content/:category/:idpoi/:lat/:lng',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/poi-audio.html',
-          controller: 'PoiDetailCtrl'
-        }
-      }
+      templateUrl: 'templates/poi-audio.html',
+      controller: 'PoiDetailCtrl'
     })
-
-    .state('tab.route', {
+    
+    .state('route', {
       url: '/route/:content/:category/:idpoi/:lat/:lng',
-      views: {
-        'tab-explore': {
-          templateUrl: 'templates/poi-route.html',
-          controller: 'RealMapCtrl'
-        }
-      }
+      templateUrl: 'templates/poi-route.html',
+      controller: 'RealMapCtrl'
     });
 
     // if none of the above states are matched, use this as the fallback

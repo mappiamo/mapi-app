@@ -17,6 +17,7 @@ angular.module('gal', ['ionic',
                        //'gal.home.controllers', 
                        'gal.real.controllers', 
                        'gal.explore.controllers',
+                       'gal.search.controllers',
                        'gal.pois.controllers', 
                        'gal.filters.services',
                        'gal.services', 
@@ -50,7 +51,9 @@ angular.module('gal', ['ionic',
                        'gal.globalization',
                        'gal.ui',
                        'gal.meta',
-                       'ionic-audio'])
+                       'ionic-audio',
+                       'gal.tab',
+                       'gal.launchnavigator'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -134,7 +137,7 @@ angular.module('gal', ['ionic',
 
 .constant('REALITY', {
   android: {
-    url: 'com.mappiamo.galleuca',
+    url: 'com.mappiamo.galreality',
     store: ''
   },
   iOS: {
@@ -176,6 +179,16 @@ angular.module('gal', ['ionic',
     }
   })
 
+  .state('tab.search', {
+    url: '/search',
+    views: {
+      'tab-search': {
+        templateUrl: 'templates/tab-search.html',
+        controller: 'SearchCtrl'
+      }
+    }
+  })
+
   .state('tab.real', {
     url: '/real',
     views: {
@@ -204,6 +217,16 @@ angular.module('gal', ['ionic',
         'tab-explore': {
           templateUrl: 'templates/explore-detail.html',
           controller: 'ExploreDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.credits', {
+      url: '/credits',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/credits.html',
+          controller: 'ExploreCtrl'
         }
       }
     })

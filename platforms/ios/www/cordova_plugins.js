@@ -349,6 +349,13 @@ module.exports = [
         "clobbers": [
             "ProgressIndicator"
         ]
+    },
+    {
+        "file": "plugins/uk.co.workingedge.phonegap.plugin.LaunchNavigator/www/ios/launchnavigator.js",
+        "id": "uk.co.workingedge.phonegap.plugin.LaunchNavigator.LaunchNavigator",
+        "clobbers": [
+            "launchnavigator"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -373,7 +380,8 @@ module.exports.metadata =
     "org.apache.cordova.globalization": "0.3.4",
     "org.apache.cordova.media": "0.2.16",
     "org.apache.cordova.network-information": "0.2.15",
-    "org.pbernasconi.progressindicator": "1.1.0"
+    "org.pbernasconi.progressindicator": "1.1.0",
+    "uk.co.workingedge.phonegap.plugin.LaunchNavigator": "2.9.5"
 }
 // BOTTOM OF METADATA
 });

@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta, $ionicModal) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta, $ionicModal, $tab) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -71,6 +71,12 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
   $scope.setLanguage = function(l) {
     $language.save(l);
     _refresh();
+  };
+
+  $scope.openCredits = function () {
+    console.log('open credits');
+    $scope.closeModal();
+    window.location.href = '#/tab/credits';
   };
 
   // **********************************
@@ -189,28 +195,23 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
     _refresh();  
   });
 
-  $ui.get('home', function (err, result) {
-      $scope.ui = result;
-    });
-
-  $ui.get('tab', function (err, result) {
-      $scope.uiTab = result;
-  });
-
   function _refresh() {
     // $scope.routes = Gal.routes;
     
     console.log('refresh data ...');
 
-    $ui.get('home', function (err, result) {
-      $scope.ui = result;
+    $tab.get(function (err, tabs) {
+      console.log(JSON.stringify(tabs));
+      $scope.uiTab = tabs;
     });
 
-    $ui.get('tab', function (err, result) {
-      $scope.uiTab = result;
+    $ui.get('home', function (err, langUI) {
+        console.log(JSON.stringify(langUI));
+        $scope.ui = langUI;
     });
 
     Gal.getRoutes(function (err, routes) {
+      console.log(JSON.stringify(routes));
       $scope.routes = routes;
     });
 
@@ -347,16 +348,17 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         }
       }
     });
-
-    // For example's sake, hide the sheet after two seconds
+    
     $timeout(function() {
      hideSheet();
-    }, 2000);
+    }, 8000);
 
   };
 
   function share_Twitter(message) {
 
+    console.log('sharing on Twitter ...');
+    
     $cordovaSocialSharing
       .shareViaTwitter(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
@@ -370,6 +372,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   function share_Facebook(message) {
     
+    console.log('sharing on Facebook ...');
     $cordovaSocialSharing
       .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
@@ -382,6 +385,8 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   };
 
   function share_whatsApp(message) {
+    
+    console.log('sharing on WhatsApp ...');
     
     $cordovaSocialSharing
       .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)

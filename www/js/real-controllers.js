@@ -12,68 +12,16 @@
 
 var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-ctrls.controller('RealCameraCtrl', function ($scope, $cordovaDevice, $startApp, $cordovaAppAvailability, REALITY) {
+ctrls.controller('RealCameraCtrl', function ($scope) {
 
-	try {
-	    var deviceInfo = {
-	    	device: $cordovaDevice.getDevice(),
-	    	cordova: $cordovaDevice.getCordova(),
-	    	model: $cordovaDevice.getModel(),
-	    	platform: $cordovaDevice.getPlatform(),
-	    	UUID: $cordovaDevice.getUUID(),
-	    	version: $cordovaDevice.getVersion()
-	    };
-
-	    console.log(JSON.stringify($scope.deviceInfo));
-
-		if (deviceInfo.platform == 'Android') {
-			console.log('run App: ' + REALITY.android.url);
-			_runApp(REALITY.android.url);
-		} else if (deviceInfo.platform == 'iOS') {
-			console.log('run App: ' + REALITY.iOS.url);
-			_runApp(REALITY.iOS.url);
-		} else {
-			$scope.message = 'Questa funzione è disponibile solo per sistemi Android e IOS';
+	$app.reality(function (err, devInfo, msg) {
+		if (!err) {
+			$scope.devicePlatform = devInfo.platform;
+			$scope.deviceVersion = devInfo.version;
+			$scope.deviceModel = devInfo.model;	
 		};
-
-		$scope.devicePlatform = deviceInfo.platform;
-		$scope.deviceVersion = deviceInfo.version;
-		$scope.deviceModel = deviceInfo.model;
-
-		function _runApp (nameApp) {
-			$scope.message = 'Avvio Realtà Aumentata...';
-			
-			$cordovaAppAvailability.check(nameApp)
-				.then(function() {
-					// is available
-					$scope.message = 'App trovata';
-					$startApp.run(nameApp, function (err, message) {
-						$scope.message = message;
-					});
-				}, function () {
-					// not available
-					$scope.message = 'Non ho trovato l\'App Gal Leuca Reality';
-					
-					var appStore = '';
-
-					if (deviceInfo.platform == 'Android') {
-						appStore = REALITY.android.store;
-					} else if (deviceInfo.platform == 'iOS') {
-						appStore = REALITY.iOS.store;
-					} else {
-						$scope.message = 'Questa funzione è disponibile solo per sistemi Android e IOS';
-					};
-
-					$startApp.run(appStore, function (err, message) {
-						$scope.message = message;
-					});
-			});
-		};
-	}
-	catch(err) {
-	    console.log('device don\'t start');
-	};
-    
+		$scope.message = message;
+	});
 });
 
 // Bussola
@@ -90,8 +38,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	$scope.$on('$ionicView.beforeLeave', function() {
 		console.log('view before leave');
-		// $scope.closeMap();
-		// _stopWatch();
 	});
 
 	$scope.$on('$ionicView.leave', function() {
@@ -99,30 +45,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	});
 
 	$scope.$on('$ionicView.beforeEnter', function() {
-		// test = TEST.value;
-		
-		/*
-		$scope.isSearch = false;
-		$scope.isError = false;
-		
-		if (test.state) {
-			var m = test.value(true);
-			_setMagnetic(m);
-		} else {
-			_setMagnetic(0);
-		};
-		*/
-
 		_geojson();
-
-		// Geolocation.get(_onSuccess, _onError);
-
-		/*
-		if (!test.state) {
-			_startWatch();    
-		};
-		*/
-
   	});
 
   	Geolocation.watch(_onSuccess, _onError);
@@ -205,9 +128,6 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 		
 		location.latitude = result.coords.latitude;
 		location.longitude = result.coords.longitude;
-		
-		// $scope.location = location;
-		// $scope.isLocation = true;
 		
 		Geolocation.save(result);
 
@@ -344,219 +264,9 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
       		map.fitBounds(layer.getBounds());
     	});
   	};
-
-	/*
-
-	var orientation = {
-		magneticHeading: 0,
-        trueHeading: false,
-        accuracy: 0,
-        timeStamp: null
-	};
-
-	var test = {
-		state: TEST.value,
-		value: function (random) {
-			if (random) {
-				return Math.floor((Math.random() * 360) + 1);
-			} else {
-				return 1; // Direzione Nord
-			}
-		}
-	};
-	var magnetic = 0;
-	var magneticHeading;
-	var trueHeading;
-	var accuracy;
-	var timeStamp;
-	var watch;
-	
-	$scope.viewInfo = function (id, idpoi, lat, lon) {
-		console.log('view info');
-		_stopWatch();
-		window.location.href = '#/tab/poi/' + id + '/' + idpoi + '/' + lat + '/' + lon;
-	};
-
-	$ionicModal.fromTemplateUrl('templates/real-map.html', {
-	    scope: $scope,
-	    animation: 'slide-in-up'
-	  }).then(function(modal) {
-	    $scope.modal = modal;
-	});
-	 
-	$scope.openMap = function() {
-		$scope.modal.show();
-	};
-
-	$scope.closeMap = function() {
-		$scope.isPOI = false;
-		$scope.modal.hide();
-	};
-
-	//Cleanup the modal when we're done with it!
-	$scope.$on('$destroy', function() {
-		$scope.modal.remove();
-	});
-
-	// Execute action on hide modal
-	$scope.$on('modal.hidden', function() {
-	// Execute action
-	});
-	
-	// Execute action on remove modal
-	$scope.$on('modal.removed', function() {
-	// Execute action
-	});
-
-	function _startWatch() {
-		// Compass 
-		var options = {
-	      frequency: 3000,
-	      filter: true     // if frequency is set, filter is ignored
-	    };
-
-    	watch = $cordovaDeviceOrientation.watchHeading(options).then(
-	      null,
-	      function(error) {
-	        // An error occurred
-	        console.log('error to device orientation');
-	      },
-	      function(result) {   // updates constantly (depending on frequency value)
-	       	magneticHeading = result.magneticHeading;
-	        trueHeading = result.trueHeading;
-	        accuracy = result.headingAccuracy;
-	        timeStamp = result.timestamp;
-	        _setMagnetic(result.magneticHeading);
-	    });
-    };
-
-    function _setMagnetic(m) {
-    	console.log('Magnetic Heading: ' + m);
-    	magnetic = m;
-    	$scope.magnetic = m;
-    	$scope.transform = "rotate(" + m + "deg)";
-
-    	if (test.state) {
-    		$scope.location = Geolocation.location();
-    		$scope.isLocation = true;
-    	}
-
-    };
-
-    $scope.search = function () {
-    	_search();	
-    };
-
-    function _search() {
-    	$scope.magnetic_search = magnetic;
-    	$scope.isSearch = true;
-		$scope.isError = false;
-       _getPois(magnetic);
-    };
-
-    // Hold Compass
-    var el = angular.element('#compass');
-    $ionicGesture.on('hold', function(e) {
-    	_search();
-    }, el);
-
-	function _getPois(magnetic) {
-
-    	var direction = $utility._getDirection(magnetic);
-    	
-    	console.log('search pois in ' + direction);
-		
-		Gal.poi_nearest(direction, function (err, data, direction) {
-			
-			console.log('Direction to filter: ' + direction + ' POIs ' + _.size(data));
-			
-			$scope.isSearch = false;
-		
-			if (_.size(data) > 0) {
-
-				//console.log(JSON.stringify(data[0].item));
-
-				var d = _.sortBy(data, function (item) {
-					return Geolocation.distance(item.item.lat, item.item.lon);
-				});
-
-				//console.log('Direction: ' + direction + ' - ' + JSON.stringify(d[0].item));
-
-				var s = _.filter(d, function (item) {
-					return item.direction == direction;
-				});
-
-				$scope.npois = 'Trovati n.' + _.size(s) + ' punti di interesse, in direzione ' + $utility._getWindRose(magnetic, true);
-
-				// console.log('Item: --------> ' + JSON.stringify(s[0]));
-
-				$scope.isError = false;
-				
-				if (_.size(s) > 0) {
-					$scope.content = s[0].content._content;
-					$scope.category = s[0].content._categories;
-
-					console.log('Content: ' + s[0].content._content);
-
-					$scope.openMap();
-
-					_geojson(s);
-
-					_stopWatch();
-
-				} else {
-					// non sono stati trovati punti di interesse
-					$scope.error_msg = 'Non ho trovato nessun Punto di interesse in direzione ' + $utility._getWindRose(magnetic, true);
-					$scope.isError = true;
-				};
-
-			} else {
-				$scope.isPOI = false;
-			};
-		});
-	};
-
-	$scope.goPOI = function () {
-		$scope.closeModal();
-	};
-	
-	function _setView(latlng) {
-		leafletData.getMap('map_compass').then(function(map) {
-	      map.setView(latlng, 9);
-	    });
-  	};	
-  	
-  	function _stopWatch() {
-
-		if (!test.state) {
-			// watch.clearWatch();
-			$cordovaDeviceOrientation.clearWatch(watch)
-		      .then(function(result) {
-		        // Success!
-		        console.log('stop watching Device Orientation');
-		      }, function(err) {
-		        // An error occurred
-		        console.log('error to stop watching Device Orientation');
-		      });
-		};
-
-	};
-
-	$timeout(function() {
-     	
-     	if (test.state) {
-     		var m = test.value(false);
-			_setMagnetic(m);
-     	};
-
-     	$scope.closeMap();
-
-  	}, 6000);
-
-	*/
 });
 
-ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest, MapBox) {
+ctrls.controller('RealMapCtrl', function ($scope, $state, $stateParams, async, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest, MapBox, $app) {
 
 	$scope.isLocation = false;
 
@@ -589,6 +299,16 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletDa
             scrollWheelZoom: false
         }
     });
+
+    $scope.goPOI = function (content, category, id, lat, lon) {
+	    $state.go('poi', {
+	      "content": content,
+	      "category": category,
+	      "poiid": id,
+	      "lat": lat,
+	      "lng": lon
+	    });
+  	};
 
     _initMap();
 	
@@ -652,12 +372,12 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletDa
 
 			var baseMaps = { "OSM Standard": osm };
 			var overlayMaps = { 
-				"Clouds": clouds, 
-				"Precipitazioni": precipitation,
-				"Neve": snow,
-				"Temperature": temp,
-				"vento": wind,
-				"Cities": city 
+				//"Clouds": clouds, 
+				//"Precipitazioni": precipitation,
+				//"Neve": snow,
+				//"Temperature": temp,
+				//"vento": wind,
+				"Meteo": city 
 			};
 	      	
 	      	layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);

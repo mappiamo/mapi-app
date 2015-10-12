@@ -2,7 +2,7 @@
   <ion-header-bar align-title="left" class="bar-positive">
   
     <div class="buttons">
-      <a class="button button-icon icon ion-ios-arrow-back" href="#/tab/map/{{ content }}/{{ category }}"></a>
+      <a class="button button-icon icon ion-ios-arrow-back" ng-click="goMap(content, category)" href="#"></a>
     </div>
     <h1 class="title">{{ title }}</h1>
     <!--
@@ -17,7 +17,7 @@
     <div class="list card" 
            ng-repeat="poi in pois">
 
-        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/poi/{{ content }}/{{ category }}/{{poi.id}}/{{poi.lat}}/{{poi.lon}}">
+        <a class="item item-thumbnail-left item-text-wrap" ng-click="goPOI(content, category, poi.id, poi.lat, poi.lon)" href="#">
           <img cache-src="{{ poi.media[0].url }}" />
           <h2>{{ poi.title }}</h2>
           <h3>{{ ui[0] }} {{ poi | distance_poi }}</h3>

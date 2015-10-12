@@ -79,6 +79,10 @@
                         {
                             "xml": "<feature name=\"ProgressIndicator\"><param name=\"android-package\" value=\"org.apache.cordova.plugin.ProgressIndicator\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"LaunchNavigator\"><param name=\"android-package\" value=\"uk.co.workingedge.phonegap.plugin.LaunchNavigator\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -127,65 +131,68 @@
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "com.lampa.startapp": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-appavailability": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-customurlscheme": {
             "URL_SCHEME": "galleuca",
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-device-motion": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-device-orientation": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "hu.dpal.phonegap.plugins.SpinnerDialog": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "nl.x-services.plugins.socialsharing": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.apache.cordova.console": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.apache.cordova.file": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.apache.cordova.file-transfer": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.apache.cordova.globalization": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.apache.cordova.media": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.apache.cordova.network-information": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.pbernasconi.progressindicator": {
-            "PACKAGE_NAME": "com.ionicframework.galleuca"
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
+        },
+        "uk.co.workingedge.phonegap.plugin.LaunchNavigator": {
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         }
     },
     "dependent_plugins": {}

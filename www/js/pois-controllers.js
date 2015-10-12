@@ -18,7 +18,7 @@
 
 var ctrls = angular.module('gal.pois.controllers', ['leaflet-directive']);
 
-ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocation, $ionicLoading, $cordovaSocialSharing, $ionicActionSheet, $timeout, MAPPIAMO, $ui) {
+ctrls.controller('PoiListCtrl', function ($scope, $state, $stateParams, Gal, _, Geolocation, $ionicLoading, $cordovaSocialSharing, $ionicActionSheet, $timeout, MAPPIAMO, $ui) {
   
   $scope.content = $stateParams.content;
   $scope.category = $stateParams.category;
@@ -32,6 +32,23 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
   $ui.get('poilist', function (err, result) {
     $scope.ui = result;
   });
+
+  $scope.goMap = function(content, category) {
+    $state.go('map', {
+      "content": content,
+      "category": category
+    });
+  };
+
+  $scope.goPOI = function (content, category, id, lat, lon) {
+    $state.go('poi', {
+      "content": content,
+      "category": category,
+      "idpoi": id,
+      "lat": lat,
+      "lng": lon
+    });
+  };
   
   console.log('Param content: ' + $scope.content);
   console.log('Param category: ' + $scope.category);
@@ -47,10 +64,6 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
 
   function _onError(error) {
     console.log('error to get location ...')
-  };
-
-  $scope.viewRoute = function (id, idpoi, lat, lon) {
-    window.location.href = '#/tab/route/' + id + '/' + idpoi + '/' + lat + '/' + lon;
   };
 
   $scope.$on('$ionicView.beforeEnter', function() {
@@ -72,15 +85,6 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
       } else {
         $ionicLoading.hide();
       }
-  };
-
-  $scope.goBack = function (id) {
-    window.location.href = '#/tab/explore/' + id;
-  };
-
-  $scope.goMap = function (id) {
-    console.log('go to map: ' + route_name);
-    window.location.href = '#/tab/map/' + id;
   };
 
   function _refresh() {
@@ -209,7 +213,7 @@ ctrls.controller('PoiListCtrl', function ($scope, $stateParams, Gal, _, Geolocat
 // **
 // ** Mappa dei punti di interesse
 
-ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async, $ionicModal, $filters, $ui) {
+ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async, $ionicModal, $filters, $ui) {
 
   var marker;
   var layer_control;
@@ -249,6 +253,24 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   }).then(function(modal) {
     $scope.modal = modal;
   });
+
+  $scope.goHome = function () {
+    $state.go('tab.explore');
+  };
+
+  $scope.exploreDetail = function (content, category) {
+    $state.go('detail', {
+      "content": content,
+      "category": category
+    });
+  };
+
+  $scope.listPOI = function (content, category) {
+    $state.go('pois', {
+      "content": content,
+      "category": category
+    });
+  };
 
   $scope.openFilters = function() {
     $scope.modal.show();
@@ -310,14 +332,6 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
       _refresh();
     });
   });
-
-  $scope.goBack = function () {
-    window.location.href = '#/tab/explore';
-  };
-
-  $scope.goList = function (route_name) {
-    window.location.href = '#/tab/explore/{{route_name}}'
-  };
 
   angular.extend($scope, {
       defaults: {
@@ -413,7 +427,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
                       popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                     });
 
-                    var descr = '<h4><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
+                    var descr = '<h4><a href="#/tab/poidetail/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
                                 '<h5>' + feature.properties.address + '</h5>';
 
                     poisLatLng.push(latlng);
@@ -438,6 +452,16 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
    
     }, options);
 
+  };
+
+  $scope.goPOI = function (content, category, id, lat, lon) {
+    $state.go('poi', {
+      "content": content,
+      "category": category,
+      "idpoi": id,
+      "lat": lat,
+      "lng": lon
+    });
   };
 
   function _setBounds(layer) {
@@ -517,13 +541,20 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 // ** dettaglio del punto di interesse
 // *****************************
 
-ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta, $cordovaDevice, $cordovaFileTransfer, $cordovaFile) {
+ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta, $cordovaDevice, $cordovaFileTransfer, $cordovaFile, $app) {
 
-  var content = $stateParams.content;
-  $scope.content = $stateParams.content;
-  var category = $stateParams.category;
-  $scope.category = $stateParams.category;
+  var content = 0;
+  if (typeof $stateParams.content !== 'undefined') {
+    content = $stateParams.content;
+    $scope.content = $stateParams.content;
+  };
 
+  var category = 0;
+  if (typeof $stateParams.content !== 'undefined') {
+    category = $stateParams.category;
+    $scope.category = $stateParams.category;
+  };
+  
   var layer_control;
 
   var idpoi = $stateParams.idpoi;
@@ -534,6 +565,11 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
   var geojson;
   var mediaAudio;
 
+  var location = {
+    latitude: 0,
+    longitude: 0
+  };
+
   $scope.isGallery = false;
   $scope.is360 = false;
   $scope.isVideo = false;
@@ -542,6 +578,63 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
   $ui.get('poidetail', function (err, result) {
     $scope.ui = result;
   });
+
+  $scope.goPOI = function (content, category, id, lat, lon) {
+    $state.go('poi', {
+      "content": content,
+      "category": category,
+      "poiid": id,
+      "lat": lat,
+      "lng": lon
+    });
+  };
+
+  $scope.goBack = function(content, category) {
+    if (content == 0 && category == 0) {
+      $state.go('tab.explore');
+    } else {
+      $state.go('map', {
+        "content": content,
+        "category": category
+      });
+    }
+  };
+
+  $scope.openMedia = function (stateUrl, content, category, id, lat, lon) {
+    $state.go(stateUrl, {
+      "content": content,
+      "category": category,
+      "poiid": id,
+      "lat": lat,
+      "lng": lon
+    });
+  }; 
+
+  $scope.openRoute = function () {
+
+    var end = {
+      latitude: lat,
+      longitude: lng
+    };
+
+    console.log('route to ' + JSON.stringify(end));
+
+    $app.map(end.latitude, end.longitude, function (err, msg, noDevice) {
+      console.log(msg);
+      if (err) {
+        console.log('eseguo il navigatore interno');
+        $state.go('route',
+          { 
+            "content": content, 
+            "category": category,
+            "idpoi": idpoi,
+            "lat": lat,
+            "lng": lng
+          });
+      };
+    });
+
+  };
   
   console.log('Parameter: ' + content + ',' + category + ',' + idpoi + ',' + lat + ',' + lng);
 
@@ -549,8 +642,6 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
   // Social sharing
 
   $scope.share = function(poi) {
-
-    // var location = 'http://www.openstreetmap.org/?mlat=' + poi.lat + '&mlon=' + poi.lon + '&zoom=12#map=12/' + poi.lat + '/' + poi.lon;
 
     var location = MAPPIAMO.contentWeb + content;
 
@@ -585,12 +676,13 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
     // For example's sake, hide the sheet after two seconds
     $timeout(function() {
      hideSheet();
-    }, 2000);
+    }, 8000);
 
   };
 
   function share_Twitter(message) {
 
+    console.log('sharing to twitter');
     $cordovaSocialSharing
       .shareViaTwitter(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
@@ -604,6 +696,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
 
   function share_Facebook(message) {
     
+    console.log('sharing to facebook');
     $cordovaSocialSharing
       .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
@@ -617,6 +710,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
 
   function share_whatsApp(message) {
     
+    console.log('sharing to wahtsapp');
     $cordovaSocialSharing
       .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
@@ -630,16 +724,13 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
 
   console.log('Parameters: ' + $scope.content + ',' + $scope.category + ',' + idpoi);
   
-  
   $scope.dataOk = false;
-
-  $scope.goBack = function (id) {
-    window.location.href = '#/tab/explore/' + id;
-  };
 
   Geolocation.get(_onSuccess, _onError);
   
   function _onSuccess(position) {
+    location.latitude = position.coords.latitude;
+    location.longitude = position.coords.longitude;
     Geolocation.save(position);
   };
 
@@ -840,95 +931,115 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
     mediaAudio.stop();
   };
 
+  function _viewData(data) {
+
+    // creo un file geojson con i dati 
+    // la lista dei luoghi di interesse ordinati per coordinate
+    // mappa da poter visualizzare
+    // filtro dei punti di interesse
+
+    console.log('******************');
+    console.log('***** POI ********');
+    console.log(JSON.stringify(data));
+
+    var dt = data;
+
+    $scope.isGallery = _.size(dt[0].media > 0);
+    // ----------------------------
+    console.log('-------------');
+    // console.log(_.size(dt[0].media) > 0);
+
+    $scope.text = S(S(dt[0].text).decodeHTMLEntities().s).stripTags().s;
+    
+    $scope.poi = dt[0];
+    console.log(JSON.stringify($scope.poi.media[0]));
+
+    $scope.dataOk = true;
+
+    _geojson();
+
+    $scope.isGallery = false;
+
+    $meta.get('poi', dt[0].meta, function (err, meta) {
+      $scope.meta = meta;
+    });
+
+    var itre = _.find(dt[0].meta, function (item) {
+      return item.name == 'virtual_tour';
+    });
+
+    if (typeof itre !== 'undefined') {
+      console.log(JSON.stringify(itre));
+      $scope.is360 = true;
+      // var u_tre = MAPPIAMO.mediatre + encodeURIComponent(itre.value) + '.html';
+      var u_tre = $sce.trustAsHtml('<iframe src="' + MAPPIAMO.mediatre + encodeURIComponent(itre.value) + '.html' + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen width="400" height="560"></iframe>');
+
+      console.log('360: ' + u_tre);
+      $scope.url_tre = u_tre;
+    };
+
+    var iVideo = _.find(dt[0].meta, function (item) {
+      return item.name == 'filmato';
+    });
+
+    if (typeof iVideo !== 'undefined') {
+      console.log(JSON.stringify(iVideo));
+      $scope.isVideo = true;
+      var url_v = iVideo.value.replace("watch?v=", "v/");
+      var u_video = $sce.trustAsHtml('<iframe src="' + url_v + '&output=embed' + '" frameborder="0" allowfullscreen width="420" height="315"></iframe>');
+
+      console.log(u_video);
+      $scope.video_url = u_video;
+    };
+
+    var iAudio = _.find(dt[0].meta, function (item) {
+      return item.name == 'audio';
+    });
+
+    if (typeof iAudio !== 'undefined') {
+      console.log(JSON.stringify(iAudio));
+      $scope.isAudio = true;
+      // <embed src="success.wav" autostart=false loop=false>
+      $scope.audio_url = iAudio.value;
+      // $scope.audio_embed = $sce.trustAsHtml('<embed src="' + iAudio.value + '" autostart=false loop=false </embed>');
+      // $scope.playAudio(iAudio.value, dt[0].id, dt[0].title);
+    };
+
+    $image.getGallery($scope.poi.media, function (err, medias) {
+      console.log('loaded images n.' + _.size(medias));
+      $scope.medias = medias;
+      $scope.isGallery = true;
+    });
+    
+    showSpinner(false);
+
+  };
+
   function _refresh() {
 
     var options_poi = {
-      category: $scope.category,
+      category: category,
       idpoi: idpoi,
       byUrl: false
     };
 
-    Gal.poi(function (err, data) {
-
-      // creo un file geojson con i dati 
-      // la lista dei luoghi di interesse ordinati per coordinate
-      // mappa da poter visualizzare
-      // filtro dei punti di interesse
-
-      if (!err) {
-
-        var dt = data;
-
-        $scope.isGallery = _.size(dt[0].media > 0);
-        // ----------------------------
-        console.log('-------------');
-        // console.log(_.size(dt[0].media) > 0);
-
-        $scope.text = S(S(dt[0].text).decodeHTMLEntities().s).stripTags().s;
-        
-        $scope.poi = dt[0];
-        console.log(JSON.stringify($scope.poi.media[0]));
-
-        $scope.dataOk = true;
-
-        _geojson();
-
-        $scope.isGallery = false;
-
-        $meta.get('poi', dt[0].meta, function (err, meta) {
-          $scope.meta = meta;
-        });
-
-        var itre = _.find(dt[0].meta, function (item) {
-          return item.name == 'virtual_tour';
-        });
-
-        if (typeof itre !== 'undefined') {
-          console.log(JSON.stringify(itre));
-          $scope.is360 = true;
-          // var u_tre = MAPPIAMO.mediatre + encodeURIComponent(itre.value) + '.html';
-          var u_tre = $sce.trustAsHtml('<iframe src="' + MAPPIAMO.mediatre + encodeURIComponent(itre.value) + '.html' + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen width="400" height="560"></iframe>');
-
-          console.log('360: ' + u_tre);
-          $scope.url_tre = u_tre;
+    if (content == 0 && category == 0) {
+      
+      Gal.poiAPI(function (err, data) {
+        if (!err) {
+          _viewData(data);
         };
+      }, options_poi);
 
-        var iVideo = _.find(dt[0].meta, function (item) {
-          return item.name == 'filmato';
-        });
-
-        if (typeof iVideo !== 'undefined') {
-          console.log(JSON.stringify(iVideo));
-          $scope.isVideo = true;
-          var url_v = iVideo.value.replace("watch?v=", "v/");
-          var u_video = $sce.trustAsHtml('<iframe src="' + url_v + '&output=embed' + '" frameborder="0" allowfullscreen width="420" height="315"></iframe>');
-
-          console.log(u_video);
-          $scope.video_url = u_video;
+    } else {
+      
+      Gal.poi(function (err, data) {
+        if (!err) {
+          _viewData(data);
         };
+      }, options_poi);
 
-        var iAudio = _.find(dt[0].meta, function (item) {
-          return item.name == 'audio';
-        });
-
-        if (typeof iAudio !== 'undefined') {
-          console.log(JSON.stringify(iAudio));
-          $scope.isAudio = true;
-          // <embed src="success.wav" autostart=false loop=false>
-          $scope.audio_url = iAudio.value;
-          // $scope.audio_embed = $sce.trustAsHtml('<embed src="' + iAudio.value + '" autostart=false loop=false </embed>');
-          // $scope.playAudio(iAudio.value, dt[0].id, dt[0].title);
-        };
-
-        $image.getGallery($scope.poi.media, function (err, medias) {
-          console.log('loaded images n.' + _.size(medias));
-          $scope.medias = medias;
-          $scope.isGallery = true;
-        });
-        
-        showSpinner(false);
-      }
-    }, options_poi);
+    };
   };
 
   function _geojson() {
@@ -942,7 +1053,9 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
     };
 
     GeoJSON.pois (function (err, data) {
+      
       console.log('send geojson to map...');
+      
       angular.extend($scope, {
           geojson: {
               data: data,

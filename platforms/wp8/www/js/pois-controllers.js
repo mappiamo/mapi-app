@@ -234,6 +234,8 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
   $scope.content = content;
   $scope.category = category;
   $scope.dataOk = false;
+
+  var poisLatLng = [];
   
   console.log('Param Map: ' + content);
 
@@ -337,7 +339,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
       center: {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-        zoom: 8
+        zoom: 12
       }
     });
    
@@ -375,6 +377,8 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
     showSpinner(true);
 
+    poisLatLng = [];
+
     var options = {
       all: false, 
       category: category, 
@@ -386,7 +390,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
     GeoJSON.pois(function (err, data) {
 
-      console.log('drawing map...')
+      console.log('drawing map...');
       
       angular.extend($scope, {
             geojson: {
@@ -412,6 +416,8 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
                     var descr = '<h4><a href="#/tab/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
                                 '<h5>' + feature.properties.address + '</h5>';
 
+                    poisLatLng.push(latlng);
+
                     return L.marker(latlng, {
                       icon: markerIcon
                     }).bindPopup(descr);
@@ -429,12 +435,15 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 
         showSpinner(false);
         $scope.isMap = true;
-
+   
     }, options);
 
   };
 
   function _setBounds(layer) {
+
+    console.log('pois ' + JSON.stringify(poisLatLng));
+
     leafletData.getMap('map').then(function(map) {
       map.fitBounds(layer.getBounds());
     });
@@ -508,7 +517,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $stateParams, Gal, leafletData,
 // ** dettaglio del punto di interesse
 // *****************************
 
-ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta, $cordovaDevice, $cordovaFileTransfer, $cordovaFile) {
+ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta, $cordovaDevice, $cordovaFileTransfer, $cordovaFile, $launchnavigator) {
 
   var content = $stateParams.content;
   $scope.content = $stateParams.content;
@@ -524,6 +533,10 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
   var layer_geojson;
   var geojson;
   var mediaAudio;
+  var location = {
+    latitude: 0,
+    longitude: 0
+  }
 
   $scope.isGallery = false;
   $scope.is360 = false;
@@ -533,6 +546,25 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
   $ui.get('poidetail', function (err, result) {
     $scope.ui = result;
   });
+
+  $scope.openRoute = function () {
+
+    var end = {
+      latitude: lat,
+      longitude: lng
+    };
+
+    $launchnavigator.navigate(
+      [location.latitude, location.longitude],
+      [end.latitude, end.longitude],
+      function(){
+          alert("Plugin success");
+      },
+      function(error){
+          alert("Plugin error: "+ error);
+    });
+
+  };
   
   console.log('Parameter: ' + content + ',' + category + ',' + idpoi + ',' + lat + ',' + lng);
 
@@ -631,6 +663,8 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
   Geolocation.get(_onSuccess, _onError);
   
   function _onSuccess(position) {
+    location.latitude = position.coords.latitude;
+    location.longitude = position.coords.longitude;
     Geolocation.save(position);
   };
 
@@ -891,8 +925,11 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $sce, $stateParams, Gal, S, 
         if (typeof iVideo !== 'undefined') {
           console.log(JSON.stringify(iVideo));
           $scope.isVideo = true;
-          var u_video = $sce.trustAsHtml('<iframe src="' + iVideo.value + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen width="400" height="360"></iframe>');
-          $scope.video_url = iVideo.value;
+          var url_v = iVideo.value.replace("watch?v=", "v/");
+          var u_video = $sce.trustAsHtml('<iframe src="' + url_v + '&output=embed' + '" frameborder="0" allowfullscreen width="420" height="315"></iframe>');
+
+          console.log(u_video);
+          $scope.video_url = u_video;
         };
 
         var iAudio = _.find(dt[0].meta, function (item) {

@@ -32,7 +32,7 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace com.ionicframework.galleuca
+namespace com.mappiamo.galleuca
 {
     public partial class App : Application
     {

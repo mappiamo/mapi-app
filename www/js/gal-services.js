@@ -37,15 +37,17 @@ angular.module('gal.services', [])
     routes:[
       {
         title: 'Paduli',
-        _content: '539',
+        _content: '665',
         _categories: '37',
         lang: {
           en: {
-            _content: '543',
+            _title: 'Paduli',
+            _content: '669',
             _categories: '85'
           },
           it: {
-            _content: '539',
+            _title: 'Paduli',
+            _content: '665',
             _categories: '37'
           }
         },
@@ -60,11 +62,13 @@ angular.module('gal.services', [])
         _categories: '11',
         lang: {
           en: {
+            _title: 'Fede',
             _content: '542',
             _categories: '62'
           },
           it: {
-            _content: '538',
+            _title: 'Fede',
+            _content: '664',
             _categories: '11'
           }
         },
@@ -79,12 +83,14 @@ angular.module('gal.services', [])
         _categories: '57',
         lang: {
           en: {
-            _content: '545',
-            _categories: '103'
+            _title: 'Naturalistic/Archaeological',
+            _content: '671',
+            _categories: '110'
           },
           it: {
-            _content: '541',
-            _categories: '57'
+            _title: 'Naturalistico/Archeologico',
+            _content: '667',
+            _categories: '58'
           }
         },
         color: '#68B42E',
@@ -98,11 +104,13 @@ angular.module('gal.services', [])
         _categories: '54',
         lang: {
           en: {
+            _title: 'Falesie',
             _content: '544',
             _categories: '99'
           },
           it: {
-            _content: '540',
+            _title: 'Falesie',
+            _content: '666',
             _categories: '54'
           }
         },
@@ -123,9 +131,11 @@ angular.module('gal.services', [])
             
         async.each(self.routes, function (item, callback) {
           if (result == 'it') {
+            item.title = item.lang.it._title;
             item._content = item.lang.it._content;
             item._categories = item.lang.it._categories;
           } else if (result == 'en') {
+            item.title = item.lang.en._title;
             item._content = item.lang.en._content;
             item._categories = item.lang.en._categories;
           };
@@ -232,6 +242,34 @@ angular.module('gal.services', [])
           });
 
         });
+
+    },
+
+    poiAPI: function (callback, options) {
+      var self = this;
+
+      var options_http = {
+        method: 'GET',
+        url: MAPPIAMO.api,
+        dataType: 'jsonp',
+      };
+
+      console.log('getting data by: ' + options.url);
+
+      $http(options_http)
+          .success(function(data) {
+              
+              var poi = _.find(data, function (item) {
+                return item.id == options.idpoi;
+              }); 
+
+              callback(false, poi);
+
+          })
+          .error(function(data, status, headers, config) {
+              console.log('Unable to get pois api ' + url);
+              callback(true, null);
+          });
 
     },
 

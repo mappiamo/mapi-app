@@ -101,65 +101,68 @@
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "com.lampa.startapp": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-appavailability": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-customurlscheme": {
             "URL_SCHEME": "galleuca",
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-device-motion": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-device-orientation": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "hu.dpal.phonegap.plugins.SpinnerDialog": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "nl.x-services.plugins.socialsharing": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "org.apache.cordova.console": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "org.apache.cordova.file": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "org.apache.cordova.file-transfer": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "org.apache.cordova.globalization": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "org.apache.cordova.media": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "org.apache.cordova.network-information": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         },
         "org.pbernasconi.progressindicator": {
-            "PACKAGE_NAME": "{008d8200-67ba-11e5-bd05-f356e36df5d5}"
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
+        },
+        "uk.co.workingedge.phonegap.plugin.LaunchNavigator": {
+            "PACKAGE_NAME": "{02dd7950-6d48-11e5-8046-0ffd3fd94019}"
         }
     },
     "dependent_plugins": {}

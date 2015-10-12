@@ -34,7 +34,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Resources;
 
 
-namespace com.ionicframework.galleuca
+namespace com.mappiamo.galleuca
 {
     public partial class MainPage : PhoneApplicationPage
     {

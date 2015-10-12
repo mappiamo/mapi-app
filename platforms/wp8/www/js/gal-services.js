@@ -37,15 +37,17 @@ angular.module('gal.services', [])
     routes:[
       {
         title: 'Paduli',
-        _content: '539',
+        _content: '665',
         _categories: '37',
         lang: {
           en: {
-            _content: '543',
+            _title: 'Paduli',
+            _content: '669',
             _categories: '85'
           },
           it: {
-            _content: '539',
+            _title: 'Paduli',
+            _content: '665',
             _categories: '37'
           }
         },
@@ -60,11 +62,13 @@ angular.module('gal.services', [])
         _categories: '11',
         lang: {
           en: {
+            _title: 'Fede',
             _content: '542',
             _categories: '62'
           },
           it: {
-            _content: '538',
+            _title: 'Fede',
+            _content: '664',
             _categories: '11'
           }
         },
@@ -79,12 +83,14 @@ angular.module('gal.services', [])
         _categories: '57',
         lang: {
           en: {
-            _content: '545',
-            _categories: '103'
+            _title: 'Naturalistic/Archaeological',
+            _content: '671',
+            _categories: '110'
           },
           it: {
-            _content: '541',
-            _categories: '57'
+            _title: 'Naturalistico/Archeologico',
+            _content: '667',
+            _categories: '58'
           }
         },
         color: '#68B42E',
@@ -98,11 +104,13 @@ angular.module('gal.services', [])
         _categories: '54',
         lang: {
           en: {
+            _title: 'Falesie',
             _content: '544',
             _categories: '99'
           },
           it: {
-            _content: '540',
+            _title: 'Falesie',
+            _content: '666',
             _categories: '54'
           }
         },
@@ -123,9 +131,11 @@ angular.module('gal.services', [])
             
         async.each(self.routes, function (item, callback) {
           if (result == 'it') {
+            item.title = item.lang.it._title;
             item._content = item.lang.it._content;
             item._categories = item.lang.it._categories;
           } else if (result == 'en') {
+            item.title = item.lang.en._title;
             item._content = item.lang.en._content;
             item._categories = item.lang.en._categories;
           };
@@ -136,6 +146,21 @@ angular.module('gal.services', [])
         })
 
       });
+
+    },
+
+    getRouteByName: function (name, done) {
+
+      var self = this;
+
+      var it = _.find(self.routes, function (item) {
+        // console.log('route item: ' + JSON.stringify(item));
+          return item.name == name;
+      });
+
+        // console.log('found route item: ' + JSON.stringify(it));
+
+        done(false, it);
 
     },
 
@@ -162,6 +187,62 @@ angular.module('gal.services', [])
         done(err, it);
 
       });
+    },
+
+    poiAll: function (done) {
+
+      var self = this;
+      var pois = [];
+
+      var options = {
+        all: true,  // tutti i POI
+        category: null, 
+        content: null, 
+        poi: null, 
+        filters: null,
+        nearest: true,
+        limit: 10,
+        lat: 0,
+        lng: 0
+      };
+
+      this.getRoutes(function (err, routes) {
+          
+          async.each(routes, function (item, callback) {
+            
+            var options = {
+              content: item._content,
+              category: item._categories,
+              idpoi: null,
+              byUrl: false
+            };
+
+            console.log(JSON.stringify(options));
+
+            self.poi(function (err, data) {
+
+              console.log('loading pois n.' + _.size(data.data));
+              //console.log('first element --> ' + JSON.stringify(data))
+              var data_filtered = _.filter(data.data, function (item) {
+                return item.type != 'route';
+              });
+
+              pois = _.union(data_filtered, pois);
+              console.log('Now pois n.' + _.size(pois));
+              callback();
+
+            }, options);
+            
+          }, function (err) {
+            if (typeof done === 'function') {
+              console.log(JSON.stringify(pois[0]));
+              console.log('Elements n.' + _.size(pois));
+              done(err, pois);
+            }
+          });
+
+        });
+
     },
 
     // punti di interesse

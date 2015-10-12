@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.galleuca" version="1.3.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.mappiamo.galleuca" version="1.3.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>GAL Leuca</name>
   <description>
-        Applicazione del GAL Capo S.Maria di Leuca
+        GAL Capo S.Maria di Leuca
     </description>
-  <author email="giuseppe.zileni@gmail.com" href="http://mappiamo.org/">
+  <author email="devstore@berross.com" href="http://mappiamo.org/">
       Mappiamo
     </author>
   <content src="index.html"/>

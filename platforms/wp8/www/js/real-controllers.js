@@ -556,7 +556,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 	*/
 });
 
-ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest, MapBox) {
+ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletData, Geolocation, Gal, _, $ionicLoading, Mapquest, MapBox, $launchnavigator) {
 
 	$scope.isLocation = false;
 
@@ -652,12 +652,12 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletDa
 
 			var baseMaps = { "OSM Standard": osm };
 			var overlayMaps = { 
-				"Clouds": clouds, 
-				"Precipitazioni": precipitation,
-				"Neve": snow,
-				"Temperature": temp,
-				"vento": wind,
-				"Cities": city 
+				//"Clouds": clouds, 
+				//"Precipitazioni": precipitation,
+				//"Neve": snow,
+				//"Temperature": temp,
+				//"vento": wind,
+				"Meteo": city 
 			};
 	      	
 	      	layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -678,12 +678,24 @@ ctrls.controller('RealMapCtrl', function ($scope, $stateParams, async, leafletDa
 			longitude: $scope.route_data.lng
 		};
 
+		$launchnavigator.navigate(
+		  [location.latitude, location.longitude],
+		  [end.latitude, end.longitude],
+		  function(){
+		      alert("Plugin success");
+		  },
+		  function(error){
+		      alert("Plugin error: "+ error);
+		});
+
+		/*
 		MapBox.direction (location, end, 0, function (err, data_geojson) {
 			
 			_geojson(data_geojson);
 
 			showSpinner(false);
 		});
+		*/
 
 	};
 

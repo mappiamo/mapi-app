@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.galleuca" version="1.3.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.mappiamo.galleuca" version="1.3.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
@@ -71,6 +71,9 @@
     <feature name="ProgressIndicator">
         <param name="ios-package" value="ProgressIndicator" />
     </feature>
+    <feature name="LaunchNavigator">
+        <param name="ios-package" value="LaunchNavigator" />
+    </feature>
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
     <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -101,9 +104,9 @@
     <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
     <name>GAL Leuca</name>
     <description>
-        Applicazione del GAL Capo S.Maria di Leuca
+        GAL Capo S.Maria di Leuca
     </description>
-    <author email="giuseppe.zileni@gmail.com" href="http://mappiamo.org/">
+    <author email="devstore@berross.com" href="http://mappiamo.org/">
       Mappiamo
     </author>
     <content src="index.html" />
@@ -113,16 +116,19 @@
     <allow-navigation href="data:*" />
     <allow-navigation href="blob:*" />
     <allow-navigation href="http://itinerari.galcapodileuca.it/*" />
+    <allow-navigation href="https://api.mapbox.com/v4/directions/*" />
+    <allow-navigation href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <allow-intent href="architect://*" />
     <allow-intent href="data:*" />
     <allow-intent href="blob:*" />
     <allow-intent href="http://itinerari.galcapodileuca.it/*" />
+    <allow-intent href="https://api.mapbox.com/v4/directions/*" />
+    <allow-intent href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />

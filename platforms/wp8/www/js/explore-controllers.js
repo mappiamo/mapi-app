@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta) {
+ctrls.controller('ExploreCtrl', function ($scope, Gal, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta, $ionicModal, $tab) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -29,6 +29,36 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
   $language.get(function (err, result) {
     $scope.language = result;
     console.log(JSON.stringify(result));
+  });
+
+  $ionicModal.fromTemplateUrl('templates/config-modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
   });
 
   $scope.reportAppLaunched = function (url) {
@@ -43,8 +73,10 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
     _refresh();
   };
 
-  $scope.data = {
-      "launched" : "No"
+  $scope.openCredits = function () {
+    console.log('open credits');
+    $scope.closeModal();
+    window.location.href = '#/tab/credits';
   };
 
   // **********************************
@@ -52,11 +84,16 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
 
   // listen for Online event
   try {
+
       var type = $cordovaNetwork.getNetwork();
-      if (!type.UNKNOWN && !type.NONE) {
+      console.log('type connection: ' + type);
+
+      if ($cordovaNetwork.isOnline()) {
+        
         if (window.ProgressIndicator) {
           $cordovaProgress.showSimpleWithLabelDetail(true, "Sincronizzazione", "Sincronizzazione dei dati dal server. Attendere un momento.")
         };
+        
         // esegue il download dei dati solo se esiste una connessione
         DataSync.download(function (err, data, pois) {
               console.log('syncronizing ok ...');
@@ -64,6 +101,9 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
                 $cordovaProgress.hide();
               };
         }, true);
+
+      } else {
+        console.log('Connection Offline.');
       };
   }
   catch(err) {
@@ -155,28 +195,23 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $ionicLoading, $utility, 
     _refresh();  
   });
 
-  $ui.get('home', function (err, result) {
-      $scope.ui = result;
-    });
-
-  $ui.get('tab', function (err, result) {
-      $scope.uiTab = result;
-  });
-
   function _refresh() {
     // $scope.routes = Gal.routes;
     
     console.log('refresh data ...');
 
-    $ui.get('home', function (err, result) {
-      $scope.ui = result;
+    $tab.get(function (err, tabs) {
+      console.log(JSON.stringify(tabs));
+      $scope.uiTab = tabs;
     });
 
-    $ui.get('tab', function (err, result) {
-      $scope.uiTab = result;
+    $ui.get('home', function (err, langUI) {
+        console.log(JSON.stringify(langUI));
+        $scope.ui = langUI;
     });
 
     Gal.getRoutes(function (err, routes) {
+      console.log(JSON.stringify(routes));
       $scope.routes = routes;
     });
 
@@ -313,16 +348,17 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
         }
       }
     });
-
-    // For example's sake, hide the sheet after two seconds
+    
     $timeout(function() {
      hideSheet();
-    }, 2000);
+    }, 8000);
 
   };
 
   function share_Twitter(message) {
 
+    console.log('sharing on Twitter ...');
+    
     $cordovaSocialSharing
       .shareViaTwitter(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
@@ -336,6 +372,7 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
 
   function share_Facebook(message) {
     
+    console.log('sharing on Facebook ...');
     $cordovaSocialSharing
       .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
@@ -348,6 +385,8 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   };
 
   function share_whatsApp(message) {
+    
+    console.log('sharing on WhatsApp ...');
     
     $cordovaSocialSharing
       .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)
