@@ -2,7 +2,7 @@
   <ion-header-bar align-title="left" class="bar-positive">
   
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-arrow-back" href="#/tab/map/{{ content }}/{{ category }}"></a>
+    <a class="button button-icon icon ion-ios-arrow-back" ng-click="goBack(content, category)" href="#"></a>
   </div>
   <h1 class="title">{{ ui[0] }}</h1>
   <div class="buttons">
@@ -12,10 +12,10 @@
 
   <div class="bar bar-subheader bar-dark">
     <div class="button-bar">
-      <a class="button button-icon icon ion-android-image" href="#/tab/gallery/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="isGallery"></a>
-      <a class="button button-icon icon ion-android-camera" href="#/tab/i360/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="is360"></a>
-      <a class="button button-icon icon ion-social-youtube" href="#/tab/video/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="isVideo"></a>
-      <a class="button button-icon icon ion-android-volume-up" href="#/tab/audio/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}" ng-show="isAudio"></a>
+      <a class="button button-icon icon ion-android-image" ng-click="openMedia('gallery', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isGallery"></a>
+      <a class="button button-icon icon ion-android-camera" ng-click="openMedia('i360', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="is360"></a>
+      <a class="button button-icon icon ion-social-youtube" ng-click="openMedia('video', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isVideo"></a>
+      <a class="button button-icon icon ion-android-volume-up" ng-click="openMedia('audio', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isAudio"></a>
       <!--
       <a class="button button-icon icon ion-android-map" href="#/tab/route/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}"></a>
       -->

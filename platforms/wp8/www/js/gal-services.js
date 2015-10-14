@@ -245,6 +245,34 @@ angular.module('gal.services', [])
 
     },
 
+    poiAPI: function (callback, options) {
+      var self = this;
+
+      var options_http = {
+        method: 'GET',
+        url: MAPPIAMO.api,
+        dataType: 'jsonp',
+      };
+
+      console.log('getting data by: ' + options.url);
+
+      $http(options_http)
+          .success(function(data) {
+              
+              var poi = _.find(data, function (item) {
+                return item.id == options.idpoi;
+              }); 
+
+              callback(false, poi);
+
+          })
+          .error(function(data, status, headers, config) {
+              console.log('Unable to get pois api ' + url);
+              callback(true, null);
+          });
+
+    },
+
     // punti di interesse
     poi: function (callback, options) {
 

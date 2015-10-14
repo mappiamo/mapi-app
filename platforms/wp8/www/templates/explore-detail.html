@@ -2,11 +2,11 @@
   <ion-header-bar align-title="left" class="bar-positive">
   
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-arrow-back" href="#/tab/map/{{ content }}/{{ category }}"></a>
+    <a class="button button-icon icon ion-ios-arrow-back" ng-click="goBack(content, category)" href="#"></a>
   </div>
     <h1 class="title">{{ ui[0] }}</h1>
   <div class="buttons">
-    <a class="button button-icon icon ion-share" ng-click="share(explore.title, explore.meta[4].value, explore.meta[5].value)"></a>
+    <a class="button button-icon icon ion-share" ng-click="share(explore)"></a>
   </div>
     
   </div>

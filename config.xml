@@ -93,4 +93,32 @@
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
   <engine name="ios" spec="^3.9.0"/>
   <engine name="android" spec="^4.1.0"/>
+  
+  <platform name="ios">
+    <config-file platform="ios" target="*-Info.plist" parent="UISupportedInterfaceOrientations">
+        <array>
+            <string>UIInterfaceOrientationPortrait</string>
+        </array>
+    </config-file>
+
+    <config-file platform="ios" target="*-Info.plist" parent="UISupportedInterfaceOrientations~ipad">
+        <array>
+            <string>UIInterfaceOrientationPortrait</string>
+            <string>UIInterfaceOrientationLandscapeLeft</string>
+            <string>UIInterfaceOrientationPortraitUpsideDown</string>
+            <string>UIInterfaceOrientationLandscapeRight</string>
+        </array>
+    </config-file>
+  </platform>
+
+  <platform name="ios">
+    <config-file platform="ios" target="*-Info.plist" parent="NSAppTransportSecurity">
+    <dict>
+    <key>NSAllowsArbitraryLoads</key><true/>
+    </dict>
+    </config-file>
+    <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+      <string>Access to GPS information is needed to display POIs around your current location</string>
+    </config-file>
+  </platform>
 </widget>

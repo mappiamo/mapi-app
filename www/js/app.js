@@ -244,8 +244,8 @@ angular.module('gal', ['ionic',
       controller: 'PoiDetailCtrl'
     })
 
-    .state('tab.poiDetail', {
-      url: '/poidetail/:content/:category/:idpoi/:lat/:lng',
+    .state('tab.poiReal', {
+      url: '/poiReal/:content/:category/:idpoi/:lat/:lng',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-detail.html',

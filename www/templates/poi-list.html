@@ -18,7 +18,9 @@
            ng-repeat="poi in pois">
 
         <a class="item item-thumbnail-left item-text-wrap" ng-click="goPOI(content, category, poi.id, poi.lat, poi.lon)" href="#">
+        <!--
           <img cache-src="{{ poi.media[0].url }}" />
+          -->
           <h2>{{ poi.title }}</h2>
           <h3>{{ ui[0] }} {{ poi | distance_poi }}</h3>
           <h4>{{ poi.address }}</h4>

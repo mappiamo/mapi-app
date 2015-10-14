@@ -17,7 +17,7 @@ var ctrls = angular.module('gal.explore.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('ExploreCtrl', function ($scope, Gal, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta, $ionicModal, $tab) {
+ctrls.controller('ExploreCtrl', function ($scope, $state, Gal, $utility, $ionicPopup, $state, DataSync, $cordovaFileTransfer, $cordovaProgress, async, $cordovaFile, _, $ionicLoading, $cordovaNetwork, $language, $ui, $meta, $ionicModal, $tab) {
 
   $scope.dataOk = false;
   var reset = false;
@@ -37,6 +37,13 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $utility, $ionicPopup, $s
   }).then(function(modal) {
     $scope.modal = modal;
   });
+
+  $scope.openExplore = function (content, categories) {
+    $state.go('map', { 
+      "content": content, 
+      "category": categories
+    })
+  };
 
   $scope.openModal = function() {
     $scope.modal.show();
@@ -63,9 +70,7 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $utility, $ionicPopup, $s
 
   $scope.reportAppLaunched = function (url) {
     console.log('receveid url: ' + url);
-    // var goUrl = '#/tab/' + url;
     window.location.href = url;
-    // $state.go(goUrl);
   };
 
   $scope.setLanguage = function(l) {
@@ -76,7 +81,8 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $utility, $ionicPopup, $s
   $scope.openCredits = function () {
     console.log('open credits');
     $scope.closeModal();
-    window.location.href = '#/tab/credits';
+    //window.location.href = '#/tab/credits';
+    $state.go('tab.credits');
   };
 
   // **********************************
@@ -230,7 +236,7 @@ ctrls.controller('ExploreCtrl', function ($scope, Gal, $utility, $ionicPopup, $s
 // **
 // ** dettagli dell'itinerario
 
-ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf, $meta, $ui) {
+ctrls.controller('ExploreDetailCtrl', function ($scope, $state, $stateParams, Gal, GeoJSON, S, Geolocation, $ionicLoading, leafletData, $geo, DataSync, $image, $ionicActionSheet, $timeout, $cordovaSocialSharing, MAPPIAMO, turf, $meta, $ui) {
 
   // var content = $stateParams.content;
   $scope.content = $stateParams.content;
@@ -263,6 +269,13 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   $scope.$on('$ionicView.enter', function(e) {
     _refresh();
   });
+
+  $scope.goBack = function (content, category) {
+    $state.go('map', {
+      "content": content,
+      "category": category
+    });
+  }
 
   function _initMap () {
 
@@ -318,7 +331,9 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $stateParams, Gal, GeoJS
   // ------------------------------------
   // Social sharing
 
-  $scope.share = function(title, start, end) {
+  $scope.share = function(explore) {
+
+    var title = explore.title
 
     var msg = 'Itinerario: ' + title + ' ' + MAPPIAMO.hashtag + 
               ' ' + MAPPIAMO.contentWeb + $scope.content;

@@ -11,8 +11,6 @@
     <h1 class="title"><a href="#/tab/home"><img src="img/logo/logo-gal_tra_small.png"></img></a></h1>
     -->
 
-    
-    
   <ion-content class="has header" id="home">
 
       <div class="card">
@@ -25,15 +23,11 @@
       <div class="list card" 
            collection-repeat="route in routes">
 
-        <a class="item item-thumbnail-left item-text-wrap" href="#/tab/map/{{route._content}}/{{route._categories}}">
+        <a class="item item-thumbnail-left item-text-wrap" ng-click="openExplore(route._content, route._categories)" href="#">
           <img src="{{ route.image }}" />
           <h2 style="color: {{route.color}}">{{ route.title }}</h2>
         </a>
-
-      </div>
         
+      </div>
   </ion-content>
-
-  
-
 </ion-view>
