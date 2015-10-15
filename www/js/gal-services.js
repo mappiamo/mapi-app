@@ -42,13 +42,15 @@ angular.module('gal.services', [])
         lang: {
           en: {
             _title: 'Paduli',
-            _content: '669',
-            _categories: '85'
+            _content: '732',
+            _categories: '37',
+            _parent_id: 'aed54dec-1810-11e5-8c6e-23016835f201'
           },
           it: {
             _title: 'Paduli',
-            _content: '665',
-            _categories: '37'
+            _content: '728',
+            _categories: '37',
+            _parent_id: ''
           }
         },
         name: 'Paduli',
@@ -63,12 +65,12 @@ angular.module('gal.services', [])
         lang: {
           en: {
             _title: 'Fede',
-            _content: '542',
-            _categories: '62'
+            _content: '727',
+            _categories: '11'
           },
           it: {
             _title: 'Fede',
-            _content: '664',
+            _content: '727',
             _categories: '11'
           }
         },
@@ -84,12 +86,13 @@ angular.module('gal.services', [])
         lang: {
           en: {
             _title: 'Naturalistic/Archaeological',
-            _content: '671',
-            _categories: '110'
+            _content: '734',
+            _categories: '110',
+            _parent_id: 'e8d52c16-1a8f-11e5-aa12-3b34e0c41583'
           },
           it: {
             _title: 'Naturalistico/Archeologico',
-            _content: '667',
+            _content: '730',
             _categories: '58'
           }
         },
@@ -100,18 +103,18 @@ angular.module('gal.services', [])
       },
       {
         title: 'Falesie',
-        _content: '540',
-        _categories: '54',
+        _content: '729',
+        _categories: '56',
         lang: {
           en: {
             _title: 'Falesie',
-            _content: '544',
-            _categories: '99'
+            _content: '729',
+            _categories: '56'
           },
           it: {
             _title: 'Falesie',
-            _content: '666',
-            _categories: '54'
+            _content: '729',
+            _categories: '56'
           }
         },
         color: '#CC9999',
@@ -120,6 +123,27 @@ angular.module('gal.services', [])
         description: 'Un percorso che si dispiega lungo la costa adriatica del Capo di Leuca, un paesaggio spettacolare dove il mare e la terra quasi si scontrano lungo la linea di costa, alta, rocciosa, costellata di grotte e insenature.'
       }
     ],
+
+    getColorContent: function (id) {
+
+      var color = '#000000';
+      var self = this;
+      console.log('get color');
+      self.getRoutes(function (err, routes) {
+        var c = _.find(routes, function (item) {
+          return item._content == id;
+        }); 
+
+        if (typeof c !== 'undefined') {
+          color = c.color;
+        };
+
+        console.log('found color ' + color);
+
+        return color;
+      });
+
+    },
 
     getRoutes: function (done) {
 
@@ -471,6 +495,7 @@ angular.module('gal.services', [])
         .success(function(data) {
           dt._id = id;
           dt.data = data;
+          console.log(JSON.stringify(dt));
           callback(false, dt);
         })
         .error(function(data, status, headers, config) {

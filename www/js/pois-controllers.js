@@ -427,7 +427,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
                       popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                     });
 
-                    var descr = '<h4><a href="#/tab/poidetail/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
+                    var descr = '<h4><a href="#/tab/poiReal/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
                                 '<h5>' + feature.properties.address + '</h5>';
 
                     poisLatLng.push(latlng);
