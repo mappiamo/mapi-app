@@ -1,0 +1,67 @@
+<ion-view view-title="{{ title }}" hide-nav-bar="true">
+  <ion-header-bar align-title="left" class="bar-positive">
+  
+  <div class="buttons">
+    <a class="button button-icon icon ion-ios-arrow-back" ng-click="goBack(content, category)" href="#"></a>
+  </div>
+  <h1 class="title">{{ ui[0] }}</h1>
+  <div class="buttons">
+    <a class="button button-icon icon ion-share" ng-click="share(poi)" href="#"></a>
+  </div>
+  </ion-header-bar>
+
+  <div class="bar bar-subheader bar-dark">
+    <div class="button-bar">
+      <a class="button button-icon icon ion-android-image" ng-click="openDetail('gallery', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isGallery"></a>
+      <a class="button button-icon icon ion-android-camera" ng-click="openDetail('i360', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="is360"></a>
+      <a class="button button-icon icon ion-social-youtube" ng-click="openDetail('video', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isVideo"></a>
+      <a class="button button-icon icon ion-android-volume-up" ng-click="openDetail('audio', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isAudio"></a>
+      <!--
+      <a class="button button-icon icon ion-android-map" href="#/tab/route/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}"></a>
+      -->
+      <a class="button button-icon icon ion-android-map" ng-click="openRoute(poi.lat, poi.lng, poi.address)"></a>
+    </div>
+  </div>
+
+   <ion-content class="has-header has-subheader">
+      
+      <div class="list card" ng-if="dataOk">
+
+        <div class="item item-text-wrap">
+          <h2> <strong>{{ poi.title }} </strong></h2>
+          <h3> <i class="icon ion-android-pin"></i> {{ poi.address }} </h3>
+          <p> {{ poi.meta[2].value }} </p>
+        </div>
+
+        <div class="item item-image">
+          <img cache-src="{{ poi.media[0].url }}"></img>
+        </div>
+        
+        <div class="item item-body item-text-wrap">
+
+        <p>
+            {{ text }}
+        </p>  
+          <leaflet id="map_poi"
+                 geojson="geojson"
+                 canter="center"
+                 defaults="defaults">
+          </leaflet>
+        </div>
+        
+      </div>
+
+      <div class="list" ng-repeat="info in meta">
+        <div class="item item-divider">
+          {{ info.name }}
+        </div>
+
+        <a class="item item-text-wrap" href="#">
+          {{ info.value }}
+        </a>
+
+      </div>
+
+  </ion-content>
+
+</ion-view>

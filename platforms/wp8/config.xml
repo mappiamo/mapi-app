@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.mappiamo.galleuca" version="1.4.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <icon height="99" src="resources/wp8/icon/ApplicationIcon.png" width="99" />
+    <icon height="159" src="resources/wp8/icon/Background.png" width="159" />
+    <splash height="1280" src="resources/wp8/splash/SplashScreenImage.png" width="768" />
+    <name>GAL Capo S.Maria di Leuca</name>
+    <description>
+        GAL Capo S.Maria di Leuca
+    </description>
+    <author email="devstore@berross.com" href="http://mappiamo.org/">
+      Mappiamo
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
+    <allow-navigation href="blob:*" />
+    <allow-navigation href="http://itinerari.galcapodileuca.it/*" />
+    <allow-navigation href="https://api.mapbox.com/v4/directions/*" />
+    <allow-navigation href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="data:*" />
+    <allow-intent href="blob:*" />
+    <allow-intent href="http://itinerari.galcapodileuca.it/*" />
+    <allow-intent href="https://api.mapbox.com/v4/directions/*" />
+    <allow-intent href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-minSdkVersion" value="16" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <feature name="Device">
+        <param name="wp-package" value="Device" />
+    </feature>
+    <feature name="Accelerometer">
+        <param name="wp-package" value="Accelerometer" />
+    </feature>
+    <feature name="Compass">
+        <param name="wp-package" value="Compass" />
+    </feature>
+    <feature name="Notification">
+        <param name="wp-package" value="Notification" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="wp-package" value="SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SpinnerDialog">
+        <param name="wp-package" value="SpinnerDialog" />
+    </feature>
+    <feature name="SocialSharing">
+        <param name="wp-package" value="SocialSharing" />
+    </feature>
+    <feature name="Console">
+        <param name="wp-package" value="DebugConsole" />
+    </feature>
+    <feature name="File">
+        <param name="wp-package" value="File" />
+    </feature>
+    <feature name="FileTransfer">
+        <param name="wp-package" value="FileTransfer" />
+    </feature>
+    <feature name="Globalization">
+        <param name="wp-package" value="Globalization" />
+    </feature>
+    <feature name="Media">
+        <param name="wp-package" value="Media" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="wp-package" value="NetworkStatus" />
+    </feature>
+</widget>
