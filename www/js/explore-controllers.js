@@ -385,32 +385,33 @@ ctrls.controller('ExploreDetailCtrl', function ($scope, $state, $stateParams, Ga
       });
   }
 
-  function share_Facebook(message) {
-    
-    console.log('sharing on Facebook ...');
+  function share_whatsApp(message) {
+    var log = 'sharing on facebook.';
+    console.log(log);
     $cordovaSocialSharing
       .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
         // Success!
-        console.log('sharing facebook.');
+        console.log(log + ' Ok.');
       }, function(err) {
         // An error occurred. Show a message to the user
-        console.log('sharing facebook. Error');
+        console.log(log + ' Error.');
       });
   };
 
-  function share_whatsApp(message) {
+  function share_Facebook(message) {
     
-    console.log('sharing on WhatsApp ...');
+    var log = 'sharing on whatsapp.';
+    console.log(log);
     
     $cordovaSocialSharing
       .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
         // Success!
-        console.log('sharing whatsApp.');
+        console.log(log + ' Ok.');
       }, function(err) {
         // An error occurred. Show a message to the user
-        console.log('sharing whatsApp. Error');
+        console.log(log + ' Error');
       });
   };
 

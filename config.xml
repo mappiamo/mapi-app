@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.mappiamo.galleuca" version="1.3.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>GAL Leuca</name>
+<widget id="com.mappiamo.galleuca" version="1.4.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>GAL Capo S.Maria di Leuca</name>
   <description>
         GAL Capo S.Maria di Leuca
     </description>
@@ -14,8 +14,8 @@
   <allow-navigation href="data:*"/>
   <allow-navigation href="blob:*"/>
   <allow-navigation href="http://itinerari.galcapodileuca.it/*"/>
-  <allow-navigation href="https://api.mapbox.com/v4/directions/*" />
-  <allow-navigation href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+  <allow-navigation href="https://api.mapbox.com/v4/directions/*"/>
+  <allow-navigation href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
@@ -25,8 +25,8 @@
   <allow-intent href="data:*"/>
   <allow-intent href="blob:*"/>
   <allow-intent href="http://itinerari.galcapodileuca.it/*"/>
-  <allow-intent href="https://api.mapbox.com/v4/directions/*" />
-  <allow-intent href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+  <allow-intent href="https://api.mapbox.com/v4/directions/*"/>
+  <allow-intent href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
@@ -86,39 +86,37 @@
     <splash src="resources/android/splash/drawable-port-xxxhdpi-screen.png" density="port-xxxhdpi"/>
   </platform>
   <platform name="wp8">
-    <icon height="99" src="resources/wp8/icon/ApplicationIcon.png" width="99"/>
-    <icon height="159" src="resources/wp8/icon/Background.png" width="159"/>
+    <icon src="resources/wp8/icon/ApplicationIcon.png" width="99" height="99"/>
+    <icon src="resources/wp8/icon/Background.png" width="159" height="159"/>
     <splash src="resources/wp8/splash/SplashScreenImage.png" width="768" height="1280"/>
   </platform>
-  <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
-  <engine name="ios" spec="^3.9.0"/>
-  <engine name="android" spec="^4.1.0"/>
-  
   <platform name="ios">
     <config-file platform="ios" target="*-Info.plist" parent="UISupportedInterfaceOrientations">
-        <array>
-            <string>UIInterfaceOrientationPortrait</string>
-        </array>
+      <array>
+        <string>UIInterfaceOrientationPortrait</string>
+      </array>
     </config-file>
-
     <config-file platform="ios" target="*-Info.plist" parent="UISupportedInterfaceOrientations~ipad">
-        <array>
-            <string>UIInterfaceOrientationPortrait</string>
-            <string>UIInterfaceOrientationLandscapeLeft</string>
-            <string>UIInterfaceOrientationPortraitUpsideDown</string>
-            <string>UIInterfaceOrientationLandscapeRight</string>
-        </array>
+      <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+      </array>
     </config-file>
   </platform>
-
   <platform name="ios">
     <config-file platform="ios" target="*-Info.plist" parent="NSAppTransportSecurity">
-    <dict>
-    <key>NSAllowsArbitraryLoads</key><true/>
-    </dict>
+      <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+      </dict>
     </config-file>
     <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
       <string>Access to GPS information is needed to display POIs around your current location</string>
     </config-file>
   </platform>
+  <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <engine name="ios" spec="^3.9.0"/>
+  <engine name="android" spec="^4.1.0"/>
 </widget>

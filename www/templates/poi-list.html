@@ -17,13 +17,11 @@
     <div class="list card" 
            ng-repeat="poi in pois">
 
-        <a class="item item-text-wrap" ng-click="goPOI(content, category, poi.id, poi.lat, poi.lon)" href="#">
-        <!--
-          <img cache-src="{{ poi.meta['image0_thumb_small'].value }}" />
-          -->
-          <h2>{{ poi.title }}</h2>
+        <a class="item item-thumbnail-left item-text-wrap" ng-click="goPOI(content, category, poi.id, poi.lat, poi.lon)" href="#">
+          <img cache-src="{{ poi | image_thumb }}" />
+          <h2><img style="margin: 0px 0px 0px 0px" src="{{ poi.meta[1].value | poi_cat }}" width="24px" height="24px" /> <strong>{{ poi.title }}</strong></h2>
           <p>
-          {{ poi.address }} <br /> <img style="margin: 10px 0px 0px 0px" src="{{ poi.meta[1].value | poi_cat }}" width="24px" height="24px" /> {{ ui[0] }} {{ poi | distance_poi }}
+          <i class="icon ion-android-pin"></i> {{ poi.address }} <br /> {{ ui[0] }} {{ poi | distance_poi }}
           </p>
           
           <!--

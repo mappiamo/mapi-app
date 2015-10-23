@@ -2,7 +2,7 @@
   <ion-header-bar align-title="left" class="bar-positive">
   
   <div class="buttons">
-    <a class="button button-icon icon ion-ios-arrow-back" ng-click="goPOI(content, category, poi.id, poi.lat, poi.lon)" href="#"></a>
+    <a class="button button-icon icon ion-ios-arrow-back" ng-click="openDetail('poi', content, category, poi.id, poi.lat, poi.lon)" href="#"></a>
   </div>
   <h1 class="title">Audio - {{ poi.title }}</h1>
   
@@ -11,11 +11,19 @@
 
    <ion-content class="has-header">
 
+      <object data="{{ url_audio }}" type="audio/wav" autostart="true">
+        <embed src="{{ url_audio }}" autostart="true">
+      </object>
+
+        <!--
+
           <div class="button-bar">
         <a class="button" ng-click="playAudio(audio_url, poi.id, poi.title)"><i class="icon ion-play"></i></a>
         <a class="button" ng-click="pauseAudio()"><i class="icon ion-pause"></i></a>
         <a class="button" ng-click="stopAudio()"><i class="icon ion-stop"></i></a>
       </div>
+
+      -->
 
 
    </ion-content>

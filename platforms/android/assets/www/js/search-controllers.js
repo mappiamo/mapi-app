@@ -5,7 +5,7 @@ var ctrls = angular.module('gal.search.controllers', ['leaflet-directive']);
 // **
 // ** lista degli itinerari
 
-ctrls.controller('SearchCtrl', function ($scope, Gal, S, $utility, $state, async, _, $ionicLoading, $language, $ui, $meta, $ionicModal, $filters) {
+ctrls.controller('SearchCtrl', function ($scope, $state, Gal, S, $utility, $state, async, _, $ionicLoading, $language, $ui, $meta, $ionicModal, $filters) {
 
 	$scope.isText = false;
 	$scope.isName = false;
@@ -96,9 +96,18 @@ ctrls.controller('SearchCtrl', function ($scope, Gal, S, $utility, $state, async
 		var content = i._content;
 		var category = i._categories;
 
-		var url = '#/tab/poi/' + content + '/' + category + '/' + poi.id + '/' + poi.lat + '/' + poi.lon;
-		console.log('go to ' + url);
-		window.location.href = url;
+		// var url = '#/tab/poi/' + content + '/' + category + '/' + poi.id + '/' + poi.lat + '/' + poi.lon;
+		// console.log('go to ' + url);
+
+		$state.go('poi', {
+	      "content": content,
+	      "category": category,
+	      "idpoi": poi.id,
+	      "lat": poi.lat,
+	      "lng": poi.lon
+	    });
+
+		// window.location.href = url;
 
 	};	
 

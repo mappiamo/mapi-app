@@ -313,7 +313,7 @@ angular.module('gal.services', [])
               if (!err) {
                 console.log('getting data POI by Database ');
                 console.log('pois n.' + _.size(data));
-                //console.log('pois : ' + JSON.stringify(data));
+                console.log('options : ' + JSON.stringify(options));
                 
                 self._send_pois(options.idpoi, data, function (err, response) {
                   callback(err, response);
@@ -331,6 +331,8 @@ angular.module('gal.services', [])
     _send_pois: function (idpoi, data, done) {
       
       var self = this; 
+
+      // console.log('pois : ' + JSON.stringify(data.data));
 
       if (idpoi != null) {
 

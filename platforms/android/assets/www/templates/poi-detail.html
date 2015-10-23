@@ -12,10 +12,10 @@
 
   <div class="bar bar-subheader bar-dark">
     <div class="button-bar">
-      <a class="button button-icon icon ion-android-image" ng-click="openMedia('gallery', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isGallery"></a>
-      <a class="button button-icon icon ion-android-camera" ng-click="openMedia('i360', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="is360"></a>
-      <a class="button button-icon icon ion-social-youtube" ng-click="openMedia('video', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isVideo"></a>
-      <a class="button button-icon icon ion-android-volume-up" ng-click="openMedia('audio', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isAudio"></a>
+      <a class="button button-icon icon ion-android-image" ng-click="openDetail('gallery', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isGallery"></a>
+      <a class="button button-icon icon ion-android-camera" ng-click="openDetail('i360', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="is360"></a>
+      <a class="button button-icon icon ion-social-youtube" ng-click="openDetail('video', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isVideo"></a>
+      <a class="button button-icon icon ion-android-volume-up" ng-click="openDetail('audio', content, category, poi.id, poi.lat, poi.lon)" href="#" ng-show="isAudio"></a>
       <!--
       <a class="button button-icon icon ion-android-map" href="#/tab/route/{{ content }}/{{ category }}/{{ poi.id }}/{{ poi.lat }}/{{ poi.lon }}"></a>
       -->
@@ -27,10 +27,9 @@
       
       <div class="list card" ng-if="dataOk">
 
-        <div class="item item-avatar">
-          <img src="img/markers/{{ poi.meta[1].value }}" width="32px" height="37px" />
-          <h2> {{ poi.title }} </h2>
-          <h3> {{ poi.address }} </h3>
+        <div class="item item-text-wrap">
+          <h2> <strong>{{ poi.title }} </strong></h2>
+          <h3> <i class="icon ion-android-pin"></i> {{ poi.address }} </h3>
           <p> {{ poi.meta[2].value }} </p>
         </div>
 

@@ -23,7 +23,7 @@ service.factory('$app', function($cordovaDevice, $startApp, REALITY, $cordovaApp
 
 		},
 
-		map: function (lat, lng, done) {
+		map: function (location, done) {
 
 			var self = this;
 
@@ -33,23 +33,28 @@ service.factory('$app', function($cordovaDevice, $startApp, REALITY, $cordovaApp
 		    
 			    if (di.platform == 'Android') {
 					// console.log('run App: ' + REALITY.android.url);
-					var appRoute = 'geo:' + lat + ',' + lng + '?z=12';
+					//var appRoute = 'geo:' + lat + ',' + lng + '?z=12';
+					var appRoute = 'http://maps.google.com/?ll=' + location.latitude + ',' + location.longitude;
 					console.log('run App Android: ' + appRoute);
 					$startApp.run(appRoute, function (err, message) {
 						done(false, message, false);
 					});
 				} else if (di.platform == 'iOS') {
-					var appRoute = 'maps://?ll=' + lat + ',' + lng;
+					//var appRoute = 'maps://?ll=' + lat + ',' + lng;
+					var appRoute = 'http://maps.apple.com/?ll=' + location.latitude + ',' + location.longitude;
 					console.log('run App iOS: ' + appRoute);
 					$startApp.run(appRoute, function (err, message) {
 						done(false, message, false);
 					});
+				/*
 				} else if (di.platform == 'WinCE' || di.platform == 'Win32NT') {
+					var appRoute = 'bingmaps:?cp=' + lat + '~' -74.006076
 					var appRoute = 'maps:' + lat + ' ' + lng;
 					console.log('run App WP: ' + appRoute);
 					$startApp.run(appRoute, function (err, message) {
 						done(false, message, false);
 					});
+				*/
 				} else {
 					done(false, '', true);
 				};

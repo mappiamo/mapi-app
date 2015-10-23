@@ -197,7 +197,6 @@ angular.module('gal.meta', [])
 			}
 			]
 		},
-
 		
 		get: function (type, meta, done) {
 			

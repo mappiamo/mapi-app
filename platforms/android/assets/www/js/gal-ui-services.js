@@ -108,7 +108,7 @@ angular.module('gal.ui', [])
 			en: ['Route Detail']
 		},
 		search: {
-			it: ['Ricerca', 'Nome', 'Categoria', 'Via', 'Ripristina'],
+			it: ['Trova', 'Nome', 'Categoria', 'Via', 'Ripristina'],
 			en: ['Search', 'Name', 'Category', 'Address', 'Undo']
 		}
 	};

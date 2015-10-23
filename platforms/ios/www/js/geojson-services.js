@@ -121,13 +121,23 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 				byUrl: false
 			};
 
+			console.log('option by geojson content: ' + JSON.stringify(options))
+
 			Gal.content(function (err, data) {
 
 				var dt = data.data;
 
 				var geometry = $geo.parse(dt.route);
 
-		        var feature = {
+				var color = '#FFFFFF';
+				var c = _.find(dt.meta, function (item) {
+					return item.name == 'route-color';
+				});
+				if (typeof c !== 'undefined') {
+					color = c.value;
+				}
+
+				var feature = {
 		          "type": "Feature",
 		          "geometry": geometry,
 		          "properties": {
@@ -136,18 +146,14 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 		            category: '',
 		            type: dt.type,
 		            title: dt.title,
-		            time: dt.meta[1].value,
-		            mezzi: dt.meta[2].value,
-		            start: dt.meta[4].value,
-		            end: dt.meta[5].value,
-		            color: dt.meta[0].value,
+		            color: color,
 		            description: '<h2>' + dt.title + '</h2>' +
                                  '<p>Tempo di percorrenza in giorni: ' + dt.meta[1].value + '</p>'
 		          }
 		        };
 
 		        self.geojson_data.features.push(feature);
-
+		        console.log(JSON.stringify(self.geojson_data));
 		        done(err, self.geojson_data);
 			}, options);
 		},

@@ -44,6 +44,29 @@ filters.filter("magnetic", function ($utility) {
 
 });
 
+filters.filter("image_thumb", function (_) {
+
+	return function (input) {
+
+		var i = '';
+		//console.log('input n.' + _.size(input));
+		//console.log('data input: ' + JSON.stringify(input));
+		var d = _.find(input.meta, function (item) {
+			return item.name == 'image0_thumb_small'
+		});
+
+		if (typeof d != 'undefined') {
+			i = d.value;
+		} else {
+			i = input.media[0].url;
+		}
+
+		return i;
+
+	};
+
+});
+
 filters.filter("magnetic_ext", function ($utility) {
 
 	return function (input) {

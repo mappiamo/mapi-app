@@ -304,7 +304,7 @@ ctrls.controller('RealMapCtrl', function ($scope, $state, $stateParams, async, l
 	    $state.go('poi', {
 	      "content": content,
 	      "category": category,
-	      "poiid": id,
+	      "idpoi": id,
 	      "lat": lat,
 	      "lng": lon
 	    });

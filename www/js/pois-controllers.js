@@ -579,16 +579,6 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
     $scope.ui = result;
   });
 
-  $scope.goPOI = function (content, category, id, lat, lon) {
-    $state.go('poi', {
-      "content": content,
-      "category": category,
-      "poiid": id,
-      "lat": lat,
-      "lng": lon
-    });
-  };
-
   $scope.goBack = function(content, category) {
     if (content == 0 && category == 0) {
       $state.go('tab.explore');
@@ -600,37 +590,31 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
     }
   };
 
-  $scope.openMedia = function (stateUrl, content, category, id, lat, lon) {
+  $scope.openDetail = function (stateUrl, content, category, id, lat, lon) {
     $state.go(stateUrl, {
       "content": content,
       "category": category,
-      "poiid": id,
+      "idpoi": id,
       "lat": lat,
       "lng": lon
     });
   }; 
 
-  $scope.openRoute = function () {
+  $scope.openRoute = function (poilat, poilng, poiaddress) {
 
     var end = {
-      latitude: lat,
-      longitude: lng
+      latitude: poilat,
+      longitude: poilng,
+      address: poiaddress
     };
 
     console.log('route to ' + JSON.stringify(end));
 
-    $app.map(end.latitude, end.longitude, function (err, msg, noDevice) {
+    $app.map(end, function (err, msg, noDevice) {
       console.log(msg);
       if (err) {
         console.log('eseguo il navigatore interno');
-        $state.go('route',
-          { 
-            "content": content, 
-            "category": category,
-            "idpoi": idpoi,
-            "lat": lat,
-            "lng": lng
-          });
+        $scope.openDetail('route', content, category, idpoi, lat, lng);
       };
     });
 
@@ -663,11 +647,11 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
           // add cancel code..
       },
       buttonClicked: function(index) {
-        if (index==0) {
+        if (index == 0) {
           share_Facebook(msg);
-        } else if (index==1) {
+        } else if (index == 1) {
           share_Twitter(msg);
-        } else if (index==2) {
+        } else if (index == 2) {
           share_whatsApp(msg);
         }
       }
@@ -694,31 +678,33 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
       });
   }
 
-  function share_Facebook(message) {
+  function share_whatsApp(message) {
     
-    console.log('sharing to facebook');
+    var log = 'sharing to whatsapp.'
+    console.log(log);
     $cordovaSocialSharing
       .shareViaWhatsApp(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
         // Success!
-        console.log('sharing facebook.');
+        console.log(log + ' Ok.');
       }, function(err) {
         // An error occurred. Show a message to the user
-        console.log('sharing facebook. Error');
+        console.log(log + ' Error!');
       });
   };
 
-  function share_whatsApp(message) {
+  function share_Facebook(message) {
     
-    console.log('sharing to wahtsapp');
+    var log = 'sharing to facebook';
+    console.log(log);
     $cordovaSocialSharing
       .shareViaFacebook(message, MAPPIAMO.img, MAPPIAMO.web)
       .then(function(result) {
         // Success!
-        console.log('sharing whatsApp.');
+        console.log(log + ' Ok.');
       }, function(err) {
         // An error occurred. Show a message to the user
-        console.log('sharing whatsApp. Error');
+        console.log(log + ' Error!');
       });
   };
 
@@ -844,10 +830,16 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
     try {
 
       var url = urlAudio;
-      var fileMP3 = id; // + '.mp3';
-      var pathMP3 = cordova.file.documentsDirectory
-      var targetPath = pathMP3 + fileMP3;
+
+      $scope.url_audio = url;
+
+      // var fileMP3 = id; // + '.mp3';
+      // var pathMP3 = cordova.file.documentsDirectory
+      // var targetPath = pathMP3 + fileMP3;
+
+      // _playAudio(url);
       
+      /*
       $cordovaFile.checkFile(pathMP3, fileMP3)
         .then(function (success) {
           // success
@@ -868,6 +860,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
             };
           });
         });
+        */
 
     } catch (err) {
       console.log('Error play media: ' + err)
@@ -986,7 +979,7 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
       console.log(JSON.stringify(iVideo));
       $scope.isVideo = true;
       var url_v = iVideo.value.replace("watch?v=", "v/");
-      var u_video = $sce.trustAsHtml('<iframe src="' + url_v + '&output=embed' + '" frameborder="0" allowfullscreen width="420" height="315"></iframe>');
+      var u_video = $sce.trustAsHtml('<iframe src="' + url_v + '&output=embed' + '" frameborder="0" allowfullscreen width="100%" height="100%"></iframe>');
 
       console.log(u_video);
       $scope.video_url = u_video;
@@ -1018,10 +1011,13 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
   function _refresh() {
 
     var options_poi = {
+      content: content,
       category: category,
-      idpoi: idpoi,
+      idpoi: $stateParams.idpoi,
       byUrl: false
     };
+
+    console.log('Options: ' + JSON.stringify(options_poi))
 
     if (content == 0 && category == 0) {
       
