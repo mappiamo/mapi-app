@@ -1,4 +1,4 @@
-#import <Cordova/CDV.h>
+#import "Cordova/CDV.h"
 
 @interface AppAvailability : CDVPlugin
 

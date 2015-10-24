@@ -1,4 +1,4 @@
-#import <Cordova/CDV.h>
+#import "Cordova/CDV.h"
 #import <MessageUI/MFMailComposeViewController.h>
 
 @interface SocialSharing : CDVPlugin <UIPopoverControllerDelegate, MFMailComposeViewControllerDelegate>

@@ -17,7 +17,7 @@
  under the License.
  */
 
-#import <Cordova/CDVPlugin.h>
+#import "Cordova/CDVPlugin.h"
 
 @interface CDVLogger : CDVPlugin
 

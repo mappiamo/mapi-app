@@ -19,7 +19,7 @@
 
 #import "CDVFile.h"
 #import "CDVAssetLibraryFilesystem.h"
-#import <Cordova/CDV.h>
+#import "Cordova/CDV.h"
 #import <AssetsLibrary/ALAsset.h>
 #import <AssetsLibrary/ALAssetRepresentation.h>
 #import <AssetsLibrary/ALAssetsLibrary.h>

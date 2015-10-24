@@ -28,7 +28,7 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 
-#import <Cordova/CDVPlugin.h>
+#import "Cordova/CDVPlugin.h"
 
 @implementation AppDelegate
 

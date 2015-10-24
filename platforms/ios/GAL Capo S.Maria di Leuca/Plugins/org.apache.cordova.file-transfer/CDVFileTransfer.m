@@ -17,7 +17,7 @@
  under the License.
  */
 
-#import <Cordova/CDV.h>
+#import "Cordova/CDV.h"
 #import "CDVFileTransfer.h"
 #import "CDVLocalFilesystem.h"
 

@@ -5,7 +5,7 @@
 //
 //
 
-#import <Cordova/CDVPlugin.h>
+#import "Cordova/CDVPlugin.h"
 
 @interface CDVSpinnerDialog : CDVPlugin
 

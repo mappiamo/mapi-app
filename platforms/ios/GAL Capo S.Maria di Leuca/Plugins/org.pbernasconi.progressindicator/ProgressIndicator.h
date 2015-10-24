@@ -1,4 +1,4 @@
-#import <Cordova/CDV.h>
+#import "Cordova/CDV.h"
 #import "MBProgressHUD.h"
 
 @interface ProgressIndicator: CDVPlugin {

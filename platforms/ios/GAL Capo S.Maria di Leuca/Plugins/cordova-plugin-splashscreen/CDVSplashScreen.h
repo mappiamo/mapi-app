@@ -18,7 +18,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <Cordova/CDVPlugin.h>
+#import "Cordova/CDVPlugin.h"
 
 typedef struct {
     BOOL iPhone;
