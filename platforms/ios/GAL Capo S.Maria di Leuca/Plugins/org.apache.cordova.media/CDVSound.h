@@ -21,7 +21,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import <AVFoundation/AVFoundation.h>
 
-#import "Cordova/CDVPlugin.h"
+#import <Cordova/CDVPlugin.h>
 
 enum CDVMediaError {
     MEDIA_ERR_ABORTED = 1,

@@ -18,7 +18,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "Cordova/CDVPlugin.h"
+#import <Cordova/CDVPlugin.h>
 
 NSString* const kCDVAssetsLibraryPrefix;
 NSString* const kCDVFilesystemURLPrefix;

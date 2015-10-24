@@ -19,7 +19,7 @@
 
 #import "CDVFile.h"
 #import "CDVLocalFilesystem.h"
-#import "Cordova/CDV.h"
+#import <Cordova/CDV.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <sys/xattr.h>
 

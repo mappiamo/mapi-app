@@ -25,9 +25,9 @@
 //  Copyright ___ORGANIZATIONNAME___ ___YEAR___. All rights reserved.
 //
 
-#import "Cordova/CDVViewController.h"
-#import "Cordova/CDVCommandDelegateImpl.h"
-#import "Cordova/CDVCommandQueue.h"
+#import <Cordova/CDVViewController.h>
+#import <Cordova/CDVCommandDelegateImpl.h>
+#import <Cordova/CDVCommandQueue.h>
 
 @interface MainViewController : CDVViewController
 

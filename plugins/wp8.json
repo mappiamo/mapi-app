@@ -1,0 +1,169 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"wp-package\" value=\"Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Accelerometer\"><param name=\"wp-package\" value=\"Accelerometer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"wp-package\" value=\"Compass\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"wp-package\" value=\"Notification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"wp-package\" value=\"SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SpinnerDialog\"><param name=\"wp-package\" value=\"SpinnerDialog\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SocialSharing\"><param name=\"wp-package\" value=\"SocialSharing\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Console\"><param name=\"wp-package\" value=\"DebugConsole\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"wp-package\" value=\"File\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileTransfer\"><param name=\"wp-package\" value=\"FileTransfer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"wp-package\" value=\"Globalization\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Media\"><param name=\"wp-package\" value=\"Media\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"wp-package\" value=\"NetworkStatus\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "Properties/WMAppManifest.xml": {
+                "parents": {
+                    "/Deployment/App/Capabilities": [
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_IDENTITY_DEVICE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_SENSORS\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_AUDIO\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MEDIALIB_PLAYBACK\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_MICROPHONE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_NETWORKING\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "com.lampa.startapp": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-appavailability": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-customurlscheme": {
+            "URL_SCHEME": "galleuca",
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "hu.dpal.phonegap.plugins.SpinnerDialog": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "nl.x-services.plugins.socialsharing": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "org.apache.cordova.file": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "org.apache.cordova.file-transfer": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "org.apache.cordova.globalization": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "org.apache.cordova.media": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "org.apache.cordova.network-information": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "org.pbernasconi.progressindicator": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        },
+        "uk.co.workingedge.phonegap.plugin.LaunchNavigator": {
+            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
+        }
+    },
+    "dependent_plugins": {}
+}

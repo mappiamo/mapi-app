@@ -17,7 +17,7 @@
  under the License.
  */
 
-#import "Cordova/CDVViewController.h"
+#import <Cordova/CDVViewController.h>
 
 @interface CDVViewController (SplashScreen)
 

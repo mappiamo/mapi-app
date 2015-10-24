@@ -1,5 +1,5 @@
 #import "SocialSharing.h"
-#import "Cordova/CDV.h"
+#import <Cordova/CDV.h>
 #import <Social/Social.h>
 #import <Foundation/NSException.h>
 #import <MessageUI/MFMessageComposeViewController.h>

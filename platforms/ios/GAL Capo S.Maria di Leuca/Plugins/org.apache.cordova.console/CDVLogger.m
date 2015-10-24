@@ -18,7 +18,7 @@
  */
 
 #import "CDVLogger.h"
-#import "Cordova/CDV.h"
+#import <Cordova/CDV.h>
 
 @implementation CDVLogger
 

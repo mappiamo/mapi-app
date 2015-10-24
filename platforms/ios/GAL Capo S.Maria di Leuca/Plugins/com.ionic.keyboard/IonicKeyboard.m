@@ -1,6 +1,6 @@
 #import "IonicKeyboard.h"
 #import "UIWebViewExtension.h"
-#import "Cordova/CDVAvailability.h"
+#import <Cordova/CDVAvailability.h>
 
 @implementation IonicKeyboard
 
