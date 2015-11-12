@@ -12,7 +12,7 @@
 
 var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-ctrls.controller('RealCameraCtrl', function ($scope) {
+ctrls.controller('RealCameraCtrl', function ($scope, $app) {
 
 	$app.reality(function (err, devInfo, msg) {
 		if (!err) {
@@ -20,7 +20,6 @@ ctrls.controller('RealCameraCtrl', function ($scope) {
 			$scope.deviceVersion = devInfo.version;
 			$scope.deviceModel = devInfo.model;	
 		};
-		$scope.message = message;
 	});
 });
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.mappiamo.galleuca" version="1.4.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.mappiamo.galleuca" version="1.4.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>GAL Capo S.Maria di Leuca</name>
   <description>
         GAL Capo S.Maria di Leuca
@@ -13,7 +13,7 @@
   <allow-navigation href="https://*/*"/>
   <allow-navigation href="data:*"/>
   <allow-navigation href="blob:*"/>
-  <allow-navigation href="http://itinerari.galcapodileuca.it/*"/>
+  <allow-navigation href="http://itinerari.galcapodileuca.it/*/*"/>
   <allow-navigation href="https://api.mapbox.com/v4/directions/*"/>
   <allow-navigation href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
   <allow-intent href="http://*/*"/>
@@ -24,7 +24,7 @@
   <allow-intent href="geo:*"/>
   <allow-intent href="data:*"/>
   <allow-intent href="blob:*"/>
-  <allow-intent href="http://itinerari.galcapodileuca.it/*"/>
+  <allow-intent href="http://itinerari.galcapodileuca.it/*/*"/>
   <allow-intent href="https://api.mapbox.com/v4/directions/*"/>
   <allow-intent href="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
   <preference name="webviewbounce" value="false"/>
@@ -108,8 +108,16 @@
   <platform name="ios">
     <config-file platform="ios" target="*-Info.plist" parent="NSAppTransportSecurity">
       <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
+        <key>NSExceptionDomains</key>
+        <dict>
+          <key>itinerari.galcapodileuca.it</key>
+          <dict>
+            <key>NSIncludesSubdomains</key>
+            <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+            <true/>
+          </dict>
+        </dict>
       </dict>
     </config-file>
     <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">

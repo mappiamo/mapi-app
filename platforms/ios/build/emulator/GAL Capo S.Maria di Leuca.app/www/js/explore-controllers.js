@@ -89,6 +89,7 @@ ctrls.controller('ExploreCtrl', function ($scope, $state, Gal, $utility, $ionicP
   // Controllo la connessione
 
   // listen for Online event
+  /*
   try {
 
       var type = $cordovaNetwork.getNetwork();
@@ -115,6 +116,7 @@ ctrls.controller('ExploreCtrl', function ($scope, $state, Gal, $utility, $ionicP
   catch(err) {
       console.log('non posso verificare la connessione');
   };
+   */
   
       /*
   var isOnline = $cordovaNetwork.isOnline()

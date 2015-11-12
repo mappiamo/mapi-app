@@ -92,20 +92,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.apache.cordova.console/www/console-via-logger.js",
-        "id": "org.apache.cordova.console.console",
-        "clobbers": [
-            "console"
-        ]
-    },
-    {
-        "file": "plugins/org.apache.cordova.console/www/logger.js",
-        "id": "org.apache.cordova.console.logger",
-        "clobbers": [
-            "cordova.logger"
-        ]
-    },
-    {
         "file": "plugins/org.apache.cordova.file/www/DirectoryEntry.js",
         "id": "org.apache.cordova.file.DirectoryEntry",
         "clobbers": [
@@ -296,13 +282,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.pbernasconi.progressindicator/www/progressIndicator.js",
-        "id": "org.pbernasconi.progressindicator.ProgressIndicator",
-        "clobbers": [
-            "ProgressIndicator"
-        ]
-    },
-    {
         "file": "plugins/uk.co.workingedge.phonegap.plugin.LaunchNavigator/www/wp8/launchnavigator.js",
         "id": "uk.co.workingedge.phonegap.plugin.LaunchNavigator.LaunchNavigator",
         "clobbers": [
@@ -326,13 +305,11 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.0.0",
     "hu.dpal.phonegap.plugins.SpinnerDialog": "1.3.1",
     "nl.x-services.plugins.socialsharing": "4.3.19",
-    "org.apache.cordova.console": "0.2.13",
     "org.apache.cordova.file": "1.3.3",
     "org.apache.cordova.file-transfer": "0.5.0",
     "org.apache.cordova.globalization": "0.3.4",
     "org.apache.cordova.media": "0.2.16",
     "org.apache.cordova.network-information": "0.2.15",
-    "org.pbernasconi.progressindicator": "1.1.0",
     "uk.co.workingedge.phonegap.plugin.LaunchNavigator": "2.9.5"
 }
 // BOTTOM OF METADATA

@@ -405,50 +405,53 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
     GeoJSON.pois(function (err, data) {
 
       console.log('drawing map...');
+
+      if (!err) {
       
-      angular.extend($scope, {
-            geojson: {
-                data: data,
-                style: 
-                function (feature) {
-                    return {
-                      color: feature.properties.color
-                    };
-                },
-                pointToLayer: function(feature, latlng) {
-                    var markerIcon = L.icon({
-                      iconUrl: 'img/markers/' + feature.properties.marker,
-                      // shadowUrl: 'leaf-shadow.png',
+        angular.extend($scope, {
+              geojson: {
+                  data: data,
+                  style: 
+                  function (feature) {
+                      return {
+                        color: feature.properties.color
+                      };
+                  },
+                  pointToLayer: function(feature, latlng) {
+                      var markerIcon = L.icon({
+                        iconUrl: 'img/markers/' + feature.properties.marker,
+                        // shadowUrl: 'leaf-shadow.png',
 
-                      iconSize:     [32, 37], // size of the icon
-                      // shadowSize:   [50, 64], // size of the shadow
-                      iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
-                      // shadowAnchor: [4, 62],  // the same for the shadow
-                      popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-                    });
+                        iconSize:     [32, 37], // size of the icon
+                        // shadowSize:   [50, 64], // size of the shadow
+                        iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
+                        // shadowAnchor: [4, 62],  // the same for the shadow
+                        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                      });
 
-                    var descr = '<h4><a href="#/tab/poiReal/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
-                                '<h5>' + feature.properties.address + '</h5>';
+                      var descr = '<h4><a href="#/tab/poiReal/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
+                                  '<h5>' + feature.properties.address + '</h5>';
 
-                    poisLatLng.push(latlng);
+                      poisLatLng.push(latlng);
 
-                    return L.marker(latlng, {
-                      icon: markerIcon
-                    }).bindPopup(descr);
-                },
-                onEachFeature: function (feature, layer) {
-                  console.log('type: ' + feature.properties.type);
-                    if (feature.properties.type == 'route') {
-                      console.log('set bounds');
-                      _setBounds(layer);
-                    };
-                } 
-              
-            }
-        });
+                      return L.marker(latlng, {
+                        icon: markerIcon
+                      }).bindPopup(descr);
+                  },
+                  onEachFeature: function (feature, layer) {
+                    console.log('type: ' + feature.properties.type);
+                      if (feature.properties.type == 'route') {
+                        console.log('set bounds');
+                        _setBounds(layer);
+                      };
+                  } 
+                
+              }
+          });
 
-        showSpinner(false);
-        $scope.isMap = true;
+          showSpinner(false);
+          $scope.isMap = true;
+        };
    
     }, options);
 

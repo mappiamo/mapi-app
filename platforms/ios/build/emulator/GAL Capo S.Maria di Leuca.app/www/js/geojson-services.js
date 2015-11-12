@@ -235,65 +235,72 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 
 				// console.log(JSON.stringify(data));
 
-				console.log('loaded pois. Start convert to geojson n.' + _.size(data));
+				if (!err) {
 
-				var d;
+					console.log('loaded pois. Start convert to geojson n.' + _.size(data));
 
-				if (typeof data.data === 'undefined') {
-					console.log('***> send data to geojson')
-					d = data;
-				} else {
-					//d = data.data;
-					console.log('*** send data filtered to geojson filtered ... n.' + _.size(data.filtered));
-					d = data.filtered;
-				};
+					var d;
 
-				async.each(d, function (item, callback) {
-
-					if (options.all && item.type === 'route') {
-						callback();
+					if (typeof data.data === 'undefined') {
+						console.log('***> send data to geojson')
+						d = data;
 					} else {
-						var geometry = $geo.parse(item.route);
+						//d = data.data;
+						console.log('*** send data filtered to geojson filtered ... n.' + _.size(data.filtered));
+						d = data.filtered;
+					};
 
-				        var feature = {
-				          "type": "Feature",
-				          "geometry": geometry,
-				          "properties": {
-				            id: item.id,
-				            content: options_poi.content,
-				            category: options_poi.category,
-				            type: item.type,
-				            title: item.title,
-				            address: item.address,
-				            marker: item.meta[1].value,
-				            color: '',
-				            lat: item.lat,
-				            lon: item.lon
-				          }
+					async.each(d, function (item, callback) {
+
+						if (options.all && item.type === 'route') {
+							callback();
+						} else {
+							var geometry = $geo.parse(item.route);
+
+					        var feature = {
+					          "type": "Feature",
+					          "geometry": geometry,
+					          "properties": {
+					            id: item.id,
+					            content: options_poi.content,
+					            category: options_poi.category,
+					            type: item.type,
+					            title: item.title,
+					            address: item.address,
+					            marker: item.meta[1].value,
+					            color: '',
+					            lat: item.lat,
+					            lon: item.lon
+					          }
+					        };
+
+					        if (item.type === 'route') {
+					        	console.log('Color:' + item.meta[0].value);
+					        	feature.properties.color = item.meta[0].value;
+					        } else {
+					        	feature.properties.color = '#FFFFFF'
+					        };
+
+				        	self.geojson_data.features.push(feature);
+
+				        	// console.log('*********************************');
+					    	//console.log('*** GeoJSON : ' + JSON.stringify(self.geojson_data));
+					
+				        	callback();
 				        };
 
-				        if (item.type === 'route') {
-				        	console.log('Color:' + item.meta[0].value);
-				        	feature.properties.color = item.meta[0].value;
-				        } else {
-				        	feature.properties.color = '#FFFFFF'
-				        };
+			      	}, function (err) {
 
-			        	self.geojson_data.features.push(feature);
+			      		if (typeof done === 'function') {
+			      			done(err);
+			      		};
 
-			        	// console.log('*********************************');
-				    	//console.log('*** GeoJSON : ' + JSON.stringify(self.geojson_data));
-				
-			        	callback();
-			        };
-
-		      	}, function (err) {
-
-		      		if (typeof done === 'function') {
+					});
+				} else {
+					if (typeof done === 'function') {
 		      			done(err);
 		      		};
-
-				});
+				}
 
 				// self._pois_geojson(d, options, done);
 				
@@ -311,10 +318,17 @@ service.factory('GeoJSON', function (_, async, S, Gal, $geo, $filters) {
 			if (!options.all) {
 				this.geojson_data.features = [];
 				self._pois(function (err) {
-					if (typeof done === 'function') {
-						// console.log('*** GeoJSON: ' + JSON.stringify(self.geojson_data));
-						done(err, self.geojson_data);
-					};
+					if (!err) {
+						if (typeof done === 'function') {
+							// console.log('*** GeoJSON: ' + JSON.stringify(self.geojson_data));
+							done(err, self.geojson_data);
+						};
+					} else {
+						if (typeof done === 'function') {
+							// console.log('*** GeoJSON: ' + JSON.stringify(self.geojson_data));
+							done(err, null);
+						};
+					}
 				}, options);
 			} else {
 				Gal.getRoutes(function (err, routes) {

@@ -77,10 +77,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"ProgressIndicator\"><param name=\"android-package\" value=\"org.apache.cordova.plugin.ProgressIndicator\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"LaunchNavigator\"><param name=\"android-package\" value=\"uk.co.workingedge.phonegap.plugin.LaunchNavigator\" /></feature>",
                             "count": 1
                         }
@@ -170,9 +166,6 @@
         "nl.x-services.plugins.socialsharing": {
             "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
-        "org.apache.cordova.console": {
-            "PACKAGE_NAME": "com.mappiamo.galleuca"
-        },
         "org.apache.cordova.file": {
             "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
@@ -186,9 +179,6 @@
             "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "org.apache.cordova.network-information": {
-            "PACKAGE_NAME": "com.mappiamo.galleuca"
-        },
-        "org.pbernasconi.progressindicator": {
             "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "uk.co.workingedge.phonegap.plugin.LaunchNavigator": {

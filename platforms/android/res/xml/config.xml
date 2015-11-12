@@ -56,9 +56,6 @@
     <feature name="NetworkStatus">
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
-    <feature name="ProgressIndicator">
-        <param name="android-package" value="org.apache.cordova.plugin.ProgressIndicator" />
-    </feature>
     <feature name="LaunchNavigator">
         <param name="android-package" value="uk.co.workingedge.phonegap.plugin.LaunchNavigator" />
     </feature>

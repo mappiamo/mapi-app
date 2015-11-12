@@ -37,10 +37,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Console\"><param name=\"wp-package\" value=\"DebugConsole\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"File\"><param name=\"wp-package\" value=\"File\" /></feature>",
                             "count": 1
                         },
@@ -140,9 +136,6 @@
         "nl.x-services.plugins.socialsharing": {
             "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
         },
-        "org.apache.cordova.console": {
-            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
-        },
         "org.apache.cordova.file": {
             "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
         },
@@ -156,9 +149,6 @@
             "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
         },
         "org.apache.cordova.network-information": {
-            "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
-        },
-        "org.pbernasconi.progressindicator": {
             "PACKAGE_NAME": "{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}"
         },
         "uk.co.workingedge.phonegap.plugin.LaunchNavigator": {
