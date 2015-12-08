@@ -4,14 +4,13 @@
     <Languages xmlns="">
         <Language code="en-US" />
     </Languages>
-    <App Author="Mappiamo" BitsPerPixel="32" Description="GAL Capo S.Maria di Leuca" Genre="apps.normal" ProductID="{3fcd4e30-798c-11e5-8821-b5755a7d1ae5}" Publisher="Mappiamo" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="GAL Capo S.Maria di Leuca" Version="1.4.1" xmlns="">
+    <App Author="Mappiamo" BitsPerPixel="32" Description="GAL Capo S.Maria di Leuca" Genre="apps.normal" ProductID="{1411f3d0-9873-11e5-9be1-f78836abf609}" Publisher="Mappiamo" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="GAL Capo S.Maria di Leuca" Version="1.4.6" xmlns="">
         <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
         <Capabilities>
             <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
             <Capability Name="ID_CAP_NETWORKING" />
             <Capability Name="ID_CAP_IDENTITY_DEVICE" />
             <Capability Name="ID_CAP_SENSORS" />
-            <Capability Name="ID_CAP_LOCATION" />
             <Capability Name="ID_CAP_MEDIALIB_AUDIO" />
             <Capability Name="ID_CAP_MEDIALIB_PLAYBACK" />
             <Capability Name="ID_CAP_MICROPHONE" />

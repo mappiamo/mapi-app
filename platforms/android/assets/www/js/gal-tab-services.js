@@ -1,4 +1,4 @@
-angular.module('gal.tab', [])
+angular.module('gal.tab', ['ionic'])
 
 .factory('$tab', function ($cordovaDevice, $ui) {
 
@@ -21,23 +21,39 @@ angular.module('gal.tab', [])
 
 			    tabs = self.tabs;
 			    tabs.title = langTab;
+
+			    tabs.switches[0] = true;
+				tabs.switches[1] = true;
+				tabs.switches[2] = false;
+				tabs.switches[3] = true;
+				tabs.switches[4] = true;
+
+				var isWebView = ionic.Platform.isWebView();
+				var isIPad = ionic.Platform.isIPad();
+				var isIOS = ionic.Platform.isIOS();
+				var isAndroid = ionic.Platform.isAndroid();
+				var isWindowsPhone = ionic.Platform.isWindowsPhone();
+
+				console.log('is Web View: ' + isWebView);
+				console.log('is isWindowsPhone: ' + isWindowsPhone);
+
+				if (isWindowsPhone) {
+					platform = 'web';
+				};
+
+				console.log('Platform: ' + platform);
 			
-				if (platform == 'Android' || platform == 'iOS') {
-					tabs.switches[0] = true;
-					tabs.switches[1] = true;
-					tabs.switches[3] = false;
-					tabs.switches[3] = true;
-				} else {
+				if (platform == 'web') {
 					tabs.switches[0] = true;
 					tabs.switches[1] = false;
-					tabs.switches[2] = true;
+					tabs.switches[2] = false;
 					tabs.switches[3] = true;
+					tabs.switches[4] = true;
 				};
 				
 				done(err, tabs);
 
     		});
-
 			
 		},
 

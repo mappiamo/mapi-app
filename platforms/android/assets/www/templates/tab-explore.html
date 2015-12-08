@@ -20,15 +20,17 @@
         </div>
       </div>
 
-      <div class="list card" 
-           collection-repeat="route in routes">
+      <div class="list">
 
-        <a class="item item-thumbnail-left item-text-wrap" ng-click="openExplore(route._content, route._categories)" href="#">
-          <img src="{{ route.image }}" />
-          <h2 style="color: {{route.color}}">{{ route.title }}</h2>
-        </a>
-        
+      <div class="item item-button-right item-thumbnail-left item-text-wrap" ng-repeat="route in routes">
+        <img src="{{ route.image }}" />
+        {{ route.title }}
+        <button class="button button-positive" ng-click="openExplore(route._content, route._categories)">
+          <i class="icon ion-ios-location"></i>
+        </button>
       </div>
+      {{ route.description }}
+    </div>
 
   </ion-content>
 </ion-view>

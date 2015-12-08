@@ -213,7 +213,7 @@ ctrls.controller('PoiListCtrl', function ($scope, $state, $stateParams, Gal, _, 
 // **
 // ** Mappa dei punti di interesse
 
-ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async, $ionicModal, $filters, $ui) {
+ctrls.controller('PoiMapCtrl', function ($scope, $compile, $state, $stateParams, Gal, leafletData, Geolocation, GeoJSON, $ionicLoading, $geo, async, $ionicModal, $filters, $ui) {
 
   var marker;
   var layer_control;
@@ -221,6 +221,8 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
   var name_map = 'map';
   var geojson;
   var filters;
+
+  var popupElement = $('#btnPOI');
 
   var content = $stateParams.content;
   var category = $stateParams.category;
@@ -269,6 +271,17 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
     $state.go('pois', {
       "content": content,
       "category": category
+    });
+  };
+
+  $scope.openPOI = function (content, category, id, lat, lng) {
+    console.log('click detail poi...');
+    $state.go('poi', {
+      "content": content,
+      "category": category,
+      "idpoi": id,
+      "lat": lat,
+      "lng": lng
     });
   };
 
@@ -336,7 +349,41 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
   angular.extend($scope, {
       defaults: {
         scrollWheelZoom: true
+      },
+      events: {
+          map: {
+              enable: ['zoomstart', 'drag', 'click', 'mousemove', 'openpopup', 'popupopen'],
+              logic: 'emit'
+          }
       }
+  });
+
+  $scope.$on('leafletDirectiveMap.zoomstart', function(event){
+      //console.log("ZoomStart");
+  });
+
+  $scope.$on('leafletDirectiveMap.drag', function(event){
+      //console.log("Drag");
+  });
+
+  $scope.$on('leafletDirectiveMap.click', function(event){
+      console.log("Click");
+      
+  });
+
+  $scope.$on('leafletDirectiveMap.mousemove', function(event){
+      //console.log("MouseMove");
+  });
+
+  $scope.$on('leafletDirectiveMap.popupopen', function(event, leafletEvent){
+      console.log("popupopen");
+      var feature = leafletEvent.leafletEvent.popup.options.feature;
+
+      var newScope = $scope.$new();
+      newScope.stream = feature;
+
+      $compile(leafletEvent.leafletEvent.popup._contentNode)(newScope);
+
   });
 
   // Geolocation
@@ -356,7 +403,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
         zoom: 12
       }
     });
-   
+
     // Punto di coordinata del device
     leafletData.getMap().then(function(map) {
 
@@ -429,14 +476,24 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
                         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                       });
 
-                      var descr = '<h4><a href="#/tab/poiReal/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
-                                  '<h5>' + feature.properties.address + '</h5>';
+                      var descr = '<button id="btnPOI" class="button button-full button-positive" ng-click="openPOI(' + content + ',' + category + ',' + feature.properties.id + ',' + feature.properties.lat + ',' + feature.properties.lon + ')">' + 
+                                  feature.properties.title + 
+                                  '</button>' + 
+                                  '<p>' + feature.properties.address + '</p>';
+
+                      //var descr = '<h4><a href="/poi/' + content + '/' + category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4><br />' +
+                      //            '<h5>' + feature.properties.address + '</h5>';
 
                       poisLatLng.push(latlng);
 
                       return L.marker(latlng, {
                         icon: markerIcon
-                      }).bindPopup(descr);
+                      }).bindPopup(descr, {
+                        closeButton: false,
+                        maxHeight: 300,
+                        feature: feature
+                      });
+
                   },
                   onEachFeature: function (feature, layer) {
                     console.log('type: ' + feature.properties.type);
@@ -469,7 +526,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
 
   function _setBounds(layer) {
 
-    console.log('pois ' + JSON.stringify(poisLatLng));
+    // console.log('pois ' + JSON.stringify(poisLatLng));
 
     leafletData.getMap('map').then(function(map) {
       map.fitBounds(layer.getBounds());
@@ -544,7 +601,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $state, $stateParams, Gal, leaf
 // ** dettaglio del punto di interesse
 // *****************************
 
-ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta, $cordovaDevice, $cordovaFileTransfer, $cordovaFile, $app) {
+ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, Gal, S, $ionicLoading, $geo, $image, leafletData, $ionicActionSheet, $timeout, $cordovaSocialSharing, Geolocation, MAPPIAMO, GeoJSON, $ionicModal, $cordovaMedia, $ui, $meta, $cordovaDevice, $cordovaFileTransfer, $cordovaFile, $app, $cordovaMedia) {
 
   var content = 0;
   if (typeof $stateParams.content !== 'undefined') {
@@ -833,16 +890,16 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
     try {
 
       var url = urlAudio;
-
-      $scope.url_audio = url;
-
-      // var fileMP3 = id; // + '.mp3';
-      // var pathMP3 = cordova.file.documentsDirectory
-      // var targetPath = pathMP3 + fileMP3;
-
+      console.log(url);
       // _playAudio(url);
       
-      /*
+      // $scope.url_audio = url;
+
+      var fileMP3 = id + '.mp3';
+      var pathMP3 = cordova.file.documentsDirectory
+      var targetPath = pathMP3 + fileMP3;
+
+      
       $cordovaFile.checkFile(pathMP3, fileMP3)
         .then(function (success) {
           // success
@@ -863,7 +920,6 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
             };
           });
         });
-        */
 
     } catch (err) {
       console.log('Error play media: ' + err)
@@ -996,9 +1052,9 @@ ctrls.controller('PoiDetailCtrl', function ($scope, $state, $sce, $stateParams, 
       console.log(JSON.stringify(iAudio));
       $scope.isAudio = true;
       // <embed src="success.wav" autostart=false loop=false>
-      $scope.audio_url = iAudio.value;
+      // $scope.audio_url = iAudio.value;
       // $scope.audio_embed = $sce.trustAsHtml('<embed src="' + iAudio.value + '" autostart=false loop=false </embed>');
-      // $scope.playAudio(iAudio.value, dt[0].id, dt[0].title);
+      $scope.playAudio(iAudio.value, dt[0].id, dt[0].title);
     };
 
     $image.getGallery($scope.poi.media, function (err, medias) {

@@ -226,6 +226,16 @@ angular.module('gal', ['ionic',
       controller: 'ExploreCtrl'
     })
 
+    .state('tab.credits', {
+      url: '/credits',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/credits.html',
+          controller: 'ExploreCtrl'
+        }
+      }
+    })
+
     .state('pois', {
       url: '/pois/:content/:category',
       templateUrl: 'templates/poi-list.html',
@@ -246,7 +256,7 @@ angular.module('gal', ['ionic',
     })
 
     .state('tab.poiReal', {
-      url: '/poiReal/:content/:category/:idpoi/:lat/:lng',
+      url: '/poireal/:content/:category/:idpoi/:lat/:lng',
       views: {
         'tab-explore': {
           templateUrl: 'templates/poi-detail.html',

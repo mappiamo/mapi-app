@@ -65,7 +65,7 @@
 		<div class="list card" 
            ng-repeat="poi in pois" ng-show="isPois">
 
-	        <a class="item item-thumbnail-left item-text-wrap" href="#" ng-click="selectPOI(poi)">
+	        <a class="item item-thumbnail-left item-text-wrap" href="/" ng-click="selectPOI(poi)">
 	          <img cache-src="{{ poi.media[0].url }}" />
 	          <h2>{{ poi.title }}</h2>
 	          <h3>{{ ui[0] }} {{ poi | distance_poi }}</h3>

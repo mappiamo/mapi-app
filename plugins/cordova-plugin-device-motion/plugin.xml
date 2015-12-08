@@ -20,7 +20,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="cordova-plugin-device-motion"
-      version="1.1.1">
+      version="1.2.0">
 	
     <name>Device Motion</name>
     <description>Cordova Device Motion Plugin</description>
@@ -160,10 +160,6 @@
     <platform name="browser">
         <js-module src="src/browser/AccelerometerProxy.js" name="AccelerometerProxy">
             <runs/>
-        </js-module>
-
-        <js-module src="src/browser/accelerometer.js" name="accelerometer">
-            <merges target="navigator.accelerometer" />
         </js-module>
     </platform>
 </plugin>

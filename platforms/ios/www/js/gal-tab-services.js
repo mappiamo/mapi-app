@@ -26,6 +26,7 @@ angular.module('gal.tab', ['ionic'])
 				tabs.switches[1] = true;
 				tabs.switches[2] = false;
 				tabs.switches[3] = true;
+				tabs.switches[4] = true;
 
 				var isWebView = ionic.Platform.isWebView();
 				var isIPad = ionic.Platform.isIPad();
@@ -45,8 +46,9 @@ angular.module('gal.tab', ['ionic'])
 				if (platform == 'web') {
 					tabs.switches[0] = true;
 					tabs.switches[1] = false;
-					tabs.switches[2] = true;
+					tabs.switches[2] = false;
 					tabs.switches[3] = true;
+					tabs.switches[4] = true;
 				};
 				
 				done(err, tabs);

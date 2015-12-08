@@ -88,8 +88,8 @@ angular.module('gal.ui', [])
 			en: ['Details', 'Filters', 'POI list']
 		},
 		tab: {
-			it: ['Home', 'Realtà aumentata', 'Bussola', 'Cerca'],
-			en: ['Home', 'Reality', 'Compass', 'Search']
+			it: ['Home', 'Realtà aumentata', 'Bussola', 'Cerca', 'Credits'],
+			en: ['Home', 'Reality', 'Compass', 'Search', 'Credits']
 		},
 		poilist: {
 			it: ['Distanza dalla tua posizione:'],

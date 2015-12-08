@@ -12,7 +12,7 @@
 
 var ctrls = angular.module('gal.real.controllers', ['ngCordova' ,'leaflet-directive']);
 
-ctrls.controller('RealCameraCtrl', function ($scope) {
+ctrls.controller('RealCameraCtrl', function ($scope, $app) {
 
 	$app.reality(function (err, devInfo, msg) {
 		if (!err) {
@@ -20,7 +20,6 @@ ctrls.controller('RealCameraCtrl', function ($scope) {
 			$scope.deviceVersion = devInfo.version;
 			$scope.deviceModel = devInfo.model;	
 		};
-		$scope.message = message;
 	});
 });
 
@@ -205,7 +204,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 
 	                  	// console.log(JSON.stringify(feature.properties));
 
-	                  	var descr = '<h4><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
+	                  	var descr = '<h4><a href="/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
                                   '<p>' + feature.properties.address + '</p>';
                                   
 	                    return L.marker(latlng, {
@@ -243,7 +242,7 @@ ctrls.controller('RealCtrl', function ($scope, Geolocation, $cordovaDeviceMotion
 				        };
 				    },
 				    onEachFeature: function (feature, layer) {
-				    	var descr = '<h4><a href="#/tab/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
+				    	var descr = '<h4><a href="/poi/' + feature.properties.content + '/' + feature.properties.category + '/' + feature.properties.id + '/' + feature.properties.lat + '/' + feature.properties.lon + '">' + feature.properties.title + '</a></h4>' +
                                   '<p>' + feature.properties.address + '<br /> - ' + Math.round(distance) + ' Km';
                       	console.log('Distance: ' + Math.round(distance));
 	                	layer.bindPopup(descr);

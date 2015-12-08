@@ -81,14 +81,18 @@ ctrls.controller('ExploreCtrl', function ($scope, $state, Gal, $utility, $ionicP
   $scope.openCredits = function () {
     console.log('open credits');
     $scope.closeModal();
-    //window.location.href = '#/tab/credits';
     $state.go('tab.credits');
+  };
+
+  $scope.goHome = function () {
+    $state.go('tab.explore');
   };
 
   // **********************************
   // Controllo la connessione
 
   // listen for Online event
+  /*
   try {
 
       var type = $cordovaNetwork.getNetwork();
@@ -115,6 +119,7 @@ ctrls.controller('ExploreCtrl', function ($scope, $state, Gal, $utility, $ionicP
   catch(err) {
       console.log('non posso verificare la connessione');
   };
+   */
   
       /*
   var isOnline = $cordovaNetwork.isOnline()
@@ -217,7 +222,7 @@ ctrls.controller('ExploreCtrl', function ($scope, $state, Gal, $utility, $ionicP
     });
 
     Gal.getRoutes(function (err, routes) {
-      console.log(JSON.stringify(routes));
+      // console.log(JSON.stringify(routes));
       $scope.routes = routes;
     });
 
@@ -226,7 +231,7 @@ ctrls.controller('ExploreCtrl', function ($scope, $state, Gal, $utility, $ionicP
   };
 
   $scope.goHome = function () {
-    window.location.href = '#/tab/home';
+    $state.go('tab.explore');
   };
   
 });
@@ -551,7 +556,7 @@ function handleOpenURL(url) {
     var rootUrl = S(url).left(S('galleuca://').length).s;
     var subUrl = S(url).strip(rootUrl).s;
 
-    var goUrl = '#/tab/' + subUrl;
+    var goUrl = '/' + subUrl;
     console.log('go to ' + goUrl);
     
     var home = document.getElementsByTagName("ion-nav-view")[1];

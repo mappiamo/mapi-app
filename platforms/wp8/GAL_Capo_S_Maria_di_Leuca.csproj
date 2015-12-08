@@ -228,9 +228,6 @@
         <Compile Include="Plugins\cordova-plugin-device-motion\Accelerometer.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\cordova-plugin-device-orientation\Compass.cs" />
-    </ItemGroup>
-    <ItemGroup>
         <Compile Include="Plugins\cordova-plugin-dialogs\Notification.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -243,42 +240,15 @@
         <Content Include="Plugins\cordova-plugin-dialogs\notification-beep.wav" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\cordova-plugin-geolocation\Geolocation.cs" />
+        <Compile Include="Plugins\cordova-plugin-file\File.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\cordova-plugin-splashscreen\SplashScreen.cs" />
+        <Compile Include="Plugins\cordova-plugin-media\Media.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\cordova-plugin-splashscreen\ResolutionHelper.cs" />
+        <Compile Include="Plugins\cordova-plugin-media\AudioPlayer.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Plugins\hu.dpal.phonegap.plugins.SpinnerDialog\SpinnerDialog.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\nl.x-services.plugins.socialsharing\SocialSharing.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.file\File.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.file-transfer\FileTransfer.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.globalization\Globalization.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.globalization\GlobalizationApiTypes.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.globalization\GlobalizationImpl.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.media\Media.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.media\AudioPlayer.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Plugins\org.apache.cordova.network-information\NetworkStatus.cs" />
+        <Compile Include="Plugins\cordova-plugin-file-transfer\FileTransfer.cs" />
     </ItemGroup>
 </Project>

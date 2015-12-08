@@ -361,7 +361,7 @@ angular.module('gal.services', [])
       
       var self = this;
       
-      var url = MAPPIAMO.poi + id + MAPPIAMO.jsonp;
+      var url = MAPPIAMO.poi + id; // + MAPPIAMO.jsonp;
 
       var options = {
         method: 'GET',
@@ -374,7 +374,7 @@ angular.module('gal.services', [])
       var dt = self.item();
       dt._id = id + '_pois';
 
-      $http(options)
+      $http.get(url)
           .success(function(data) {
               
               // var d;
@@ -388,14 +388,11 @@ angular.module('gal.services', [])
                       console.log('data filtered Ok.')
                       callback(err, response3);
                     });
-                  
-
                 });
               });
-              
           })
-          .error(function(data, status, headers, config) {
-              console.log('Unable to get itinerario ' + name);
+          .error(function(err) {
+              console.log('Unable to get itinerario _poi_URI: ' + JSON.stringify(err));
               callback(true, null);
           });
     },
@@ -480,7 +477,7 @@ angular.module('gal.services', [])
 
     _content_URI: function (id, callback) {
 
-      var url = MAPPIAMO.content + id + MAPPIAMO.jsonp;
+         var url = MAPPIAMO.content + id; // + MAPPIAMO.jsonp;
       var self = this; 
 
       console.log('getting data by ' + url);
@@ -493,15 +490,16 @@ angular.module('gal.services', [])
 
       var dt = self.item();
 
-      $http(options)
+      $http.get(url)
         .success(function(data) {
           dt._id = id;
           dt.data = data;
           console.log(JSON.stringify(dt));
           callback(false, dt);
         })
-        .error(function(data, status, headers, config) {
-            console.log('Unable to get itinerario ' + name);
+        .error(function(err) {
+            console.log('Unable to get itinerario _content_URI ' + JSON.stringify(err));
+            
             callback(true, null);
       });
     }

@@ -79,8 +79,6 @@ ctrls.controller('SearchCtrl', function ($scope, $state, Gal, S, $utility, $stat
 
 	$scope.selectPOI = function (poi) {
 
-		// href="#/tab/poi/{{ content }}/{{ category }}/{{poi.id}}/{{poi.lat}}/{{poi.lon}}"
-
 		var nameRoute = _.find(poi.meta, function (item) {
 			return item.name = 'tipo_itine';
 		});
@@ -95,9 +93,6 @@ ctrls.controller('SearchCtrl', function ($scope, $state, Gal, S, $utility, $stat
 
 		var content = i._content;
 		var category = i._categories;
-
-		// var url = '#/tab/poi/' + content + '/' + category + '/' + poi.id + '/' + poi.lat + '/' + poi.lon;
-		// console.log('go to ' + url);
 
 		$state.go('poi', {
 	      "content": content,

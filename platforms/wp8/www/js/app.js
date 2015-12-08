@@ -54,7 +54,8 @@ angular.module('gal', ['ionic',
                        'ionic-audio',
                        'gal.tab',
                        'gal.launchnavigator',
-                       'gal.launchapp'])
+                       'gal.launchapp',
+                       'ngIOS9UIWebViewPatch'])
 
 .run(function ($ionicPlatform, Geolocation, $cordovaBackgroundGeolocation, $ionicLoading, $cordovaProgress, DataSync, $cordovaNetwork) {
   
@@ -223,6 +224,16 @@ angular.module('gal', ['ionic',
       url: '/credits',
       templateUrl: 'templates/credits.html',
       controller: 'ExploreCtrl'
+    })
+
+    .state('tab.credits', {
+      url: '/credits',
+      views: {
+        'tab-explore': {
+          templateUrl: 'templates/credits.html',
+          controller: 'ExploreCtrl'
+        }
+      }
     })
 
     .state('pois', {
