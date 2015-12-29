@@ -1,0 +1,19 @@
+﻿<ion-view view-title="Raggiungi la destinazione" hide-nav-bar="true"> 
+  
+  <ion-header-bar align-title="left" class="bar-positive">
+
+    <div class="button-bar">
+        <a class="button button-icon icon ion-ios-arrow-back" ng-click="goPOI(content, category, poi.id, poi.lat, poi.lon)" href="/"></a>
+    </div>
+    <div class="h1 title">Raggiungi la destinazione</div>
+
+  </ion-header-bar>
+
+  <ion-content class="has-header">
+    <div data-tap-disabled="true">
+      <leaflet id="map_route" 
+               defaults="defaults">
+      </leaflet> 
+      </div>
+  </ion-content>
+</ion-view>

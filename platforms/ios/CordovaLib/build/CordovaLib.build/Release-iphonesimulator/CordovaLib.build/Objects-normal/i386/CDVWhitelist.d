@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/CDVWhitelist.m \
-  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/CDVWhitelist.h
+  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/Public/CDVWhitelist.m \
+  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/Public/CDVWhitelist.h

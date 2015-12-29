@@ -579,7 +579,7 @@ ctrls.controller('PoiMapCtrl', function ($scope, $compile, $state, $stateParams,
         // "Neve": snow,
         // "Temperature": temp,
         // "vento": wind,
-        "Meteo": city 
+        // "Meteo": city 
       };
 
       layer_control = L.control.layers(baseMaps, overlayMaps).addTo(map);

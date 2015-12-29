@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/CDVConfigParser.m \
-  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/CDVConfigParser.h
+  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/Public/CDVConfigParser.m \
+  /Users/gzileni/GitHub/mapi-app/platforms/ios/CordovaLib/Classes/Public/CDVConfigParser.h

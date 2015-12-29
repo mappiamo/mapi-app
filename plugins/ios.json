@@ -26,16 +26,21 @@
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
-        "cordova-plugin-media": {
-            "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         },
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.mappiamo.galleuca"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
+        },
+        "cordova-plugin-wkwebview-engine": {
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.mappiamo.galleuca"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-        }
-    }
+    "dependent_plugins": {}
 }

@@ -1,0 +1,30 @@
+﻿<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title"></h1>
+    <div class="buttons">
+      <a class="button button-icon icon ion-ios-close-outline" ng-click="closeModal()"></a>
+    </div>
+  </ion-header-bar>
+  
+    <ion-content class="has-header">
+      
+      <div class="list card">
+          <a href="#" class="item item-icon-left" ng-click="download()">
+            <i class="icon ion-ios-cloud-download"></i>
+             Download dei dati
+          </a>
+
+          <a href="#" class="item item-icon-left" ng-click="openCredits()">
+            <i class="icon ion-ios-people"></i>
+            Credits
+          </a>
+        </div>
+
+        <div class="list">
+          <h4 style="color: #FFFFFF">Scegli la lingua</h4>
+          <ion-radio ng-model="language" ng-value="'it'" ng-change="setLanguage('it')">Italian</ion-radio>
+          <ion-radio ng-model="language" ng-value="'en'" ng-change="setLanguage('en')">English</ion-radio>
+        </div>
+
+  </ion-content>
+</ion-modal-view>

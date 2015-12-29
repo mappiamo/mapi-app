@@ -1,0 +1,51 @@
+﻿<ion-view view-title="{{ ui[0] }}">
+
+	<ion-content>
+
+		<!--
+		<div class="list card">
+
+		  <div class="item item-thumbnail-left item-text-wrap">
+		    <img align="center" src="img/compass/compass_380.png"
+					id="compass" 
+					width="100%"
+					height="100%" 
+					on-hold="getPois()"
+					ng-style="
+					 {
+				 	'transform': transform, 
+					'-webkit-transform': transform, 
+					'-ms-transform': transform,
+					'-o-transform': transform, 
+					'transform': transform
+				}" />
+		    <h2 class="promo-text" ng-show="isLocation" align="center">
+					<i class="icon ion-ios-location"></i> {{ location.latitude | number: 4 }}, {{ location.longitude | number: 4 }}
+				</h2>
+				<button class="button button-full button-positive" ng-click="search()" ng-show="!isSearch">
+					Cerca verso <strong>{{ magnetic | magnetic_ext }}</strong>
+				</button>
+				<p ng-show="!isSearch" align="center">
+					{{ npois }}
+				</p>
+				<p ng-show="isSearch" align="center">
+					<ion-spinner icon="lines"></ion-spinner>
+					Sto cercando in direzione <strong>{{ magnetic_search | magnetic_ext }}</strong>
+				</p>
+				<p class="assertive" align="center" ng-show="isError">
+					<i class="icon ion-android-warning">
+						{{ error_msg }}
+					</i> 
+				</p>
+		  </div>
+		  -->
+		  <div data-tap-disabled="true">
+			<leaflet id="map_compass"
+		       	 geojson="geojson"
+		       	 center="center"
+		         defaults="defaults">
+			</leaflet>	
+		</div>
+		
+  </ion-content>
+</ion-view>

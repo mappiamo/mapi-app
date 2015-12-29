@@ -1,0 +1,35 @@
+﻿<ion-modal-view>
+	<ion-header-bar align-title="left" class="bar-positive">
+		<h1 class="title">Filtri</h1>
+		<div class="buttons">
+			<button class="button" ng-click="closeFilters()">Applica</button>
+		</div>
+    </ion-header-bar>
+    <ion-content>
+
+    	<div class="list">
+
+    	<!--
+    	  <div class="item item-divider">
+		    Comuni
+		  </div>
+
+		  <ion-toggle ng-model="city.value" ng-repeat="city in filters.cities" toggle-class="toggle-calm"> {{ city.name }}</ion-toggle>
+		  -->
+		  
+		  <div class="item item-divider">
+		    Categorie
+		  </div>
+
+		  <ion-toggle ng-model="category.value" ng-repeat="category in filters.categories" toggle-class="toggle-calm"> {{ category.name }}</ion-toggle>
+
+		  <div class="item item-divider">
+		    Periodo storico
+		  </div>
+
+		  <ion-toggle ng-model="age.value" ng-repeat="age in filters.ages" toggle-class="toggle-calm"> {{ age.name }}</ion-toggle>
+
+		</div>
+      
+    </ion-content>
+  </ion-modal-view>

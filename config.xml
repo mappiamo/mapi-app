@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.mappiamo.galleuca" version="1.4.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.mappiamo.galleuca" version="1.4.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>GAL Capo S.Maria di Leuca</name>
     <description>
         GAL Capo S.Maria di Leuca
@@ -132,4 +132,6 @@
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <engine name="android" spec="^4.1.0" />
     <engine name="ios" spec="~3.9.2" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~1.1.1" />
+    <plugin name="cordova-plugin-wkwebview-engine" spec="~1.0.1" />
 </widget>

@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-appavailability.AppAvailability", function(require, exports, module) { var appAvailability = {
+cordova.define("cordova-plugin-appavailability.AppAvailability", function(require, exports, module) {
+var appAvailability = {
     
     check: function(urlScheme, successCallback, errorCallback) {
         cordova.exec(

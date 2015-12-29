@@ -224,6 +224,22 @@ module.exports = [
         "runs": true
     },
     {
+        "file": "plugins/cordova-plugin-file-transfer/www/FileTransferError.js",
+        "id": "cordova-plugin-file-transfer.FileTransferError",
+        "pluginId": "cordova-plugin-file-transfer",
+        "clobbers": [
+            "window.FileTransferError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-file-transfer/www/FileTransfer.js",
+        "id": "cordova-plugin-file-transfer.FileTransfer",
+        "pluginId": "cordova-plugin-file-transfer",
+        "clobbers": [
+            "window.FileTransfer"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-media/www/MediaError.js",
         "id": "cordova-plugin-media.MediaError",
         "pluginId": "cordova-plugin-media",
@@ -240,34 +256,25 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-file-transfer/www/FileTransferError.js",
-        "id": "cordova-plugin-file-transfer.FileTransferError",
-        "pluginId": "cordova-plugin-file-transfer",
+        "file": "plugins/cordova-plugin-wkwebview-engine/src/www/ios/ios-wkwebview-exec.js",
+        "id": "cordova-plugin-wkwebview-engine.ios-wkwebview-exec",
+        "pluginId": "cordova-plugin-wkwebview-engine",
         "clobbers": [
-            "window.FileTransferError"
+            "cordova.exec"
         ]
     },
     {
-        "file": "plugins/cordova-plugin-file-transfer/www/FileTransfer.js",
-        "id": "cordova-plugin-file-transfer.FileTransfer",
-        "pluginId": "cordova-plugin-file-transfer",
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
         "clobbers": [
-            "window.FileTransfer"
+            "cordova.InAppBrowser.open",
+            "window.open"
         ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
-{
-    "com.lampa.startapp": "0.0.5",
-    "cordova-plugin-appavailability": "0.4.2",
-    "cordova-plugin-customurlscheme": "4.0.0",
-    "cordova-plugin-device": "1.1.0",
-    "cordova-plugin-device-motion": "1.2.0",
-    "cordova-plugin-dialogs": "1.2.0",
-    "cordova-plugin-file": "3.0.0",
-    "cordova-plugin-media": "1.0.1",
-    "cordova-plugin-file-transfer": "1.4.0"
-}
+{}
 // BOTTOM OF METADATA
 });

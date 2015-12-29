@@ -1,0 +1,18 @@
+﻿<ion-view view-title="{{ title }}" hide-nav-bar="true">
+  <ion-header-bar align-title="left" class="bar-positive">
+  
+  <div class="buttons">
+    <a class="button button-icon icon ion-ios-arrow-back" ng-click="openDetail('poi', content, category, poi.id, poi.lat, poi.lon)" href="/"></a>
+  </div>
+  <h1 class="title">360° - {{ poi.title }}</h1>
+  
+
+</ion-header-bar>
+
+   <ion-content class="has-header">
+
+          <div width="100%" height="100%" ng-bind-html="url_tre"></div>
+
+
+   </ion-content>
+</ion-view>

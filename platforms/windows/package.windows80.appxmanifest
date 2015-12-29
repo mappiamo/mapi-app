@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+    <Identity Name="com.mappiamo.galleuca" Publisher="CN=$username$" Version="1.4.9.0" />
+    <Properties>
+        <DisplayName>GAL Capo S.Maria di Leuca</DisplayName>
+        <PublisherDisplayName>Mappiamo</PublisherDisplayName>
+        <Logo>images\storelogo.png</Logo>
+    </Properties>
+    <Prerequisites>
+        <OSMinVersion>6.2.1</OSMinVersion>
+        <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+    </Prerequisites>
+    <Resources>
+        <Resource Language="x-generate" />
+    </Resources>
+    <Applications>
+        <Application Id="com.mappiamo.galleuca" StartPage="www/index.html">
+            <VisualElements BackgroundColor="#464646" Description="CordovaApp" DisplayName="GAL Capo S.Maria di Leuca" ForegroundText="light" Logo="images\Square150x150Logo.png" SmallLogo="images\Square30x30Logo.png">
+                <DefaultTile ShowName="allLogos" WideLogo="images\Wide310x150Logo.png" />
+                <SplashScreen Image="images\splashscreen.png" />
+            </VisualElements>
+            <Extensions>
+                <Extension Category="windows.protocol" StartPage="www/index.html">
+                    <Protocol Name="galleuca" />
+                </Extension>
+            </Extensions>
+        </Application>
+    </Applications>
+    <Capabilities>
+        <Capability Name="internetClient" />
+        <DeviceCapability Name="microphone" />
+    </Capabilities>
+</Package>
