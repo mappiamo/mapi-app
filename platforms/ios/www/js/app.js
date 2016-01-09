@@ -303,9 +303,15 @@ angular.module('gal', ['ionic',
       url: '/route/:content/:category/:idpoi/:lat/:lng',
       templateUrl: 'templates/poi-route.html',
       controller: 'RealMapCtrl'
-    });
+    })
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/explore');
+    //$urlRouterProvider.otherwise('/tab/explore');
+
+    $urlRouterProvider.otherwise(function($injector, $location){
+        //return '/tab/explore';
+        var $state = $injector.get("$state");
+        $state.go("tab.explore");
+    });
 
 });
